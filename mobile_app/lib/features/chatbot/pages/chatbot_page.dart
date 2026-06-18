@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:gal/gal.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_app/core/widgets/bottom_nav.dart';
@@ -203,6 +204,14 @@ class _ChatbotPageState extends State<ChatbotPage> {
       }
 
       final imageFile = File(pickedImage.path);
+
+      if (source == ImageSource.camera) {
+        try {
+          await Gal.putImage(imageFile.path, album: 'SortSnap');
+        } catch (e) {
+          debugPrint('Failed to save image to gallery: $e');
+        }
+      }
 
       setState(() {
         _messages.add(
