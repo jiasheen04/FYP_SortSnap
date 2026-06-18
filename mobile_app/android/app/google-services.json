@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "487439039376",
+    "project_id": "sortsnap-0494",
+    "storage_bucket": "sortsnap-0494.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487439039376:android:17070973d25b8199865115",
+        "android_client_info": {
+          "package_name": "com.sortsnap.mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHOp5PYIyksv8nYTyk-crRbK7sHDAEPAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
