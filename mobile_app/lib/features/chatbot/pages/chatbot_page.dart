@@ -205,14 +205,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
       final imageFile = File(pickedImage.path);
 
-      if (source == ImageSource.camera) {
-        try {
-          await Gal.putImage(imageFile.path, album: 'SortSnap');
-        } catch (e) {
-          debugPrint('Failed to save image to gallery: $e');
-        }
-      }
-
       setState(() {
         _messages.add(
           ChatMessage(
@@ -233,20 +225,54 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         if (!mounted) return;
 
-        final classification = result['classification'] as Map<String, dynamic>;
+        final detectionMode = result['detectionMode'] ?? 'single';
 
-        final category = classification['category'] ?? 'Unknown';
-        final confidence = (classification['confidence'] ?? 0.0) as num;
-        final itemName = classification['itemName'] ?? 'Unknown item';
-        final isRecyclable = classification['isRecyclable'] ?? false;
+        final classification =
+            result['classification'] as Map<String, dynamic>? ?? {};
+
+        final classificationsRaw = result['classifications'] as List? ?? [];
+
         final answer = result['answer'] ?? 'No guidance returned.';
 
-        final resultMessage =
-            'Item: $itemName\n'
-            'Category: $category\n'
-            'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
-            'Confidence: ${(confidence * 100).toStringAsFixed(0)}%\n\n'
-            '$answer';
+        String resultMessage;
+
+        if (detectionMode == 'possible_mixed' &&
+            classificationsRaw.length > 1) {
+          String itemListText = '';
+
+          for (int i = 0; i < classificationsRaw.length; i++) {
+            final item = classificationsRaw[i] as Map<String, dynamic>;
+
+            final category = item['category'] ?? 'Unknown';
+            final confidencePercentage = item['confidencePercentage'] ?? 0;
+            final isRecyclable = item['isRecyclable'] == true;
+
+            itemListText +=
+                '${i + 1}. $category\n'
+                'Confidence: $confidencePercentage%\n'
+                'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
+          }
+
+          resultMessage =
+              'Possible mixed materials:\n\n'
+              '$itemListText'
+              '$answer';
+        } else {
+          final category = classification['category'] ?? 'Unknown';
+          final itemName = classification['itemName'] ?? category;
+          final isRecyclable = classification['isRecyclable'] == true;
+
+          final confidence = classification['confidence'] ?? 0.0;
+          final confidencePercentage =
+              classification['confidencePercentage'] ?? (confidence * 100);
+
+          resultMessage =
+              'Item: $itemName\n'
+              'Category: $category\n'
+              'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
+              'Confidence: ${confidencePercentage.toStringAsFixed(0)}%\n\n'
+              '$answer';
+        }
 
         setState(() {
           _messages.add(ChatMessage(text: resultMessage, isUser: false));

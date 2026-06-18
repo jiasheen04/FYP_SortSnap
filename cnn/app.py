@@ -12,16 +12,23 @@ CORS(app)
 
 IMG_SIZE = 256
 
-model = tf.keras.models.load_model("sortsnap_cnn_model.keras", compile=False)
+# If second/third prediction is lower than this, treat as one item only
+MIXED_CONFIDENCE_THRESHOLD = 0.20
 
-with open("class_names.json", "r") as f:
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "sortsnap_cnn_model.keras")
+CLASS_NAMES_PATH = os.path.join(BASE_DIR, "class_names.json")
+
+model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+
+with open(CLASS_NAMES_PATH, "r") as f:
     class_names = json.load(f)
 
 
 def get_recyclable_status(predicted_class):
     recyclable_classes = ["plastic", "paper", "cardboard", "metal", "glass"]
 
-    if predicted_class in recyclable_classes:
+    if predicted_class.lower() in recyclable_classes:
         return True
 
     return False
@@ -66,32 +73,44 @@ def predict():
         predictions = model.predict(img_array, verbose=0)
         score = predictions[0]
 
-        predicted_index = int(np.argmax(score))
-        predicted_class = class_names[predicted_index]
-        confidence = float(score[predicted_index])
-        confidence_percentage = round(confidence * 100, 2)
-
         top_indices = np.argsort(score)[-3:][::-1]
 
-        top_predictions = [
-            {
-                "class": class_names[int(i)],
-                "confidence": round(float(score[int(i)] * 100), 2)
-            }
-            for i in top_indices
-        ]
+        top_predictions = []
 
-        is_recyclable = get_recyclable_status(predicted_class)
+        for i in top_indices:
+            item_name = class_names[int(i)]
+            confidence = float(score[int(i)])
+            confidence_percentage = round(confidence * 100, 2)
+
+            top_predictions.append({
+                "class": item_name,
+                "itemName": item_name,
+                "category": item_name,
+                "confidence": round(confidence, 4),
+                "confidencePercentage": confidence_percentage,
+                "isRecyclable": get_recyclable_status(item_name)
+            })
+
+        main_classification = top_predictions[0]
+
+        mixed_candidates = []
+
+        for item in top_predictions[1:]:
+            if item["confidence"] >= MIXED_CONFIDENCE_THRESHOLD:
+                mixed_candidates.append(item)
+
+        if len(mixed_candidates) > 0:
+            detection_mode = "possible_mixed"
+            classifications = [main_classification] + mixed_candidates
+        else:
+            detection_mode = "single"
+            classifications = [main_classification]
 
         return jsonify({
             "success": True,
-            "classification": {
-                "itemName": predicted_class,
-                "category": predicted_class,
-                "confidence": round(confidence, 4),
-                "confidencePercentage": confidence_percentage,
-                "isRecyclable": is_recyclable
-            },
+            "detectionMode": detection_mode,
+            "classification": main_classification,
+            "classifications": classifications,
             "top_predictions": top_predictions
         })
 

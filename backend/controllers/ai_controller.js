@@ -2,14 +2,14 @@ const ILMU_API_KEY = process.env.ILMU_API_KEY;
 const ILMU_BASE_URL = process.env.ILMU_BASE_URL || "https://api.ilmu.ai/v1";
 const ILMU_MODEL = process.env.ILMU_MODEL || "ilmu-nemo-nano";
 
-// Local CNN API first. Later on Render, set CNN_API_URL in environment variable.
-const CNN_API_URL = process.env.CNN_API_URL || "http://127.0.0.1:5001";
+// Local CNN API first. On Render, set CNN_API_URL to: https://sortsnap-cnn.onrender.com
+const CNN_API_URL = process.env.CNN_API_URL || "http://127.0.0.1:8000";
 
 async function callIlmu(messages, maxTokens = 500) {
   const response = await fetch(`${ILMU_BASE_URL}/chat/completions`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${ILMU_API_KEY}`,
+      Authorization: `Bearer ${ILMU_API_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -51,31 +51,73 @@ async function callCnnApi(file) {
     throw new Error(data.message || "CNN image prediction failed");
   }
 
-  return data.classification;
+  return data;
 }
 
-function buildRecyclingPrompt(classification) {
-  const itemName = classification.itemName || "unknown item";
-  const category = classification.category || itemName;
-  const confidencePercentage = classification.confidencePercentage || 0;
-  const isRecyclable = classification.isRecyclable === true;
+function buildSmartRecyclingPrompt(cnnResult) {
+  const detectionMode = cnnResult.detectionMode || "single";
+  const main = cnnResult.classification || {};
+
+  const classifications = Array.isArray(cnnResult.classifications)
+    ? cnnResult.classifications
+    : [main];
+
+  if (detectionMode === "possible_mixed" && classifications.length > 1) {
+    const predictionList = classifications
+      .map((item, index) => {
+        return `${index + 1}. ${item.category} - ${item.confidencePercentage}% confidence - Recyclable: ${item.isRecyclable ? "Yes" : "No"
+          }`;
+      })
+      .join("\n");
+
+    return `
+The image classification result shows more than one possible waste material.
+
+Possible materials:
+${predictionList}
+
+Important:
+This is not object detection, so do not say every item is definitely detected.
+Use wording like "This image mainly looks like..." and "There may also be...".
+
+Give recycling guidance for a Cyberjaya user in Malaysia.
+
+Requirements:
+- Start with: "This image mainly looks like..."
+- Mention the main material first.
+- Mention possible mixed materials only as possible.
+- Tell the user to separate different materials before recycling.
+- Give simple guidance for each possible material.
+- Keep it beginner-friendly.
+- Keep it around 4 to 6 sentences.
+- Do not mention CNN, model, API, backend, or confidence score in the final answer.
+`;
+  }
+
+  const itemName = main.itemName || "unknown item";
+  const category = main.category || itemName;
+  const confidencePercentage = main.confidencePercentage || 0;
+  const isRecyclable = main.isRecyclable === true;
 
   return `
-The CNN image classification model detected the uploaded item as "${itemName}".
+The uploaded image mainly contains one waste item.
+
+Detected item: ${itemName}
 Category: ${category}
 Confidence: ${confidencePercentage}%
 Recyclable: ${isRecyclable ? "Yes" : "No"}
 
-Give a short recycling guidance message for a Cyberjaya user in Malaysia.
+Give recycling guidance for a Cyberjaya user in Malaysia.
 
 Requirements:
 - Start with: "This looks like..."
-- Mention the detected item.
+- Mention only this detected item.
+- Do not mention possible mixed materials.
 - Explain what the user should do.
 - Keep it beginner-friendly.
-- Keep it short, around 3 to 5 sentences.
-- If it is battery, mention special disposal and do not put it in normal recycling bin.
+- Keep it around 3 to 5 sentences.
 - If confidence is below 80%, say the image may be unclear and ask the user to type the item name if needed.
+- Do not mention CNN, model, API, backend, or confidence score in the final answer.
 `;
 }
 
@@ -131,17 +173,27 @@ async function classifyImage(req, res) {
       });
     }
 
-    // 1. Send uploaded image to CNN API
-    const classification = await callCnnApi(req.file);
+    const cnnResult = await callCnnApi(req.file);
 
-    // 2. Send CNN result to ILMU for explanation
-    const prompt = buildRecyclingPrompt(classification);
+    const mainClassification = cnnResult.classification || {
+      category: "Unknown",
+      confidence: 0.0,
+      confidencePercentage: 0.0,
+      itemName: "Unknown item",
+      isRecyclable: false,
+    };
+
+    const classifications = Array.isArray(cnnResult.classifications)
+      ? cnnResult.classifications
+      : [mainClassification];
+
+    const prompt = buildSmartRecyclingPrompt(cnnResult);
 
     const messages = [
       {
         role: "system",
         content:
-          "You are SortSnap, a recycling assistant for Cyberjaya users. Use the CNN classification result to give short and practical recycling guidance. Do not mention technical backend details to the user.",
+          "You are SortSnap, a recycling assistant for Cyberjaya users. Use the image classification result to give short and practical recycling guidance. Do not mention technical backend details to the user.",
       },
       {
         role: "user",
@@ -149,12 +201,14 @@ async function classifyImage(req, res) {
       },
     ];
 
-    const answer = await callIlmu(messages, 500);
+    const answer = await callIlmu(messages, 700);
 
-    // 3. Return classification + ILMU answer to Flutter
     return res.json({
       success: true,
-      classification: classification,
+      detectionMode: cnnResult.detectionMode || "single",
+      classification: mainClassification,
+      classifications: classifications,
+      top_predictions: cnnResult.top_predictions || classifications,
       answer: answer,
       source: "cnn + ilmu",
     });
@@ -163,6 +217,7 @@ async function classifyImage(req, res) {
 
     return res.status(500).json({
       success: false,
+      detectionMode: "single",
       classification: {
         category: "Unknown",
         confidence: 0.0,
@@ -170,6 +225,7 @@ async function classifyImage(req, res) {
         itemName: "Unknown item",
         isRecyclable: false,
       },
+      classifications: [],
       answer:
         "Sorry, I could not classify the image right now. Please type the item name in the chatbot, for example plastic bottle, cardboard box, or battery.",
       source: "cnn + ilmu",

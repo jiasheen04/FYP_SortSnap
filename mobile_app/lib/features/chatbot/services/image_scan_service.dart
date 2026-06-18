@@ -56,14 +56,15 @@ class ImageScanService {
     );
 
     final response = await http.Response.fromStream(streamedResponse);
-    final data = jsonDecode(response.body);
+    final data = jsonDecode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode != 200 || data['success'] != true) {
       throw Exception(data['message'] ?? 'Failed to classify image.');
     }
 
-    final classification = data['classification'] as Map<String, dynamic>;
-    final answer = data['answer'] ?? '';
+    final classification =
+        data['classification'] as Map<String, dynamic>? ?? {};
+    final classifications = data['classifications'] as List? ?? [];
 
     final userId = currentUser.uid;
     final userSnapshot = await _firestore.collection('users').doc(userId).get();
@@ -78,9 +79,12 @@ class ImageScanService {
       'latestImageLocalPath': imageFile.path,
       'latestCategory': classification['category'] ?? 'Unknown',
       'latestConfidence': classification['confidence'] ?? 0,
-      'latestGuidance': answer,
+      'latestConfidencePercentage': classification['confidencePercentage'] ?? 0,
+      'latestGuidance': data['answer'] ?? '',
       'latestItemName': classification['itemName'] ?? '',
       'isRecyclable': classification['isRecyclable'] ?? false,
+      'detectionMode': data['detectionMode'] ?? 'single',
+      'classifications': classifications,
       'source': data['source'] ?? 'cnn + ilmu',
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
