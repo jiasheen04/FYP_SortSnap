@@ -230,6 +230,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
       final imageFile = File(pickedImage.path);
 
+      // Save camera photo to gallery
       if (source == ImageSource.camera) {
         await _saveCameraImageToGallery(imageFile);
       }
@@ -252,16 +253,19 @@ class _ChatbotPageState extends State<ChatbotPage> {
           imageFile: imageFile,
         );
 
+        debugPrint('FLUTTER IMAGE RESULT: $result');
+
         if (!mounted) return;
 
-        final detectionMode = result['detectionMode'] ?? 'single';
+        final detectionMode = (result['detectionMode'] ?? 'single').toString();
 
-        final classification =
-            result['classification'] as Map<String, dynamic>? ?? {};
+        final classification = Map<String, dynamic>.from(
+          result['classification'] as Map? ?? {},
+        );
 
         final classificationsRaw = result['classifications'] as List? ?? [];
 
-        final answer = result['answer'] ?? 'No guidance returned.';
+        final answer = (result['answer'] ?? 'No guidance returned.').toString();
 
         String resultMessage;
 
@@ -270,15 +274,17 @@ class _ChatbotPageState extends State<ChatbotPage> {
           String itemListText = '';
 
           for (int i = 0; i < classificationsRaw.length; i++) {
-            final item = classificationsRaw[i] as Map<String, dynamic>;
+            final item = Map<String, dynamic>.from(
+              classificationsRaw[i] as Map,
+            );
 
-            final category = item['category'] ?? 'Unknown';
+            final category = (item['category'] ?? 'Unknown').toString();
             final confidencePercentage = item['confidencePercentage'] ?? 0;
             final isRecyclable = item['isRecyclable'] == true;
 
             itemListText +=
                 '${i + 1}. $category\n'
-                'Confidence: $confidencePercentage%\n'
+                'Confidence: ${(confidencePercentage as num).toStringAsFixed(0)}%\n'
                 'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
           }
 
@@ -287,19 +293,18 @@ class _ChatbotPageState extends State<ChatbotPage> {
               '$itemListText'
               '$answer';
         } else {
-          final category = classification['category'] ?? 'Unknown';
-          final itemName = classification['itemName'] ?? category;
+          final category = (classification['category'] ?? 'Unknown').toString();
+          final itemName = (classification['itemName'] ?? category).toString();
           final isRecyclable = classification['isRecyclable'] == true;
 
-          final confidence = classification['confidence'] ?? 0.0;
           final confidencePercentage =
-              classification['confidencePercentage'] ?? (confidence * 100);
+              classification['confidencePercentage'] ?? 0;
 
           resultMessage =
               'Item: $itemName\n'
               'Category: $category\n'
               'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
-              'Confidence: ${confidencePercentage.toStringAsFixed(0)}%\n\n'
+              'Confidence: ${(confidencePercentage as num).toStringAsFixed(0)}%\n\n'
               '$answer';
         }
 
@@ -314,11 +319,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         setState(() {
           _messages.add(
-            ChatMessage(
-              text:
-                  'Image scan is currently unavailable. Please type the item name, for example "plastic bottle", "battery", or "cardboard", and I will guide you.',
-              isUser: false,
-            ),
+            ChatMessage(text: 'Image scan error:\n$e', isUser: false),
           );
           _isLoading = false;
         });
