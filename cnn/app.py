@@ -1,38 +1,21 @@
-import os
-import json
-import numpy as np
-from PIL import Image
-
-import tensorflow as tf
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+import tensorflow as tf
+import numpy as np
+from PIL import Image
+import json
+import io
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-MODEL_PATH = "sortsnap_cnn_model.keras"
-CLASS_NAMES_PATH = "class_names.json"
 IMG_SIZE = 256
 
-# Load CNN model once when server starts
-model = tf.keras.models.load_model(MODEL_PATH, compile=False)
+model = tf.keras.models.load_model("sortsnap_cnn_model.keras", compile=False)
 
-# Load class names
-with open(CLASS_NAMES_PATH, "r") as file:
-    class_names = json.load(file)
-
-
-def prepare_image(image_file):
-    image = Image.open(image_file).convert("RGB")
-    image = image.resize((IMG_SIZE, IMG_SIZE))
-
-    image_array = np.array(image)
-    image_array = np.expand_dims(image_array, axis=0)
-
-    image_array = tf.keras.applications.efficientnet_v2.preprocess_input(image_array)
-
-    return image_array
+with open("class_names.json", "r") as f:
+    class_names = json.load(f)
 
 
 def get_recyclable_status(predicted_class):
@@ -48,7 +31,8 @@ def get_recyclable_status(predicted_class):
 def home():
     return jsonify({
         "success": True,
-        "message": "SortSnap CNN API is running."
+        "message": "SortSnap CNN API is running",
+        "classes": class_names
     })
 
 
@@ -62,28 +46,40 @@ def health():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    if "image" not in request.files:
+        return jsonify({
+            "success": False,
+            "message": "No image uploaded. Please upload an image using form-data with key name 'image'."
+        }), 400
+
+    file = request.files["image"]
+
     try:
-        if "image" not in request.files:
-            return jsonify({
-                "success": False,
-                "message": "No image file uploaded."
-            }), 400
+        img = Image.open(io.BytesIO(file.read())).convert("RGB")
+        img = img.resize((IMG_SIZE, IMG_SIZE))
 
-        image_file = request.files["image"]
+        img_array = tf.keras.preprocessing.image.img_to_array(img)
+        img_array = np.expand_dims(img_array, axis=0)
 
-        if image_file.filename == "":
-            return jsonify({
-                "success": False,
-                "message": "Empty image file."
-            }), 400
+        img_array = tf.keras.applications.efficientnet_v2.preprocess_input(img_array)
 
-        image_array = prepare_image(image_file)
+        predictions = model.predict(img_array, verbose=0)
+        score = predictions[0]
 
-        predictions = model.predict(image_array)
-
-        predicted_index = int(np.argmax(predictions[0]))
+        predicted_index = int(np.argmax(score))
         predicted_class = class_names[predicted_index]
-        confidence = float(predictions[0][predicted_index])
+        confidence = float(score[predicted_index])
+        confidence_percentage = round(confidence * 100, 2)
+
+        top_indices = np.argsort(score)[-3:][::-1]
+
+        top_predictions = [
+            {
+                "class": class_names[int(i)],
+                "confidence": round(float(score[int(i)] * 100), 2)
+            }
+            for i in top_indices
+        ]
 
         is_recyclable = get_recyclable_status(predicted_class)
 
@@ -93,21 +89,22 @@ def predict():
                 "itemName": predicted_class,
                 "category": predicted_class,
                 "confidence": round(confidence, 4),
-                "confidencePercentage": round(confidence * 100, 2),
+                "confidencePercentage": confidence_percentage,
                 "isRecyclable": is_recyclable
-            }
+            },
+            "top_predictions": top_predictions
         })
 
-    except Exception as error:
-        print("Prediction Error:", error)
+    except Exception as e:
+        print("Prediction Error:", str(e))
 
         return jsonify({
             "success": False,
             "message": "Image prediction failed.",
-            "error": str(error)
+            "error": str(e)
         }), 500
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5001))
+    port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port)
