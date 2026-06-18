@@ -36,46 +36,26 @@ class ImageScanService {
     return savedImage;
   }
 
-  Future<Map<String, dynamic>> classifyImage({
-    required File imageFile,
-  }) async {
+  Future<Map<String, dynamic>> classifyImage({required File imageFile}) async {
     final currentUser = _auth.currentUser;
 
     if (currentUser == null) {
       throw Exception('User is not logged in.');
     }
 
-    // Convert image to base64
-    final bytes = await imageFile.readAsBytes();
-    final base64Image = base64Encode(bytes);
-
-    // Determine mime type
-    final extension = imageFile.path.split('.').last.toLowerCase();
-    String mimeType = 'image/jpeg';
-    if (extension == 'png') {
-      mimeType = 'image/png';
-    } else if (extension == 'gif') {
-      mimeType = 'image/gif';
-    } else if (extension == 'webp') {
-      mimeType = 'image/webp';
-    }
-
-    // Call backend API
     final url = Uri.parse('$_baseUrl/api/chatbot/classify-image');
 
-    final response = await http
-        .post(
-          url,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'imageBase64': base64Image,
-            'mimeType': mimeType,
-          }),
-        )
-        .timeout(const Duration(seconds: 60));
+    final request = http.MultipartRequest('POST', url);
 
+    request.files.add(
+      await http.MultipartFile.fromPath('image', imageFile.path),
+    );
+
+    final streamedResponse = await request.send().timeout(
+      const Duration(seconds: 90),
+    );
+
+    final response = await http.Response.fromStream(streamedResponse);
     final data = jsonDecode(response.body);
 
     if (response.statusCode != 200 || data['success'] != true) {
@@ -83,31 +63,29 @@ class ImageScanService {
     }
 
     final classification = data['classification'] as Map<String, dynamic>;
+    final answer = data['answer'] ?? '';
 
-    // Save result to Firestore
     final userId = currentUser.uid;
-    final userSnapshot =
-        await _firestore.collection('users').doc(userId).get();
+    final userSnapshot = await _firestore.collection('users').doc(userId).get();
     final userData = userSnapshot.data() ?? {};
 
     await _firestore.collection('image_scan_records').doc(userId).set({
       'userId': userId,
       'userNo': userData['userNo'] ?? '',
       'username': userData['username'] ?? '',
-      'userName':
-          '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim(),
+      'userName': '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'
+          .trim(),
       'latestImageLocalPath': imageFile.path,
       'latestCategory': classification['category'] ?? 'Unknown',
       'latestConfidence': classification['confidence'] ?? 0,
-      'latestGuidance': classification['explanation'] ?? '',
-      'latestDisposalAction': classification['disposalAction'] ?? '',
+      'latestGuidance': answer,
       'latestItemName': classification['itemName'] ?? '',
       'isRecyclable': classification['isRecyclable'] ?? false,
-      'source': 'ilmu-text-only',
+      'source': data['source'] ?? 'cnn + ilmu',
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
 
-    return classification;
+    return data;
   }
 
   Future<void> saveLatestImageScanLocal({
@@ -152,8 +130,7 @@ class ImageScanService {
       'latestImageSource': sourceType,
       'latestCategory': 'Pending',
       'latestConfidence': 0,
-      'latestGuidance':
-          'Image saved. Classifying...',
+      'latestGuidance': 'Image saved. Classifying...',
       'source': 'local_image',
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));

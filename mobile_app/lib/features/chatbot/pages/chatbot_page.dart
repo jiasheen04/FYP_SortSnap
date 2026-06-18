@@ -12,11 +12,7 @@ class ChatMessage {
   final bool isUser;
   final File? image;
 
-  ChatMessage({
-    required this.text,
-    required this.isUser,
-    this.image,
-  });
+  ChatMessage({required this.text, required this.isUser, this.image});
 }
 
 class QuickQuestion {
@@ -172,7 +168,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
       setState(() {
         _messages.add(
           ChatMessage(
-            text: 'Sorry, I could not get an answer right now. Please try again.',
+            text:
+                'Sorry, I could not get an answer right now. Please try again.',
             isUser: false,
           ),
         );
@@ -221,36 +218,26 @@ class _ChatbotPageState extends State<ChatbotPage> {
       _scrollToBottom();
 
       try {
-        final classification = await _imageScanService.classifyImage(
+        final result = await _imageScanService.classifyImage(
           imageFile: imageFile,
         );
 
         if (!mounted) return;
 
+        final classification = result['classification'] as Map<String, dynamic>;
+
         final category = classification['category'] ?? 'Unknown';
         final confidence = (classification['confidence'] ?? 0.0) as num;
         final itemName = classification['itemName'] ?? 'Unknown item';
         final isRecyclable = classification['isRecyclable'] ?? false;
-        final disposalAction =
-            classification['disposalAction'] ?? 'Check with local guidelines.';
-        final explanation =
-            classification['explanation'] ?? 'Could not determine classification.';
+        final answer = result['answer'] ?? 'No guidance returned.';
 
-        String resultMessage;
-
-        if (confidence < 0.4) {
-          resultMessage =
-              'I am not very confident about this image (${(confidence * 100).toStringAsFixed(0)}% confidence).\n\n'
-              'It looks like it might be: $itemName\n\n'
-              'For better results, try typing the item name below and I can give you more accurate guidance.';
-        } else {
-          resultMessage = 'Item: $itemName\n'
-              'Category: $category\n'
-              'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
-              'Confidence: ${(confidence * 100).toStringAsFixed(0)}%\n\n'
-              '$disposalAction\n\n'
-              '$explanation';
-        }
+        final resultMessage =
+            'Item: $itemName\n'
+            'Category: $category\n'
+            'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
+            'Confidence: ${(confidence * 100).toStringAsFixed(0)}%\n\n'
+            '$answer';
 
         setState(() {
           _messages.add(ChatMessage(text: resultMessage, isUser: false));
@@ -281,9 +268,9 @@ class _ChatbotPageState extends State<ChatbotPage> {
         _isLoading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to pick image: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to pick image: $e')));
     }
   }
 
@@ -653,9 +640,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
       decoration: const BoxDecoration(
         color: Color(0xFFEFFAF5),
-        border: Border(
-          top: BorderSide(color: Color(0xFFDDF1EA)),
-        ),
+        border: Border(top: BorderSide(color: Color(0xFFDDF1EA))),
       ),
       child: SafeArea(
         top: false,
@@ -710,133 +695,131 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   Widget _buildImageOptionOverlay() {
-  if (!_showImageOptions) {
-    return const SizedBox.shrink();
-  }
+    if (!_showImageOptions) {
+      return const SizedBox.shrink();
+    }
 
-  return Positioned.fill(
-    child: Stack(
-      children: [
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _showImageOptions = false;
-            });
-          },
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            child: Container(
-              color: Colors.black.withOpacity(0.12),
+    return Positioned.fill(
+      child: Stack(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _showImageOptions = false;
+              });
+            },
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+              child: Container(color: Colors.black.withOpacity(0.12)),
             ),
           ),
-        ),
 
-        Positioned(
-          left: 15,
-          bottom: 72,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showImageOptions = false;
-                  });
-                  _pickImage(ImageSource.camera);
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      width: 54,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFCDEFE2),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.10),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+          Positioned(
+            left: 15,
+            bottom: 72,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showImageOptions = false;
+                    });
+                    _pickImage(ImageSource.camera);
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 54,
+                        height: 54,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFFCDEFE2),
+                            width: 1.5,
                           ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt_outlined,
-                        color: Color(0xFF3BAA82),
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Camera',
-                      style: TextStyle(
-                        color: Color(0xFF264D43),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 18),
-
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showImageOptions = false;
-                  });
-                  _pickImage(ImageSource.gallery);
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      width: 54,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xFFCDEFE2),
-                          width: 1.5,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.10),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.10),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                        child: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Color(0xFF3BAA82),
+                          size: 26,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.photo_library_outlined,
-                        color: Color(0xFF3BAA82),
-                        size: 26,
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Camera',
+                        style: TextStyle(
+                          color: Color(0xFF264D43),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Gallery',
-                      style: TextStyle(
-                        color: Color(0xFF264D43),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 18),
+
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showImageOptions = false;
+                    });
+                    _pickImage(ImageSource.gallery);
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 54,
+                        height: 54,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFFCDEFE2),
+                            width: 1.5,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.10),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.photo_library_outlined,
+                          color: Color(0xFF3BAA82),
+                          size: 26,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'Gallery',
+                        style: TextStyle(
+                          color: Color(0xFF264D43),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
