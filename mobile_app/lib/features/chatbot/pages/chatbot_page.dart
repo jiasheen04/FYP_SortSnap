@@ -186,6 +186,31 @@ class _ChatbotPageState extends State<ChatbotPage> {
     }
   }
 
+  Future<void> _saveCameraImageToGallery(File imageFile) async {
+    try {
+      final hasAccess = await Gal.hasAccess(toAlbum: true);
+
+      if (!hasAccess) {
+        final requestGranted = await Gal.requestAccess(toAlbum: true);
+
+        if (!requestGranted) {
+          debugPrint('Gallery permission denied.');
+          return;
+        }
+      }
+
+      await Gal.putImage(imageFile.path, album: 'SortSnap');
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Photo saved to gallery.')));
+    } catch (e) {
+      debugPrint('Failed to save image to gallery: $e');
+    }
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     try {
       setState(() {
@@ -204,6 +229,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
       }
 
       final imageFile = File(pickedImage.path);
+
+      if (source == ImageSource.camera) {
+        await _saveCameraImageToGallery(imageFile);
+      }
 
       setState(() {
         _messages.add(
