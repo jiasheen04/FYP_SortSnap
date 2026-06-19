@@ -96,9 +96,6 @@ Say what the image mainly looks like and mention possible mixed materials.
 ⚠️ Important note
 Mention any warning or exception.
 
-📍 Cyberjaya tip
-Give a simple local recycling/drop-off suggestion.
-
 Rules:
 - Keep it beginner-friendly.
 - Keep it around 80 to 140 words.
@@ -130,9 +127,6 @@ Say what the item is.
 
 ⚠️ Important note
 Mention any warning or exception.
-
-📍 Cyberjaya tip
-Give a simple local recycling/drop-off suggestion.
 
 Rules:
 - Mention only this detected item.
@@ -176,9 +170,6 @@ Give the direct answer in 1 or 2 sentences.
 
 ⚠️ Important note
 Mention exceptions or warnings if needed.
-
-📍 Cyberjaya tip
-Mention recycling centre, drop-off point, council, or retailer collection if relevant.
 
 Important rules:
 - If the user asks "say more detailed", give more explanation about the previous recycling topic if possible.

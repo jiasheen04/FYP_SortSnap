@@ -1,22 +1,40 @@
-# Flutter / Dart
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Node backend
+backend/node_modules/
+backend/npm-debug.log*
+backend/yarn-error.log*
+
+# Flutter generated files
 mobile_app/.dart_tool/
 mobile_app/build/
 mobile_app/.flutter-plugins
 mobile_app/.flutter-plugins-dependencies
 mobile_app/.packages
 
-# Android generated files
+# Android / Gradle generated files
 mobile_app/android/.gradle/
+mobile_app/android/.kotlin/
 mobile_app/android/local.properties
+mobile_app/android/app/build/
 
-# Node backend
-backend/node_modules/
-backend/.env
-
-# IDE
-.idea/
-.vscode/
-
-# OS files
-.DS_Store
-Thumbs.db
+# Python / CNN generated files
+cnn/__pycache__/
+cnn/*.pyc
+cnn/.ipynb_checkpoints/
+cnn/.venv/
+cnn/venv/
+cnn/uploads/
+cnn/dataset/
+cnn/data/
