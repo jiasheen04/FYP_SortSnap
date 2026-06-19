@@ -52,7 +52,7 @@ class ImageScanService {
     );
 
     final streamedResponse = await request.send().timeout(
-      const Duration(seconds: 90),
+      const Duration(seconds: 240),
     );
 
     final response = await http.Response.fromStream(streamedResponse);
