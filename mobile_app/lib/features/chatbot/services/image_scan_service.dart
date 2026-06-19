@@ -70,24 +70,120 @@ class ImageScanService {
     final userSnapshot = await _firestore.collection('users').doc(userId).get();
     final userData = userSnapshot.data() ?? {};
 
-    await _firestore.collection('image_scan_records').doc(userId).set({
-      'userId': userId,
-      'userNo': userData['userNo'] ?? '',
-      'username': userData['username'] ?? '',
-      'userName': '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'
-          .trim(),
-      'latestImageLocalPath': imageFile.path,
-      'latestCategory': classification['category'] ?? 'Unknown',
-      'latestConfidence': classification['confidence'] ?? 0,
-      'latestConfidencePercentage': classification['confidencePercentage'] ?? 0,
-      'latestGuidance': data['answer'] ?? '',
-      'latestItemName': classification['itemName'] ?? '',
-      'isRecyclable': classification['isRecyclable'] ?? false,
-      'detectionMode': data['detectionMode'] ?? 'single',
-      'classifications': classifications,
-      'source': data['source'] ?? 'cnn + ilmu',
-      'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    final userNo = userData['userNo'] ?? '';
+    final username = userData['username'] ?? '';
+    final userName =
+        '${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}'.trim();
+
+    final answer = data['answer'] ?? '';
+    final source = data['source'] ?? 'cnn + ilmu';
+    final detectionMode = data['detectionMode'] ?? 'single';
+
+    final mainCategory = classification['category'] ?? 'Unknown';
+    final mainItemName = classification['itemName'] ?? '';
+    final confidence = classification['confidence'] ?? 0;
+    final confidencePercentage = classification['confidencePercentage'] ?? 0;
+    final isRecyclable = classification['isRecyclable'] ?? false;
+
+    final possibleCategories = classifications.map((item) {
+      final mapItem = item as Map<String, dynamic>;
+      return {
+        'category': mapItem['category'] ?? 'Unknown',
+        'itemName': mapItem['itemName'] ?? '',
+        'isRecyclable': mapItem['isRecyclable'] ?? false,
+        'confidence': mapItem['confidence'] ?? 0,
+        'confidencePercentage': mapItem['confidencePercentage'] ?? 0,
+      };
+    }).toList();
+
+    final imageScanDoc = _firestore
+        .collection('image_scan_records')
+        .doc(userId);
+
+    final chatbotDoc = _firestore.collection('chatbot_records').doc(userId);
+    final messagesCollection = chatbotDoc.collection('messages');
+
+    await _firestore.runTransaction((transaction) async {
+      final chatbotSnapshot = await transaction.get(chatbotDoc);
+      final currentCount =
+          (chatbotSnapshot.data()?['messageCount'] ?? 0) as int;
+
+      final userMessageNo = currentCount + 1;
+      final botMessageNo = currentCount + 2;
+
+      final userMessageId =
+          '${userMessageNo.toString().padLeft(5, '0')}_image_user';
+      final botMessageId =
+          '${botMessageNo.toString().padLeft(5, '0')}_image_bot';
+
+      transaction.set(imageScanDoc, {
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'latestImageLocalPath': imageFile.path,
+        'latestCategory': mainCategory,
+        'latestConfidence': confidence,
+        'latestConfidencePercentage': confidencePercentage,
+        'latestGuidance': answer,
+        'latestItemName': mainItemName,
+        'isRecyclable': isRecyclable,
+        'detectionMode': detectionMode,
+        'classifications': classifications,
+        'source': source,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      transaction.set(chatbotDoc, {
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'latestQuestion': 'Image scan',
+        'latestAnswer': answer,
+        'isRecyclingRelated': true,
+        'source': source,
+        'messageCount': botMessageNo,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      transaction.set(messagesCollection.doc(userMessageId), {
+        'messageNo': userMessageNo,
+        'displayOrder': userMessageNo,
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'role': 'user',
+        'messageType': 'image_scan',
+        'text': 'Image uploaded for scanning.',
+        'imageLocalPath': imageFile.path,
+        'source': 'user',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      transaction.set(messagesCollection.doc(botMessageId), {
+        'messageNo': botMessageNo,
+        'displayOrder': botMessageNo,
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'role': 'bot',
+        'messageType': 'image_scan_result',
+        'text': answer,
+        'imageLocalPath': imageFile.path,
+        'detectionMode': detectionMode,
+        'mainCategory': mainCategory,
+        'mainItemName': mainItemName,
+        'isRecyclable': isRecyclable,
+        'confidence': confidence,
+        'confidencePercentage': confidencePercentage,
+        'possibleCategories': possibleCategories,
+        'source': source,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    });
 
     return data;
   }

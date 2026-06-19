@@ -63,21 +63,67 @@ class ChatbotService {
       chatHistory: chatHistory,
     );
 
-    final answer = aiResult['answer'] ?? 'Sorry, I could not generate an answer.';
+    final answer =
+        aiResult['answer'] ?? 'Sorry, I could not generate an answer.';
     final isRecyclingRelated = aiResult['isRecyclingRelated'] ?? true;
     final source = aiResult['source'] ?? 'ilmu';
 
-    await _firestore.collection('chatbot_records').doc(userId).set({
-      'userId': userId,
-      'userNo': userNo,
-      'username': username,
-      'userName': userName,
-      'latestQuestion': question,
-      'latestAnswer': answer,
-      'isRecyclingRelated': isRecyclingRelated,
-      'source': source,
-      'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    final chatbotDoc = _firestore.collection('chatbot_records').doc(userId);
+    final messagesCollection = chatbotDoc.collection('messages');
+
+    await _firestore.runTransaction((transaction) async {
+      final chatbotSnapshot = await transaction.get(chatbotDoc);
+      final currentCount =
+          (chatbotSnapshot.data()?['messageCount'] ?? 0) as int;
+
+      final userMessageNo = currentCount + 1;
+      final botMessageNo = currentCount + 2;
+
+      final userMessageId = '${userMessageNo.toString().padLeft(5, '0')}_user';
+      final botMessageId = '${botMessageNo.toString().padLeft(5, '0')}_bot';
+
+      transaction.set(chatbotDoc, {
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'latestQuestion': question,
+        'latestAnswer': answer,
+        'isRecyclingRelated': isRecyclingRelated,
+        'source': source,
+        'messageCount': botMessageNo,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      transaction.set(messagesCollection.doc(userMessageId), {
+        'messageNo': userMessageNo,
+        'displayOrder': userMessageNo,
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'role': 'user',
+        'messageType': 'text',
+        'text': question,
+        'source': 'user',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      transaction.set(messagesCollection.doc(botMessageId), {
+        'messageNo': botMessageNo,
+        'displayOrder': botMessageNo,
+        'userId': userId,
+        'userNo': userNo,
+        'username': username,
+        'userName': userName,
+        'role': 'bot',
+        'messageType': 'text',
+        'text': answer,
+        'isRecyclingRelated': isRecyclingRelated,
+        'source': source,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    });
 
     return answer;
   }
@@ -91,13 +137,8 @@ class ChatbotService {
     final response = await http
         .post(
           url,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'question': question,
-            'chatHistory': chatHistory,
-          }),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'question': question, 'chatHistory': chatHistory}),
         )
         .timeout(const Duration(seconds: 60));
 
