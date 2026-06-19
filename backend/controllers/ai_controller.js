@@ -30,44 +30,79 @@ async function callIlmu(messages, maxTokens = 500) {
   return data.choices?.[0]?.message?.content || "";
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function callCnnApi(file) {
-  const formData = new FormData();
-
-  const imageBlob = new Blob([file.buffer], {
-    type: file.mimetype,
-  });
-
-  formData.append("image", imageBlob, file.originalname || "uploaded_image.jpg");
-
   const cnnBaseUrl = CNN_API_URL.replace(/\/$/, "");
+  const maxAttempts = 4;
 
-  const response = await fetch(`${cnnBaseUrl}/predict`, {
-    method: "POST",
-    body: formData,
-  });
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const formData = new FormData();
 
-  const rawText = await response.text();
+      const imageBlob = new Blob([file.buffer], {
+        type: file.mimetype,
+      });
 
-  let data;
+      formData.append(
+        "image",
+        imageBlob,
+        file.originalname || "uploaded_image.jpg"
+      );
 
-  try {
-    data = JSON.parse(rawText);
-  } catch (error) {
-    console.error("CNN did not return JSON.");
-    console.error("CNN status:", response.status);
-    console.error("CNN response preview:", rawText.slice(0, 300));
+      const response = await fetch(`${cnnBaseUrl}/predict`, {
+        method: "POST",
+        body: formData,
+      });
 
-    throw new Error(
-      "CNN service is not ready yet. Please wait a while and try again."
-    );
+      const rawText = await response.text();
+
+      let data;
+
+      try {
+        data = JSON.parse(rawText);
+      } catch (jsonError) {
+        console.error(`CNN returned non-JSON on attempt ${attempt}`);
+        console.error("CNN status:", response.status);
+        console.error("CNN response preview:", rawText.slice(0, 200));
+
+        if (attempt < maxAttempts) {
+          await sleep(30000);
+          continue;
+        }
+
+        throw new Error(
+          "CNN service is still waking up. Please wait a while and try again."
+        );
+      }
+
+      if (!response.ok || !data.success) {
+        console.error(`CNN API Error on attempt ${attempt}:`, data);
+
+        if (attempt < maxAttempts) {
+          await sleep(30000);
+          continue;
+        }
+
+        throw new Error(data.message || "CNN image prediction failed");
+      }
+
+      return data;
+    } catch (error) {
+      console.error(`CNN call failed on attempt ${attempt}:`, error.message);
+
+      if (attempt < maxAttempts) {
+        await sleep(30000);
+        continue;
+      }
+
+      throw error;
+    }
   }
 
-  if (!response.ok || !data.success) {
-    console.error("CNN API Error:", data);
-    throw new Error(data.message || "CNN image prediction failed");
-  }
-
-  return data;
+  throw new Error("CNN image prediction failed after retrying.");
 }
 
 function buildSmartRecyclingPrompt(cnnResult) {
