@@ -39,12 +39,28 @@ async function callCnnApi(file) {
 
   formData.append("image", imageBlob, file.originalname || "uploaded_image.jpg");
 
-  const response = await fetch(`${CNN_API_URL}/predict`, {
+  const cnnBaseUrl = CNN_API_URL.replace(/\/$/, "");
+
+  const response = await fetch(`${cnnBaseUrl}/predict`, {
     method: "POST",
     body: formData,
   });
 
-  const data = await response.json();
+  const rawText = await response.text();
+
+  let data;
+
+  try {
+    data = JSON.parse(rawText);
+  } catch (error) {
+    console.error("CNN did not return JSON.");
+    console.error("CNN status:", response.status);
+    console.error("CNN response preview:", rawText.slice(0, 300));
+
+    throw new Error(
+      "CNN service is not ready yet. Please wait a while and try again."
+    );
+  }
 
   if (!response.ok || !data.success) {
     console.error("CNN API Error:", data);
