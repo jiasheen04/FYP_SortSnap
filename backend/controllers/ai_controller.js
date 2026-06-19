@@ -191,7 +191,7 @@ Rules:
 // POST /api/chatbot/text
 async function sendTextMessage(req, res) {
   try {
-    const { question } = req.body;
+    const { question, chatHistory = [] } = req.body;
 
     if (!question || question.trim() === "") {
       return res.status(400).json({
@@ -200,37 +200,51 @@ async function sendTextMessage(req, res) {
       });
     }
 
+    const recentHistory = Array.isArray(chatHistory)
+      ? chatHistory.slice(-8)
+      : [];
+
+    const historyMessages = recentHistory
+      .filter((msg) => msg.text && msg.text.trim() !== "")
+      .map((msg) => ({
+        role: msg.isUser ? "user" : "assistant",
+        content: msg.text,
+      }));
+
     const messages = [
       {
         role: "system",
         content: `
 You are SortSnap, a recycling assistant for Cyberjaya users in Malaysia.
 
+You can understand follow-up questions using the chat history.
+If the user says "it", "that item", "say more", "more detail", or asks a condition like "what if it is fully paper", use the previous conversation context.
+
 Answer style:
 - Give useful recycling guidance, not too short.
-- Use clear point form.
-- Use this format when suitable:
+- Use clear point form when suitable.
+- Keep the answer around 80 to 140 words.
+
+Use this format when suitable:
 
 ✅ Quick answer
-Give the direct answer in 1 or 2 sentences.
+Give the direct answer.
 
 ♻️ What to do
 • Give practical steps.
-• Explain how to prepare the item before recycling.
-• Mention whether to clean, dry, flatten, separate, or bring to special collection.
+• Mention clean, dry, flatten, rinse, separate, or special collection if needed.
 
 ⚠️ Important note
-Mention exceptions or warnings if needed.
+Mention exceptions or warnings.
 
-Important rules:
-- If the user asks "say more detailed", give more explanation about the previous recycling topic if possible.
-- If the user gives a condition, follow that condition. Example: if the user says "if it is completely made of paper", answer based on a fully paper item, not a plastic-lined cup.
-- Do not contradict yourself.
+Rules:
+- Do not contradict the user's condition.
+- If the user says "completely made of paper", answer based on paper only.
 - If unsure, say "usually" or "please check the recycling label/local guideline".
-- Keep the answer around 80 to 140 words.
 - Do not mention AI, backend, API, model, CNN, or confidence score.
-        `,
+    `,
       },
+      ...historyMessages,
       {
         role: "user",
         content: question,

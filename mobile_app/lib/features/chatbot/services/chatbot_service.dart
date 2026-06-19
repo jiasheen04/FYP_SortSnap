@@ -30,7 +30,10 @@ class ChatbotService {
     return ChatbotRecord.fromFirestore(snapshot.data()!);
   }
 
-  Future<String> askQuestion(String question) async {
+  Future<String> askQuestion(
+    String question, {
+    List<Map<String, dynamic>> chatHistory = const [],
+  }) async {
     final currentUser = _auth.currentUser;
 
     if (currentUser == null) {
@@ -55,7 +58,10 @@ class ChatbotService {
     final fullName = '$firstName $lastName'.trim();
     final userName = fullName.isEmpty ? username : fullName;
 
-    final aiResult = await _askIlmuBackend(question);
+    final aiResult = await _askIlmuBackend(
+      question: question,
+      chatHistory: chatHistory,
+    );
 
     final answer = aiResult['answer'] ?? 'Sorry, I could not generate an answer.';
     final isRecyclingRelated = aiResult['isRecyclingRelated'] ?? true;
@@ -76,7 +82,10 @@ class ChatbotService {
     return answer;
   }
 
-  Future<Map<String, dynamic>> _askIlmuBackend(String question) async {
+  Future<Map<String, dynamic>> _askIlmuBackend({
+    required String question,
+    required List<Map<String, dynamic>> chatHistory,
+  }) async {
     final url = Uri.parse('$_baseUrl/api/chatbot/text');
 
     final response = await http
@@ -87,9 +96,10 @@ class ChatbotService {
           },
           body: jsonEncode({
             'question': question,
+            'chatHistory': chatHistory,
           }),
         )
-        .timeout(const Duration(seconds: 30));
+        .timeout(const Duration(seconds: 60));
 
     final data = jsonDecode(response.body);
 

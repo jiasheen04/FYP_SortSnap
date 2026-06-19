@@ -154,7 +154,16 @@ class _ChatbotPageState extends State<ChatbotPage> {
     _scrollToBottom();
 
     try {
-      final answer = await _chatbotService.askQuestion(question);
+      final chatHistory = _messages
+          .where((msg) => msg.text.trim().isNotEmpty)
+          .where((msg) => !msg.text.toLowerCase().contains('scanning image'))
+          .map((msg) => {'text': msg.text, 'isUser': msg.isUser})
+          .toList();
+
+      final answer = await _chatbotService.askQuestion(
+        question,
+        chatHistory: chatHistory,
+      );
 
       if (!mounted) return;
 
@@ -294,7 +303,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
           final category = (classification['category'] ?? 'Unknown').toString();
           final itemName = (classification['itemName'] ?? category).toString();
           final isRecyclable = classification['isRecyclable'] == true;
-
 
           resultMessage =
               'Item: $itemName\n'
