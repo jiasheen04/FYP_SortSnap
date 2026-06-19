@@ -279,12 +279,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
             );
 
             final category = (item['category'] ?? 'Unknown').toString();
-            final confidencePercentage = item['confidencePercentage'] ?? 0;
             final isRecyclable = item['isRecyclable'] == true;
 
             itemListText +=
                 '${i + 1}. $category\n'
-                'Confidence: ${(confidencePercentage as num).toStringAsFixed(0)}%\n'
                 'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
           }
 
@@ -297,14 +295,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
           final itemName = (classification['itemName'] ?? category).toString();
           final isRecyclable = classification['isRecyclable'] == true;
 
-          final confidencePercentage =
-              classification['confidencePercentage'] ?? 0;
 
           resultMessage =
               'Item: $itemName\n'
               'Category: $category\n'
-              'Recyclable: ${isRecyclable ? "Yes" : "No"}\n'
-              'Confidence: ${(confidencePercentage as num).toStringAsFixed(0)}%\n\n'
+              'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n'
               '$answer';
         }
 

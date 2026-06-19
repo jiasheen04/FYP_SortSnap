@@ -63,40 +63,51 @@ function buildSmartRecyclingPrompt(cnnResult) {
     : [main];
 
   if (detectionMode === "possible_mixed" && classifications.length > 1) {
-    const predictionList = classifications
+    const materialList = classifications
       .map((item, index) => {
-        return `${index + 1}. ${item.category} - ${item.confidencePercentage}% confidence - Recyclable: ${item.isRecyclable ? "Yes" : "No"
+        return `${index + 1}. ${item.category} - Recyclable: ${item.isRecyclable ? "Yes" : "No"
           }`;
       })
       .join("\n");
 
     return `
-The image classification result shows more than one possible waste material.
+The image classification result suggests possible mixed waste materials.
 
 Possible materials:
-${predictionList}
+${materialList}
 
 Important:
 This is not object detection, so do not say every item is definitely detected.
 Use wording like "This image mainly looks like..." and "There may also be...".
+Do not mention confidence score.
 
 Give recycling guidance for a Cyberjaya user in Malaysia.
 
-Requirements:
-- Start with: "This image mainly looks like..."
-- Mention the main material first.
-- Mention possible mixed materials only as possible.
-- Tell the user to separate different materials before recycling.
-- Give simple guidance for each possible material.
+Use this format:
+
+✅ Main result
+Say what the image mainly looks like and mention possible mixed materials.
+
+♻️ What to do
+• Give practical steps for each possible material.
+• Tell the user to separate different materials before recycling.
+• Mention clean, dry, flatten, rinse, or special disposal if needed.
+
+⚠️ Important note
+Mention any warning or exception.
+
+📍 Cyberjaya tip
+Give a simple local recycling/drop-off suggestion.
+
+Rules:
 - Keep it beginner-friendly.
-- Keep it around 4 to 6 sentences.
-- Do not mention CNN, model, API, backend, or confidence score in the final answer.
+- Keep it around 80 to 140 words.
+- Do not mention CNN, model, API, backend, or confidence score.
 `;
   }
 
   const itemName = main.itemName || "unknown item";
   const category = main.category || itemName;
-  const confidencePercentage = main.confidencePercentage || 0;
   const isRecyclable = main.isRecyclable === true;
 
   return `
@@ -104,20 +115,31 @@ The uploaded image mainly contains one waste item.
 
 Detected item: ${itemName}
 Category: ${category}
-Confidence: ${confidencePercentage}%
 Recyclable: ${isRecyclable ? "Yes" : "No"}
 
 Give recycling guidance for a Cyberjaya user in Malaysia.
 
-Requirements:
-- Start with: "This looks like..."
+Use this format:
+
+✅ Main result
+Say what the item is.
+
+♻️ What to do
+• Give practical recycling or disposal steps.
+• Mention whether to clean, dry, flatten, rinse, separate, or bring to special collection.
+
+⚠️ Important note
+Mention any warning or exception.
+
+📍 Cyberjaya tip
+Give a simple local recycling/drop-off suggestion.
+
+Rules:
 - Mention only this detected item.
 - Do not mention possible mixed materials.
-- Explain what the user should do.
 - Keep it beginner-friendly.
-- Keep it around 3 to 5 sentences.
-- If confidence is below 80%, say the image may be unclear and ask the user to type the item name if needed.
-- Do not mention CNN, model, API, backend, or confidence score in the final answer.
+- Keep it around 70 to 120 words.
+- Do not mention CNN, model, API, backend, or confidence score.
 `;
 }
 
@@ -136,8 +158,36 @@ async function sendTextMessage(req, res) {
     const messages = [
       {
         role: "system",
-        content:
-          "You are SortSnap, a recycling assistant for Cyberjaya users. Give short, clear, beginner-friendly recycling guidance. Focus on Malaysian recycling context. Do not give very long answers.",
+        content: `
+You are SortSnap, a recycling assistant for Cyberjaya users in Malaysia.
+
+Answer style:
+- Give useful recycling guidance, not too short.
+- Use clear point form.
+- Use this format when suitable:
+
+✅ Quick answer
+Give the direct answer in 1 or 2 sentences.
+
+♻️ What to do
+• Give practical steps.
+• Explain how to prepare the item before recycling.
+• Mention whether to clean, dry, flatten, separate, or bring to special collection.
+
+⚠️ Important note
+Mention exceptions or warnings if needed.
+
+📍 Cyberjaya tip
+Mention recycling centre, drop-off point, council, or retailer collection if relevant.
+
+Important rules:
+- If the user asks "say more detailed", give more explanation about the previous recycling topic if possible.
+- If the user gives a condition, follow that condition. Example: if the user says "if it is completely made of paper", answer based on a fully paper item, not a plastic-lined cup.
+- Do not contradict yourself.
+- If unsure, say "usually" or "please check the recycling label/local guideline".
+- Keep the answer around 80 to 140 words.
+- Do not mention AI, backend, API, model, CNN, or confidence score.
+        `,
       },
       {
         role: "user",
@@ -145,7 +195,7 @@ async function sendTextMessage(req, res) {
       },
     ];
 
-    const answer = await callIlmu(messages, 500);
+    const answer = await callIlmu(messages, 700);
 
     return res.json({
       success: true,
