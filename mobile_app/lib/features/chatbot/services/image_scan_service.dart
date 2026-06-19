@@ -36,6 +36,47 @@ class ImageScanService {
     return savedImage;
   }
 
+  String _safeDocPart(String value) {
+    final cleaned = value.trim().isEmpty ? 'user' : value.trim();
+    return cleaned.replaceAll(RegExp(r'[^A-Za-z0-9_-]'), '_');
+  }
+
+  String _buildImageScanDisplayText(Map<String, dynamic> data) {
+    final detectionMode = (data['detectionMode'] ?? 'single').toString();
+    final classification =
+        data['classification'] as Map<String, dynamic>? ?? {};
+    final classificationsRaw = data['classifications'] as List? ?? [];
+    final answer = (data['answer'] ?? 'No guidance returned.').toString();
+
+    if (detectionMode == 'possible_mixed' && classificationsRaw.length > 1) {
+      String itemListText = '';
+
+      for (int i = 0; i < classificationsRaw.length; i++) {
+        final item = Map<String, dynamic>.from(classificationsRaw[i] as Map);
+
+        final category = (item['category'] ?? 'Unknown').toString();
+        final isRecyclable = item['isRecyclable'] == true;
+
+        itemListText +=
+            '${i + 1}. $category\n'
+            'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
+      }
+
+      return 'Possible mixed materials:\n\n'
+          '$itemListText'
+          '$answer';
+    }
+
+    final category = (classification['category'] ?? 'Unknown').toString();
+    final itemName = (classification['itemName'] ?? category).toString();
+    final isRecyclable = classification['isRecyclable'] == true;
+
+    return 'Item: $itemName\n'
+        'Category: $category\n'
+        'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n'
+        '$answer';
+  }
+
   Future<Map<String, dynamic>> classifyImage({required File imageFile}) async {
     final currentUser = _auth.currentUser;
 
@@ -87,6 +128,7 @@ class ImageScanService {
 
     final possibleCategories = classifications.map((item) {
       final mapItem = item as Map<String, dynamic>;
+
       return {
         'category': mapItem['category'] ?? 'Unknown',
         'itemName': mapItem['itemName'] ?? '',
@@ -96,43 +138,63 @@ class ImageScanService {
       };
     }).toList();
 
-    final imageScanDoc = _firestore
-        .collection('image_scan_records')
-        .doc(userId);
+    final chatDisplayText = _buildImageScanDisplayText(data);
+    data['chatDisplayText'] = chatDisplayText;
 
     final chatbotDoc = _firestore.collection('chatbot_records').doc(userId);
     final messagesCollection = chatbotDoc.collection('messages');
 
     await _firestore.runTransaction((transaction) async {
       final chatbotSnapshot = await transaction.get(chatbotDoc);
-      final currentCount =
+
+      final currentMessageCount =
           (chatbotSnapshot.data()?['messageCount'] ?? 0) as int;
 
-      final userMessageNo = currentCount + 1;
-      final botMessageNo = currentCount + 2;
+      final currentScanCount =
+          (chatbotSnapshot.data()?['imageScanCount'] ?? 0) as int;
+
+      final scanNo = currentScanCount + 1;
+
+      final userMessageNo = currentMessageCount + 1;
+      final botMessageNo = currentMessageCount + 2;
+
+      final safeUserNo = _safeDocPart(userNo.isNotEmpty ? userNo : userId);
+
+      final scanDocId =
+          '${safeUserNo}_scan_${scanNo.toString().padLeft(6, '0')}';
 
       final userMessageId =
-          '${userMessageNo.toString().padLeft(5, '0')}_image_user';
+          '${userMessageNo.toString().padLeft(6, '0')}_image_user';
+
       final botMessageId =
-          '${botMessageNo.toString().padLeft(5, '0')}_image_bot';
+          '${botMessageNo.toString().padLeft(6, '0')}_image_bot';
+
+      final imageScanDoc = _firestore
+          .collection('image_scan_records')
+          .doc(scanDocId);
 
       transaction.set(imageScanDoc, {
+        'scanId': scanDocId,
+        'scanNo': scanNo,
+        'displayOrder': scanNo,
         'userId': userId,
         'userNo': userNo,
         'username': username,
         'userName': userName,
-        'latestImageLocalPath': imageFile.path,
-        'latestCategory': mainCategory,
-        'latestConfidence': confidence,
-        'latestConfidencePercentage': confidencePercentage,
-        'latestGuidance': answer,
-        'latestItemName': mainItemName,
+        'imageLocalPath': imageFile.path,
+        'category': mainCategory,
+        'itemName': mainItemName,
         'isRecyclable': isRecyclable,
+        'confidence': confidence,
+        'confidencePercentage': confidencePercentage,
         'detectionMode': detectionMode,
         'classifications': classifications,
+        'possibleCategories': possibleCategories,
+        'guidance': answer,
+        'chatDisplayText': chatDisplayText,
         'source': source,
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
       transaction.set(chatbotDoc, {
         'userId': userId,
@@ -140,10 +202,11 @@ class ImageScanService {
         'username': username,
         'userName': userName,
         'latestQuestion': 'Image scan',
-        'latestAnswer': answer,
+        'latestAnswer': chatDisplayText,
         'isRecyclingRelated': true,
         'source': source,
         'messageCount': botMessageNo,
+        'imageScanCount': scanNo,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
@@ -171,7 +234,7 @@ class ImageScanService {
         'userName': userName,
         'role': 'bot',
         'messageType': 'image_scan_result',
-        'text': answer,
+        'text': chatDisplayText,
         'imageLocalPath': imageFile.path,
         'detectionMode': detectionMode,
         'mainCategory': mainCategory,

@@ -30,6 +30,54 @@ class ChatbotService {
     return ChatbotRecord.fromFirestore(snapshot.data()!);
   }
 
+  Future<List<Map<String, dynamic>>> getChatMessages() async {
+    final currentUser = _auth.currentUser;
+
+    if (currentUser == null) {
+      return [];
+    }
+
+    final snapshot = await _firestore
+        .collection('chatbot_records')
+        .doc(currentUser.uid)
+        .collection('messages')
+        .orderBy('displayOrder')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data['messageId'] = doc.id;
+      return data;
+    }).toList();
+  }
+
+  Future<void> clearChatMessages() async {
+    final currentUser = _auth.currentUser;
+
+    if (currentUser == null) {
+      throw Exception('User is not logged in.');
+    }
+
+    final userId = currentUser.uid;
+    final chatbotDoc = _firestore.collection('chatbot_records').doc(userId);
+    final messagesSnapshot = await chatbotDoc.collection('messages').get();
+
+    final batch = _firestore.batch();
+
+    for (final doc in messagesSnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+
+    batch.set(chatbotDoc, {
+      'latestQuestion': '',
+      'latestAnswer': '',
+      'messageCount': 0,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    await batch.commit();
+  }
+
   Future<String> askQuestion(
     String question, {
     List<Map<String, dynamic>> chatHistory = const [],
@@ -79,8 +127,8 @@ class ChatbotService {
       final userMessageNo = currentCount + 1;
       final botMessageNo = currentCount + 2;
 
-      final userMessageId = '${userMessageNo.toString().padLeft(5, '0')}_user';
-      final botMessageId = '${botMessageNo.toString().padLeft(5, '0')}_bot';
+      final userMessageId = '${userMessageNo.toString().padLeft(6, '0')}_user';
+      final botMessageId = '${botMessageNo.toString().padLeft(6, '0')}_bot';
 
       transaction.set(chatbotDoc, {
         'userId': userId,

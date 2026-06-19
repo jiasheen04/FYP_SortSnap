@@ -85,7 +85,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   @override
   void initState() {
     super.initState();
-    _loadLatestRecord();
+    _loadChatMessages();
   }
 
   @override
@@ -107,16 +107,50 @@ class _ChatbotPageState extends State<ChatbotPage> {
     });
   }
 
-  Future<void> _loadLatestRecord() async {
+  Future<void> _loadChatMessages() async {
     try {
-      await _chatbotService.getLatestChatbotRecord();
+      final savedMessages = await _chatbotService.getChatMessages();
 
       if (!mounted) return;
 
+      final loadedMessages = savedMessages.map((data) {
+        final role = (data['role'] ?? '').toString();
+        final messageType = (data['messageType'] ?? '').toString();
+
+        String text = (data['text'] ?? '').toString();
+
+        File? imageFile;
+        final imageLocalPath = (data['imageLocalPath'] ?? '').toString();
+
+        if (imageLocalPath.isNotEmpty) {
+          final file = File(imageLocalPath);
+
+          if (file.existsSync()) {
+            imageFile = file;
+          }
+        }
+
+        if (messageType == 'image_scan') {
+          text = 'Scanning image...';
+        }
+
+        return ChatMessage(
+          text: text,
+          isUser: role == 'user',
+          image: imageFile,
+        );
+      }).toList();
+
       setState(() {
+        _messages.clear();
+        _messages.addAll(loadedMessages);
         _isLoadingLatest = false;
       });
+
+      _scrollToBottom();
     } catch (e) {
+      debugPrint('Failed to load chat messages: $e');
+
       if (!mounted) return;
 
       setState(() {
@@ -144,6 +178,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   Future<void> _sendQuestionText(String question) async {
+    final chatHistory = _messages
+        .where((msg) => msg.text.trim().isNotEmpty)
+        .where((msg) => !msg.text.toLowerCase().contains('scanning image'))
+        .map((msg) => {'text': msg.text, 'isUser': msg.isUser})
+        .toList();
+
     setState(() {
       _isLoading = true;
       _showImageOptions = false;
@@ -154,12 +194,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
     _scrollToBottom();
 
     try {
-      final chatHistory = _messages
-          .where((msg) => msg.text.trim().isNotEmpty)
-          .where((msg) => !msg.text.toLowerCase().contains('scanning image'))
-          .map((msg) => {'text': msg.text, 'isUser': msg.isUser})
-          .toList();
-
       final answer = await _chatbotService.askQuestion(
         question,
         chatHistory: chatHistory,
@@ -239,7 +273,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
       final imageFile = File(pickedImage.path);
 
-      // Save camera photo to gallery
       if (source == ImageSource.camera) {
         await _saveCameraImageToGallery(imageFile);
       }
@@ -266,50 +299,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         if (!mounted) return;
 
-        final detectionMode = (result['detectionMode'] ?? 'single').toString();
-
-        final classification = Map<String, dynamic>.from(
-          result['classification'] as Map? ?? {},
-        );
-
-        final classificationsRaw = result['classifications'] as List? ?? [];
-
-        final answer = (result['answer'] ?? 'No guidance returned.').toString();
-
-        String resultMessage;
-
-        if (detectionMode == 'possible_mixed' &&
-            classificationsRaw.length > 1) {
-          String itemListText = '';
-
-          for (int i = 0; i < classificationsRaw.length; i++) {
-            final item = Map<String, dynamic>.from(
-              classificationsRaw[i] as Map,
-            );
-
-            final category = (item['category'] ?? 'Unknown').toString();
-            final isRecyclable = item['isRecyclable'] == true;
-
-            itemListText +=
-                '${i + 1}. $category\n'
-                'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
-          }
-
-          resultMessage =
-              'Possible mixed materials:\n\n'
-              '$itemListText'
-              '$answer';
-        } else {
-          final category = (classification['category'] ?? 'Unknown').toString();
-          final itemName = (classification['itemName'] ?? category).toString();
-          final isRecyclable = classification['isRecyclable'] == true;
-
-          resultMessage =
-              'Item: $itemName\n'
-              'Category: $category\n'
-              'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n'
-              '$answer';
-        }
+        final resultMessage =
+            (result['chatDisplayText'] ??
+                    result['answer'] ??
+                    'No guidance returned.')
+                .toString();
 
         setState(() {
           _messages.add(ChatMessage(text: resultMessage, isUser: false));
@@ -322,7 +316,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         setState(() {
           _messages.add(
-            ChatMessage(text: 'Image scan error:\n$e', isUser: false),
+            ChatMessage(
+              text:
+                  'Image scan is currently unavailable. Please wait a while and try again, or type the item name manually.',
+              isUser: false,
+            ),
           );
           _isLoading = false;
         });
@@ -339,6 +337,30 @@ class _ChatbotPageState extends State<ChatbotPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Failed to pick image: $e')));
+    }
+  }
+
+  Future<void> _resetChat() async {
+    try {
+      await _chatbotService.clearChatMessages();
+
+      if (!mounted) return;
+
+      setState(() {
+        _messages.clear();
+        _showImageOptions = false;
+        _showQuickQuestions = false;
+      });
+    } catch (e) {
+      debugPrint('Failed to reset chat: $e');
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to reset chat. Please try again.'),
+        ),
+      );
     }
   }
 
@@ -914,13 +936,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       ),
       actions: [
         IconButton(
-          onPressed: () {
-            setState(() {
-              _messages.clear();
-              _showImageOptions = false;
-              _showQuickQuestions = false;
-            });
-          },
+          onPressed: _isLoading ? null : _resetChat,
           icon: const Icon(Icons.refresh, color: Colors.white, size: 24),
         ),
       ],
