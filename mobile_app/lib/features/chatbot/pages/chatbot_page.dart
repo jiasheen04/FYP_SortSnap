@@ -341,27 +341,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   Future<void> _resetChat() async {
-    try {
-      await _chatbotService.clearChatMessages();
-
-      if (!mounted) return;
-
-      setState(() {
-        _messages.clear();
-        _showImageOptions = false;
-        _showQuickQuestions = false;
-      });
-    } catch (e) {
-      debugPrint('Failed to reset chat: $e');
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to reset chat. Please try again.'),
-        ),
-      );
-    }
+    setState(() {
+      _messages.clear();
+      _showImageOptions = false;
+      _showQuickQuestions = false;
+    });
   }
 
   Widget _botBubble(String text) {
