@@ -81,11 +81,56 @@ class _ChatbotPageState extends State<ChatbotPage> {
   bool _isLoadingLatest = true;
   bool _showImageOptions = false;
   bool _showQuickQuestions = false;
+  bool _isWarmingImageScanner = false;
+
+  bool _shouldWarmImageScanner(String text) {
+    final lowerText = text.toLowerCase();
+
+    final imageKeywords = [
+      'image',
+      'photo',
+      'picture',
+      'pic',
+      'camera',
+      'gallery',
+      'upload',
+      'scan',
+      'snap',
+      'take photo',
+      'classify',
+      'recognize',
+      'identify',
+      'gambar',
+      'foto',
+      '拍照',
+      '照片',
+      '图片',
+      '上传',
+      '扫描',
+    ];
+
+    return imageKeywords.any((keyword) => lowerText.contains(keyword));
+  }
+
+  Future<void> _warmUpImageScannerSilently() async {
+    if (_isWarmingImageScanner) return;
+
+    _isWarmingImageScanner = true;
+
+    try {
+      await _imageScanService.warmUpImageScanner();
+    } catch (e) {
+      debugPrint('Silent CNN warm up failed: $e');
+    } finally {
+      _isWarmingImageScanner = false;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _loadChatMessages();
+    _warmUpImageScannerSilently();
   }
 
   @override
@@ -183,6 +228,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
         .where((msg) => !msg.text.toLowerCase().contains('scanning image'))
         .map((msg) => {'text': msg.text, 'isUser': msg.isUser})
         .toList();
+
+    if (_shouldWarmImageScanner(question)) {
+      _warmUpImageScannerSilently();
+    }
 
     setState(() {
       _isLoading = true;
@@ -291,6 +340,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
       _scrollToBottom();
 
       try {
+        await _imageScanService.warmUpImageScanner();
+        
         final result = await _imageScanService.classifyImage(
           imageFile: imageFile,
         );

@@ -251,6 +251,36 @@ class ImageScanService {
     return data;
   }
 
+  Future<bool> warmUpImageScanner() async {
+  final url = Uri.parse('https://sortsnap-cnn.onrender.com/health');
+
+  for (int attempt = 1; attempt <= 6; attempt++) {
+    try {
+      final response = await http.get(url).timeout(
+            const Duration(seconds: 20),
+          );
+
+      if (response.statusCode == 200) {
+        final body = response.body.trim();
+
+        if (body.startsWith('{')) {
+          final data = jsonDecode(body) as Map<String, dynamic>;
+
+          if (data['success'] == true) {
+            return true;
+          }
+        }
+      }
+    } catch (e) {
+      print('CNN warm up attempt $attempt failed: $e');
+    }
+
+    await Future.delayed(const Duration(seconds: 10));
+  }
+
+  return false;
+}
+
   Future<void> saveLatestImageScanLocal({
     required File imageFile,
     required String sourceType,
