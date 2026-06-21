@@ -264,19 +264,16 @@ English:
 ✅ Quick answer
 ♻️ What to do
 ⚠️ Important note
-📍 Cyberjaya tip
 
 Malay:
 ✅ Jawapan ringkas
 ♻️ Apa perlu dibuat
 ⚠️ Nota penting
-📍 Tip Cyberjaya
 
 Chinese:
 ✅ 简短回答
 ♻️ 应该怎么做
 ⚠️ 重要提醒
-📍 Cyberjaya 小提示
 
 Answer style:
 - Give useful recycling guidance, not too short.
