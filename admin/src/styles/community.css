@@ -1,12 +1,8 @@
-/* =========================
-   Community Page
-   File: CommunityPage.jsx
-========================= */
-
 .community-page .community-tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 22px;
+  flex-wrap: wrap;
 }
 
 .community-page .community-tabs button {
@@ -30,10 +26,117 @@
   color: white;
 }
 
-.community-page .card {
-  min-height: 400px;
+/* =========================
+  Main Layout
+========================= */
+
+.community-page .community-admin-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr;
+  gap: 28px;
+  align-items: stretch;
 }
 
+.community-page .community-list-card,
+.community-page .community-detail-card {
+  min-height: 700px;
+}
+
+.community-page .community-list-card {
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
+  padding-right: 20px;
+}
+
+.community-page .community-detail-card {
+  overflow: visible;
+}
+
+.community-page .community-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.community-page .community-list-header h2 {
+  margin: 0;
+}
+
+.community-page .community-list-header .primary-btn {
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+/* =========================
+  List
+========================= */
+
+.community-page .community-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.community-page .community-list-item {
+  width: 100%;
+  border: 1px solid #dde3ea;
+  background: white;
+  border-radius: 14px;
+  padding: 16px 20px;
+  text-align: left;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.community-page .community-list-item:hover {
+  background: #f8fafc;
+}
+
+.community-page .community-list-item.active {
+  border-color: #4fbd91;
+  background: #f0fff7;
+}
+
+.community-page .community-list-item h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #020617;
+}
+
+.community-page .community-list-item p {
+  margin: 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+.community-page .community-status-badge {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.community-page .community-status-badge.active-faq {
+  background: #e9fff3;
+  color: #009245;
+  border: 1px solid #a8ecc7;
+}
+
+.community-page .community-status-badge.inactive {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+}
+
+/* Old list-box support */
 .community-page .list-box {
   border: 1px solid #dde3ea;
   border-radius: 14px;
@@ -59,20 +162,220 @@
   top: 14px;
 }
 
+/* =========================
+  Editor Layout
+========================= */
+
+.community-page .editor-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.community-page .basic-form-panel,
+.community-page .item-editor-panel {
+  width: 100%;
+  border: 1px solid #dde3ea;
+  border-radius: 14px;
+  padding: 18px;
+  background: #f8fafc;
+}
+
+.community-page .basic-form-panel h3,
+.community-page .item-editor-panel h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
 .community-page .flashcard-form {
   border: 1px solid #dde3ea;
   border-radius: 14px;
-  padding: 16px;
+  padding: 18px;
   margin-top: 18px;
-  background: #f8fafc;
+  background: white;
 }
 
 .community-page .flashcard-form h3 {
   margin: 0 0 10px;
 }
 
-@media (max-width: 1100px) {
-  .community-page .community-tabs {
-    flex-wrap: wrap;
+.community-page .compact-form {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+/* =========================
+  Card / Question Tabs
+========================= */
+
+.community-page .item-tab-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin: 12px 0 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e1e5ea;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.community-page .item-tab {
+  flex: 0 0 auto;
+  border: 1px solid #dce2e8;
+  background: white;
+  color: #111827;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.community-page .item-tab:hover {
+  background: #eef6f2;
+}
+
+.community-page .active-item-tab {
+  background: #4fbd91;
+  border-color: #4fbd91;
+  color: white;
+}
+
+/* =========================
+  Forms
+========================= */
+
+.community-page .form-two-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.community-page .form-help {
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+
+.community-page .mini-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.community-page .mini-title-row h3 {
+  margin: 0;
+}
+
+.community-page .community-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.community-page .community-checkbox-row input {
+  width: auto;
+  margin: 0;
+}
+
+/* =========================
+  Buttons
+========================= */
+
+.community-page .mini-button-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.community-page .small-btn {
+  border: 1px solid #dce2e8;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: white;
+  color: #111827;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.community-page .small-btn:hover {
+  background: #f4f6f8;
+}
+
+.community-page .add-btn {
+  background: #e9fff3;
+  color: #087a3f;
+  border-color: #a8ecc7;
+}
+
+.community-page .add-btn:hover {
+  background: #dffcea;
+}
+
+.community-page .danger-btn {
+  border: 1px solid #ffd0c9;
+  border-radius: 13px;
+  padding: 12px 18px;
+  background: #fff7f5;
+  color: #b42318;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.community-page .small-btn.danger-btn {
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.community-page .danger-btn:hover {
+  background: #fff0ed;
+}
+
+.community-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+  Responsive
+========================= */
+
+@media (max-width: 1250px) {
+  .community-page .community-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .community-page .community-list-card {
+    min-height: 360px;
+    max-height: 420px;
+  }
+
+  .community-page .community-detail-card {
+    min-height: 500px;
+  }
+}
+
+@media (max-width: 900px) {
+  .community-page .form-two-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .community-page .community-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .community-page .community-list-item {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
