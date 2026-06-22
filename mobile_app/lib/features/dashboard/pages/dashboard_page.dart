@@ -2,6 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app/core/widgets/bottom_nav.dart';
+import 'package:mobile_app/features/community/models/article.dart';
+import 'package:mobile_app/features/community/pages/article_page.dart';
+import 'package:mobile_app/features/community/pages/community_page.dart';
+import 'package:mobile_app/features/community/services/community_service.dart';
 import 'package:mobile_app/features/pickup/pages/pickup_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -15,10 +19,14 @@ class _DashboardPageState extends State<DashboardPage> {
   String userDisplayName = '';
   bool isLoading = true;
 
+  final CommunityService communityService = CommunityService();
+  List<Article> articles = [];
+
   @override
   void initState() {
     super.initState();
     loadUserData();
+    loadArticles();
   }
 
   Future<void> loadUserData() async {
@@ -56,24 +64,156 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  Widget _buildFeatureCard({
+  Future<void> loadArticles() async {
+    try {
+      final articleList = await communityService.getActiveArticles();
+
+      if (!mounted) return;
+
+      setState(() {
+        articles = articleList;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        articles = [];
+      });
+    }
+  }
+
+  void showQrDialog() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    String userId = 'N/A';
+
+    if (currentUser != null) {
+      if (currentUser.uid.length > 8) {
+        userId = '${currentUser.uid.substring(0, 8)}...';
+      } else {
+        userId = currentUser.uid;
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.qr_code_2, size: 120, color: Color(0xFF51BA90)),
+              const SizedBox(height: 16),
+              const Text(
+                'Your SortSnap QR',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'User ID: $userId',
+                style: const TextStyle(fontSize: 13, color: Colors.black54),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Show this QR at recycling points for quick check-in.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, color: Colors.black54),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Close',
+                style: TextStyle(color: Color(0xFF51BA90)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildTopButton({
     required IconData icon,
     required String title,
-    required String subtitle,
     required VoidCallback onTap,
-    Color? iconColor,
   }) {
+    return Expanded(
+      child: ElevatedButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, size: 20),
+        label: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF96D8BE),
+          foregroundColor: Colors.white,
+          elevation: 2,
+          padding: const EdgeInsets.symmetric(vertical: 17),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildSectionTitle({
+    required String title,
+    bool showSeeAll = false,
+    VoidCallback? onSeeAll,
+  }) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 21,
+            fontWeight: FontWeight.w800,
+            color: Colors.black,
+          ),
+        ),
+        const Spacer(),
+        if (showSeeAll)
+          GestureDetector(
+            onTap: onSeeAll,
+            child: const Text(
+              'See All  >',
+              style: TextStyle(
+                color: Colors.black26,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildArticleCard(Article article) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => ArticlePage(article: article)),
+        );
+      },
       child: Container(
-        padding: const EdgeInsets.all(18),
+        width: 270,
+        margin: const EdgeInsets.only(right: 14),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withOpacity(0.85),
+          borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 7,
               offset: const Offset(0, 3),
             ),
           ],
@@ -81,33 +221,135 @@ class _DashboardPageState extends State<DashboardPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8F8F0),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(icon, color: iconColor ?? const Color(0xFF51BA90), size: 24),
-            ),
-            const SizedBox(height: 12),
+            buildArticleImage(article),
+            const SizedBox(height: 8),
             Text(
-              title,
+              article.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
+                color: Color(0xFF51BA90),
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.black54,
-              ),
+              article.summary,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Colors.black38, fontSize: 12),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildArticleImage(Article article) {
+    if (article.imagePath.isEmpty) {
+      return buildArticlePlaceholder();
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.asset(
+        article.imagePath,
+        width: double.infinity,
+        height: 105,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return buildArticlePlaceholder();
+        },
+      ),
+    );
+  }
+
+  Widget buildArticlePlaceholder() {
+    return Container(
+      width: double.infinity,
+      height: 105,
+      decoration: BoxDecoration(
+        color: const Color(0xFFE8F8F0),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: const Icon(
+        Icons.article_outlined,
+        color: Color(0xFF51BA90),
+        size: 42,
+      ),
+    );
+  }
+
+  Widget buildArticlesSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSectionTitle(
+          title: 'Articles',
+          showSeeAll: true,
+          onSeeAll: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CommunityPage(initialTabIndex: 2),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 14),
+
+        if (articles.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.85),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: const Text(
+              'No articles available yet.',
+              style: TextStyle(color: Colors.black54, fontSize: 14),
+            ),
+          )
+        else
+          SizedBox(
+            height: 175,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                return buildArticleCard(articles[index]);
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget buildTipCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.85),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: const Row(
+        children: [
+          Icon(Icons.lightbulb_outline, color: Color(0xFF51BA90), size: 30),
+          SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              'Rinse food containers before recycling them.',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+                height: 1.3,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -117,210 +359,78 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFD5EDE4),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(
+              child: CircularProgressIndicator(color: Color(0xFF51BA90)),
+            )
           : SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                padding: const EdgeInsets.fromLTRB(22, 18, 22, 100),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Welcome back,',
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w400,
+                        fontSize: 23,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
                       ),
                     ),
                     Text(
                       userDisplayName,
                       style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w800,
                         color: Color(0xFF51BA90),
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 22),
 
-                    // Quick action buttons
                     Row(
                       children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const PickupPage(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.local_shipping_outlined, size: 20),
-                            label: const Text('Pickup'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF96D8BE),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                        buildTopButton(
+                          icon: Icons.local_shipping_outlined,
+                          title: 'Pickup',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const PickupPage(),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              _showQrDialog();
-                            },
-                            icon: const Icon(Icons.qr_code, size: 20),
-                            label: const Text('Show QR'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF96D8BE),
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
-                          ),
+                        const SizedBox(width: 18),
+                        buildTopButton(
+                          icon: Icons.qr_code_scanner,
+                          title: 'Show QR',
+                          onTap: showQrDialog,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 28),
 
-                    // Features section
+                    const SizedBox(height: 30),
+
+                    buildArticlesSection(),
+
+                    const SizedBox(height: 30),
+
                     const Text(
-                      'Explore Features',
+                      'Tips of the day 🌱',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 21,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 14),
 
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 14,
-                      crossAxisSpacing: 14,
-                      childAspectRatio: 1.1,
-                      children: [
-                        _buildFeatureCard(
-                          icon: Icons.map_outlined,
-                          title: 'Find Locations',
-                          subtitle: 'Nearby recycling points',
-                          onTap: () {
-                            Navigator.pushReplacementNamed(context, '/map');
-                          },
-                        ),
-                        _buildFeatureCard(
-                          icon: Icons.smart_toy_outlined,
-                          title: 'Ask Chatbot',
-                          subtitle: 'Recycling guidance',
-                          onTap: () {
-                            Navigator.pushReplacementNamed(context, '/chatbot');
-                          },
-                        ),
-                        _buildFeatureCard(
-                          icon: Icons.quiz_outlined,
-                          title: 'Challenges',
-                          subtitle: 'Quiz & Flashcards',
-                          onTap: () {
-                            Navigator.pushReplacementNamed(context, '/community');
-                          },
-                        ),
-                        _buildFeatureCard(
-                          icon: Icons.camera_alt_outlined,
-                          title: 'Scan Item',
-                          subtitle: 'Image classification',
-                          onTap: () {
-                            Navigator.pushReplacementNamed(context, '/chatbot');
-                          },
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Tips section
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF62C49D), Color(0xFF51BA90)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Recycling Tip',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Rinse food containers before recycling them. Clean items have a better chance of being recycled properly!',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    buildTipCard(),
                   ],
                 ),
               ),
             ),
       bottomNavigationBar: const BottomNav(selectedIndex: 2),
-    );
-  }
-
-  void _showQrDialog() {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.qr_code_2, size: 120, color: Color(0xFF51BA90)),
-            const SizedBox(height: 16),
-            const Text(
-              'Your SortSnap QR',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'User ID: ${currentUser?.uid.substring(0, 8) ?? 'N/A'}...',
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Show this QR at recycling points for quick check-in.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close', style: TextStyle(color: Color(0xFF51BA90))),
-          ),
-        ],
-      ),
     );
   }
 }

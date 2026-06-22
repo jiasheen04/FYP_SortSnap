@@ -1,0 +1,78 @@
+/* =========================
+   Community Page
+   File: CommunityPage.jsx
+========================= */
+
+.community-page .community-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.community-page .community-tabs button {
+  border: 1px solid #dce2e8;
+  background: white;
+  color: #111827;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.community-page .community-tabs button:hover {
+  background: #eef6f2;
+}
+
+.community-page .community-tabs .active-tab {
+  background: #4fbd91;
+  border-color: #4fbd91;
+  color: white;
+}
+
+.community-page .card {
+  min-height: 400px;
+}
+
+.community-page .list-box {
+  border: 1px solid #dde3ea;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: #ffffff;
+  position: relative;
+}
+
+.community-page .list-box b {
+  display: block;
+  padding-right: 100px;
+}
+
+.community-page .list-box p {
+  color: #5f6b7a;
+  margin: 8px 0 0;
+}
+
+.community-page .list-box span {
+  position: absolute;
+  right: 16px;
+  top: 14px;
+}
+
+.community-page .flashcard-form {
+  border: 1px solid #dde3ea;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 18px;
+  background: #f8fafc;
+}
+
+.community-page .flashcard-form h3 {
+  margin: 0 0 10px;
+}
+
+@media (max-width: 1100px) {
+  .community-page .community-tabs {
+    flex-wrap: wrap;
+  }
+}

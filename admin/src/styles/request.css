@@ -1,0 +1,139 @@
+.request-page .two-column {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 22px;
+  align-items: flex-start;
+}
+
+.request-page .card {
+  padding: 22px 24px;
+  border-radius: 16px;
+}
+
+.request-page h2 {
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.request-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.request-page table th,
+.request-page table td {
+  padding: 14px 16px;
+  font-size: 15px;
+}
+
+.request-page table th {
+  text-align: left;
+  background-color: #f5f7f9;
+}
+
+.request-page table tr {
+  cursor: pointer;
+}
+
+.request-page .selected-row {
+  background-color: #e5f8ee;
+}
+
+.request-page .detail-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 15px;
+}
+
+.request-page .detail-row b {
+  font-weight: 700;
+}
+
+.request-page label {
+  display: block;
+  margin-top: 18px;
+  font-weight: 700;
+}
+
+.request-page select {
+  width: 100%;
+  height: 46px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border: 1px solid #d7dee8;
+  border-radius: 12px;
+  font-size: 15px;
+  background-color: white;
+}
+
+.request-page .button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.request-page .button-row button {
+  padding: 12px 18px;
+}
+
+.request-page .normal-btn {
+  margin-top: 18px;
+}
+
+.request-page .button-row .normal-btn {
+  margin-top: 0;
+}
+
+.request-page hr {
+  margin: 22px 0;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* keep pickup request boxes stable */
+.request-page .two-column > .card {
+  min-height: 620px;
+}
+
+.request-page .two-column > .card:first-child {
+  height: 620px;
+  overflow: hidden;
+}
+
+.request-page .two-column > .card:first-child table {
+  display: block;
+  max-height: 430px;
+  overflow-y: auto;
+}
+
+.request-page .two-column > .card:first-child thead,
+.request-page .two-column > .card:first-child tbody,
+.request-page .two-column > .card:first-child tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* message will not push layout down */
+.request-page .message-box {
+  position: fixed;
+  top: 22px;
+  right: 30px;
+  width: 360px;
+  z-index: 999;
+}
+
+@media (max-width: 1100px) {
+  .request-page .two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .request-page .message-box {
+    position: static;
+    width: auto;
+  }
+}

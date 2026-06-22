@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app/features/profile/pages/feedback_history_page.dart';
 
 class FeedbackPage extends StatefulWidget {
   const FeedbackPage({super.key});
@@ -31,20 +32,44 @@ class _FeedbackPageState extends State<FeedbackPage> {
       return;
     }
 
-    setState(() => _isSubmitting = true);
+    setState(() {
+      _isSubmitting = true;
+    });
 
     try {
       final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser == null) throw Exception('Not logged in');
+      if (currentUser == null) {
+        throw Exception('Not logged in');
+      }
+
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
+
+      String username = 'Unknown User';
+      String userNo = '-';
+
+      if (userDoc.exists) {
+        final userData = userDoc.data();
+
+        if (userData != null) {
+          username = userData['username'] ?? 'Unknown User';
+          userNo = userData['userNo'] ?? '-';
+        }
+      }
 
       await FirebaseFirestore.instance.collection('feedback').add({
         'userId': currentUser.uid,
+        'username': username,
+        'userNo': userNo,
         'category': _selectedCategory,
         'subject': _subjectController.text.trim(),
         'message': _messageController.text.trim(),
         'status': 'Open',
-        'adminReply': null,
+        'adminReply': '',
         'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
       });
 
       if (!mounted) return;
@@ -52,14 +77,20 @@ class _FeedbackPageState extends State<FeedbackPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Feedback submitted successfully!')),
       );
+
       Navigator.pop(context);
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to submit: $e')),
-      );
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to submit: $e')));
     } finally {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
@@ -79,12 +110,20 @@ class _FeedbackPageState extends State<FeedbackPage> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Help Centre',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 17),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -103,7 +142,47 @@ class _FeedbackPageState extends State<FeedbackPage> {
             ),
             const SizedBox(height: 24),
 
-            const Text('Category', style: TextStyle(fontSize: 16, color: Colors.black54)),
+            Align(
+              alignment: Alignment.centerRight,
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Color(0xFF35A37A), width: 1.6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 14,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const FeedbackHistoryPage(),
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.history,
+                  color: Color(0xFF35A37A),
+                  size: 18,
+                ),
+                label: const Text(
+                  'My Feedback',
+                  style: TextStyle(
+                    color: Color(0xFF35A37A),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+
+            const Text(
+              'Category',
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -119,14 +198,21 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     return DropdownMenuItem(value: cat, child: Text(cat));
                   }).toList(),
                   onChanged: (value) {
-                    if (value != null) setState(() => _selectedCategory = value);
+                    if (value != null) {
+                      setState(() {
+                        _selectedCategory = value;
+                      });
+                    }
                   },
                 ),
               ),
             ),
             const SizedBox(height: 20),
 
-            const Text('Subject', style: TextStyle(fontSize: 16, color: Colors.black54)),
+            const Text(
+              'Subject',
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _subjectController,
@@ -142,7 +228,10 @@ class _FeedbackPageState extends State<FeedbackPage> {
             ),
             const SizedBox(height: 20),
 
-            const Text('Message', style: TextStyle(fontSize: 16, color: Colors.black54)),
+            const Text(
+              'Message',
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
             const SizedBox(height: 8),
             TextField(
               controller: _messageController,
@@ -175,9 +264,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     ? const SizedBox(
                         height: 22,
                         width: 22,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
                       )
-                    : const Text('Submit Feedback', style: TextStyle(fontSize: 16)),
+                    : const Text(
+                        'Submit Feedback',
+                        style: TextStyle(fontSize: 16),
+                      ),
               ),
             ),
           ],

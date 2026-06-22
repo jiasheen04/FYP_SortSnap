@@ -9,7 +9,9 @@ import 'package:mobile_app/features/community/pages/flashcard_page.dart';
 import 'package:mobile_app/features/community/pages/article_page.dart';
 
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({super.key});
+  final int initialTabIndex;
+
+  const CommunityPage({super.key, this.initialTabIndex = 0});
 
   @override
   State<CommunityPage> createState() => _CommunityPageState();
@@ -34,7 +36,11 @@ class _CommunityPageState extends State<CommunityPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.initialTabIndex,
+    );
     _loadData();
   }
 
@@ -118,20 +124,14 @@ class _CommunityPageState extends State<CommunityPage>
             color: iconBgColor,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: 26,
-          ),
+          child: Icon(icon, color: iconColor, size: 26),
         ),
         title: Text(
           title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
-        subtitle: customSubtitle ??
+        subtitle:
+            customSubtitle ??
             Padding(
               padding: const EdgeInsets.only(top: 3),
               child: Text(
@@ -152,9 +152,7 @@ class _CommunityPageState extends State<CommunityPage>
 
   Widget _buildQuizList() {
     if (_quizzes.isEmpty) {
-      return _buildEmptyMessage(
-        'No quizzes available yet.\nCheck back later!',
-      );
+      return _buildEmptyMessage('No quizzes available yet.\nCheck back later!');
     }
 
     return ListView.builder(
@@ -173,9 +171,7 @@ class _CommunityPageState extends State<CommunityPage>
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => QuizPage(quiz: quiz),
-              ),
+              MaterialPageRoute(builder: (_) => QuizPage(quiz: quiz)),
             );
           },
         );
@@ -267,9 +263,7 @@ class _CommunityPageState extends State<CommunityPage>
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => ArticlePage(article: article),
-              ),
+              MaterialPageRoute(builder: (_) => ArticlePage(article: article)),
             );
           },
         );
@@ -342,9 +336,7 @@ class _CommunityPageState extends State<CommunityPage>
         ),
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: iconGreen),
-            )
+          ? const Center(child: CircularProgressIndicator(color: iconGreen))
           : TabBarView(
               controller: _tabController,
               children: [

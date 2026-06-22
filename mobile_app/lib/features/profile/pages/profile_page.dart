@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app/app/routes.dart';
 import 'package:mobile_app/core/widgets/bottom_nav.dart';
 import 'package:mobile_app/features/profile/pages/edit_profile_page.dart';
+import 'package:mobile_app/features/profile/pages/change_password_page.dart';
 import 'package:mobile_app/features/profile/pages/faq_page.dart';
 import 'package:mobile_app/features/profile/pages/feedback_page.dart';
 import 'package:mobile_app/features/profile/pages/about_page.dart';
@@ -188,6 +189,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         MaterialPageRoute(builder: (_) => const EditProfilePage()),
                       );
                       _loadUserData();
+                    },
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.lock_reset_outlined,
+                    title: 'Change Password',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ChangePasswordPage()),
+                      );
                     },
                   ),
                   _buildMenuItem(
