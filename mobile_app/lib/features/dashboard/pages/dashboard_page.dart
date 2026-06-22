@@ -6,6 +6,10 @@ import 'package:mobile_app/features/community/models/article.dart';
 import 'package:mobile_app/features/community/pages/article_page.dart';
 import 'package:mobile_app/features/community/pages/community_page.dart';
 import 'package:mobile_app/features/community/services/community_service.dart';
+import 'package:mobile_app/features/dashboard/data/recycle_category_data.dart';
+import 'package:mobile_app/features/dashboard/pages/recycle_categories_page.dart';
+import 'package:mobile_app/features/dashboard/pages/recycle_items_page.dart';
+import 'package:mobile_app/features/dashboard/widgets/dashboard_widgets.dart';
 import 'package:mobile_app/features/pickup/pages/pickup_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -82,9 +86,28 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
-  void showQrDialog() {
-    final currentUser = FirebaseAuth.instance.currentUser;
+  void openCategoryPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const RecycleCategoriesPage(),
+      ),
+    );
+  }
 
+  void openCategoryItems(RecycleCategory category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RecycleCategoryItemsPage(
+          category: category,
+        ),
+      ),
+    );
+  }
+
+  void showQrDialog() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
     String userId = 'N/A';
 
     if (currentUser != null) {
@@ -105,22 +128,35 @@ class _DashboardPageState extends State<DashboardPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.qr_code_2, size: 120, color: Color(0xFF51BA90)),
+              const Icon(
+                Icons.qr_code_2,
+                size: 120,
+                color: Color(0xFF51BA90),
+              ),
               const SizedBox(height: 16),
               const Text(
                 'Your SortSnap QR',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'User ID: $userId',
-                style: const TextStyle(fontSize: 13, color: Colors.black54),
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
               ),
               const SizedBox(height: 8),
               const Text(
                 'Show this QR at recycling points for quick check-in.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
               ),
             ],
           ),
@@ -131,7 +167,9 @@ class _DashboardPageState extends State<DashboardPage> {
               },
               child: const Text(
                 'Close',
-                style: TextStyle(color: Color(0xFF51BA90)),
+                style: TextStyle(
+                  color: Color(0xFF51BA90),
+                ),
               ),
             ),
           ],
@@ -140,144 +178,35 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget buildTopButton({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return Expanded(
-      child: ElevatedButton.icon(
-        onPressed: onTap,
-        icon: Icon(icon, size: 20),
-        label: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF96D8BE),
-          foregroundColor: Colors.white,
-          elevation: 2,
-          padding: const EdgeInsets.symmetric(vertical: 17),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-    );
-  }
+  Widget buildCategorySection() {
+    final dashboardCategories = [
+      RecycleCategoryData.getCategoryByName('Plastic'),
+      RecycleCategoryData.getCategoryByName('Cardboard'),
+      RecycleCategoryData.getCategoryByName('E-Waste'),
+      RecycleCategoryData.getCategoryByName('Trash'),
+    ];
 
-  Widget buildSectionTitle({
-    required String title,
-    bool showSeeAll = false,
-    VoidCallback? onSeeAll,
-  }) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 21,
-            fontWeight: FontWeight.w800,
-            color: Colors.black,
-          ),
+        DashboardSectionTitle(
+          title: 'Category',
+          showSeeAll: true,
+          onSeeAll: openCategoryPage,
         ),
-        const Spacer(),
-        if (showSeeAll)
-          GestureDetector(
-            onTap: onSeeAll,
-            child: const Text(
-              'See All  >',
-              style: TextStyle(
-                color: Colors.black26,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+        const SizedBox(height: 14),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: dashboardCategories.map((category) {
+            return DashboardCategoryItem(
+              category: category,
+              onTap: () {
+                openCategoryItems(category);
+              },
+            );
+          }).toList(),
+        ),
       ],
-    );
-  }
-
-  Widget buildArticleCard(Article article) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ArticlePage(article: article)),
-        );
-      },
-      child: Container(
-        width: 270,
-        margin: const EdgeInsets.only(right: 14),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.85),
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 7,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildArticleImage(article),
-            const SizedBox(height: 8),
-            Text(
-              article.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFF51BA90),
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 3),
-            Text(
-              article.summary,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.black38, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildArticleImage(Article article) {
-    if (article.imagePath.isEmpty) {
-      return buildArticlePlaceholder();
-    }
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Image.asset(
-        article.imagePath,
-        width: double.infinity,
-        height: 105,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return buildArticlePlaceholder();
-        },
-      ),
-    );
-  }
-
-  Widget buildArticlePlaceholder() {
-    return Container(
-      width: double.infinity,
-      height: 105,
-      decoration: BoxDecoration(
-        color: const Color(0xFFE8F8F0),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: const Icon(
-        Icons.article_outlined,
-        color: Color(0xFF51BA90),
-        size: 42,
-      ),
     );
   }
 
@@ -285,7 +214,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildSectionTitle(
+        DashboardSectionTitle(
           title: 'Articles',
           showSeeAll: true,
           onSeeAll: () {
@@ -298,18 +227,20 @@ class _DashboardPageState extends State<DashboardPage> {
           },
         ),
         const SizedBox(height: 14),
-
         if (articles.isEmpty)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.85),
+              color: Colors.white.withValues(alpha: 0.85),
               borderRadius: BorderRadius.circular(14),
             ),
             child: const Text(
               'No articles available yet.',
-              style: TextStyle(color: Colors.black54, fontSize: 14),
+              style: TextStyle(
+                color: Colors.black54,
+                fontSize: 14,
+              ),
             ),
           )
         else
@@ -319,7 +250,19 @@ class _DashboardPageState extends State<DashboardPage> {
               scrollDirection: Axis.horizontal,
               itemCount: articles.length,
               itemBuilder: (context, index) {
-                return buildArticleCard(articles[index]);
+                return DashboardArticleCard(
+                  article: articles[index],
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ArticlePage(
+                          article: articles[index],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
@@ -332,12 +275,16 @@ class _DashboardPageState extends State<DashboardPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.85),
+        color: Colors.white.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
       ),
       child: const Row(
         children: [
-          Icon(Icons.lightbulb_outline, color: Color(0xFF51BA90), size: 30),
+          Icon(
+            Icons.lightbulb_outline,
+            color: Color(0xFF51BA90),
+            size: 30,
+          ),
           SizedBox(width: 14),
           Expanded(
             child: Text(
@@ -360,7 +307,9 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: const Color(0xFFD5EDE4),
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFF51BA90)),
+              child: CircularProgressIndicator(
+                color: Color(0xFF51BA90),
+              ),
             )
           : SafeArea(
               child: SingleChildScrollView(
@@ -385,10 +334,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     const SizedBox(height: 22),
-
                     Row(
                       children: [
-                        buildTopButton(
+                        DashboardTopButton(
                           icon: Icons.local_shipping_outlined,
                           title: 'Pickup',
                           onTap: () {
@@ -401,20 +349,18 @@ class _DashboardPageState extends State<DashboardPage> {
                           },
                         ),
                         const SizedBox(width: 18),
-                        buildTopButton(
+                        DashboardTopButton(
                           icon: Icons.qr_code_scanner,
                           title: 'Show QR',
                           onTap: showQrDialog,
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 30),
-
+                    buildCategorySection(),
+                    const SizedBox(height: 30),
                     buildArticlesSection(),
-
                     const SizedBox(height: 30),
-
                     const Text(
                       'Tips of the day 🌱',
                       style: TextStyle(
@@ -424,7 +370,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ),
                     const SizedBox(height: 14),
-
                     buildTipCard(),
                   ],
                 ),
