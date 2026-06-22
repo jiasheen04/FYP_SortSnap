@@ -5,10 +5,7 @@ import 'package:mobile_app/features/dashboard/pages/recycle_items_page.dart';
 class RecycleCategoriesPage extends StatefulWidget {
   final int initialTabIndex;
 
-  const RecycleCategoriesPage({
-    super.key,
-    this.initialTabIndex = 0,
-  });
+  const RecycleCategoriesPage({super.key, this.initialTabIndex = 0});
 
   @override
   State<RecycleCategoriesPage> createState() => _RecycleCategoriesPageState();
@@ -34,18 +31,11 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
   void openCategoryItems(RecycleCategory category) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => RecycleCategoryItemsPage(
-          category: category,
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => RecycleItemsPage(category: category)),
     );
   }
 
-  Widget buildTabButton({
-    required String title,
-    required int index,
-  }) {
+  Widget buildTabButton({required String title, required int index}) {
     bool isSelected = selectedTabIndex == index;
 
     return GestureDetector(
@@ -54,26 +44,44 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
           selectedTabIndex = index;
         });
       },
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: isSelected ? const Color(0xFF51BA90) : Colors.black38,
-              fontSize: 20,
-              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : [],
+        ),
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? const Color(0xFF51BA90) : Colors.black38,
+                fontSize: 15,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+              ),
             ),
-          ),
-          const SizedBox(height: 7),
-          Container(
-            width: 42,
-            height: 4,
-            decoration: BoxDecoration(
-              color: isSelected ? const Color(0xFF51BA90) : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
+            const SizedBox(height: 5),
+            Container(
+              width: 28,
+              height: 3,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? const Color(0xFF51BA90)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -86,27 +94,40 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
       child: Column(
         children: [
           Container(
-            width: 104,
-            height: 104,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE3EA74),
+            width: 82,
+            height: 82,
+            decoration: BoxDecoration(
+              color: const Color(0xFF96D8BE),
               shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 7,
+                  offset: const Offset(0, 3),
+                ),
+              ],
             ),
-            child: Icon(
-              category.icon,
-              color: const Color(0xFF51BA90),
-              size: 50,
+            child: ClipOval(
+              child: Image.asset(
+                category.imagePath,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(category.icon, color: Colors.white, size: 38);
+                },
+              ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 9),
           Text(
             category.name,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black45,
-              fontWeight: FontWeight.w600,
-              height: 1.25,
+              fontSize: 13,
+              color: Colors.black54,
+              fontWeight: FontWeight.w500,
+              height: 1.2,
             ),
           ),
         ],
@@ -117,12 +138,12 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F7),
+      backgroundColor: const Color(0xFFD5EDE4),
       body: SafeArea(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+              padding: const EdgeInsets.fromLTRB(14, 14, 18, 0),
               child: Row(
                 children: [
                   IconButton(
@@ -131,49 +152,50 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
                     },
                     icon: const Icon(
                       Icons.arrow_back,
-                      color: Colors.black,
-                      size: 32,
+                      color: Colors.black87,
+                      size: 29,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 6),
                   const Text(
                     'Recycle Categories',
                     style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(221, 254, 254, 254),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 34),
+            const SizedBox(height: 22),
+
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 34),
+              padding: const EdgeInsets.symmetric(horizontal: 22),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  buildTabButton(
-                    title: 'Recyclable',
-                    index: 0,
+                  Expanded(
+                    child: buildTabButton(title: 'Recyclable', index: 0),
                   ),
-                  buildTabButton(
-                    title: 'Non-Recyclable',
-                    index: 1,
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: buildTabButton(title: 'Special Handling', index: 1),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 34),
+
+            const SizedBox(height: 24),
+
             Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 22),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
                 itemCount: currentCategories.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
-                  mainAxisSpacing: 36,
-                  crossAxisSpacing: 14,
-                  childAspectRatio: 0.74,
+                  mainAxisSpacing: 26,
+                  crossAxisSpacing: 18,
+                  childAspectRatio: 0.78,
                 ),
                 itemBuilder: (context, index) {
                   return buildCategoryCard(currentCategories[index]);

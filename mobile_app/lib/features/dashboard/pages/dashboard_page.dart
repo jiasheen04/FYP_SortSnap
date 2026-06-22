@@ -89,20 +89,14 @@ class _DashboardPageState extends State<DashboardPage> {
   void openCategoryPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const RecycleCategoriesPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const RecycleCategoriesPage()),
     );
   }
 
   void openCategoryItems(RecycleCategory category) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => RecycleCategoryItemsPage(
-          category: category,
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => RecycleItemsPage(category: category)),
     );
   }
 
@@ -128,35 +122,22 @@ class _DashboardPageState extends State<DashboardPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.qr_code_2,
-                size: 120,
-                color: Color(0xFF51BA90),
-              ),
+              const Icon(Icons.qr_code_2, size: 120, color: Color(0xFF51BA90)),
               const SizedBox(height: 16),
               const Text(
                 'Your SortSnap QR',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 'User ID: $userId',
-                style: const TextStyle(
-                  fontSize: 13,
-                  color: Colors.black54,
-                ),
+                style: const TextStyle(fontSize: 13, color: Colors.black54),
               ),
               const SizedBox(height: 8),
               const Text(
                 'Show this QR at recycling points for quick check-in.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 13, color: Colors.black54),
               ),
             ],
           ),
@@ -167,9 +148,7 @@ class _DashboardPageState extends State<DashboardPage> {
               },
               child: const Text(
                 'Close',
-                style: TextStyle(
-                  color: Color(0xFF51BA90),
-                ),
+                style: TextStyle(color: Color(0xFF51BA90)),
               ),
             ),
           ],
@@ -183,7 +162,7 @@ class _DashboardPageState extends State<DashboardPage> {
       RecycleCategoryData.getCategoryByName('Plastic'),
       RecycleCategoryData.getCategoryByName('Cardboard'),
       RecycleCategoryData.getCategoryByName('E-Waste'),
-      RecycleCategoryData.getCategoryByName('Trash'),
+      RecycleCategoryData.getCategoryByName('Personal Waste'),
     ];
 
     return Column(
@@ -237,10 +216,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             child: const Text(
               'No articles available yet.',
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.black54, fontSize: 14),
             ),
           )
         else
@@ -256,9 +232,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ArticlePage(
-                          article: articles[index],
-                        ),
+                        builder: (_) => ArticlePage(article: articles[index]),
                       ),
                     );
                   },
@@ -270,7 +244,37 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+  final List<String> dailyTips = const [
+    'Rinse food containers before recycling them.',
+    'Flatten cardboard boxes before placing them in the recycling bin.',
+    'Keep batteries separate because they need special handling.',
+    'Do not mix food waste with recyclable items.',
+    'Remove leftover liquid from bottles before recycling.',
+    'Reuse bags and containers when they are still clean.',
+    'Check if an item is recyclable before throwing it into the bin.',
+  ];
+
+  String getTodayTip() {
+    final startDate = DateTime(2026, 6, 22);
+    final today = DateTime.now();
+
+    final cleanStartDate = DateTime(
+      startDate.year,
+      startDate.month,
+      startDate.day,
+    );
+
+    final cleanToday = DateTime(today.year, today.month, today.day);
+
+    final dayDifference = cleanToday.difference(cleanStartDate).inDays;
+    final tipIndex = dayDifference % dailyTips.length;
+
+    return dailyTips[tipIndex];
+  }
+
   Widget buildTipCard() {
+    final todayTip = getTodayTip();
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -278,18 +282,18 @@ class _DashboardPageState extends State<DashboardPage> {
         color: Colors.white.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.lightbulb_outline,
             color: Color(0xFF51BA90),
             size: 30,
           ),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
           Expanded(
             child: Text(
-              'Rinse food containers before recycling them.',
-              style: TextStyle(
+              todayTip,
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.black54,
                 height: 1.3,
@@ -307,9 +311,7 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: const Color(0xFFD5EDE4),
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF51BA90),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFF51BA90)),
             )
           : SafeArea(
               child: SingleChildScrollView(

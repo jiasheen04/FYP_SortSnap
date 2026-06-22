@@ -102,7 +102,15 @@ class DashboardCategoryItem extends StatelessWidget {
                 color: Color(0xFF96D8BE),
                 shape: BoxShape.circle,
               ),
-              child: Icon(category.icon, color: Colors.white, size: 31),
+              child: ClipOval(
+                child: Image.asset(
+                  category.imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(category.icon, color: Colors.white, size: 31);
+                  },
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             Text(

@@ -82,6 +82,9 @@ flutter:
     - assets/images/flashcards/
     - assets/images/quiz/
     - assets/images/articles/
+    - assets/images/categories/recyclable/
+    - assets/images/categories/specialhandling/
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
