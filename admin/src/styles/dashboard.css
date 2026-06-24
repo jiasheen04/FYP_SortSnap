@@ -1,6 +1,14 @@
+.dashboard-page .dashboard-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 18px;
   margin-bottom: 22px;
 }
@@ -11,6 +19,7 @@
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 8px 25px rgba(15, 23, 42, 0.04);
+  min-height: 145px;
 }
 
 .stat-card h3 {
@@ -26,33 +35,170 @@
   color: #111827;
 }
 
+.stat-card small {
+  display: block;
+  margin-top: 7px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* =========================
+   Middle Summary Cards
+========================= */
+
 .dashboard-section-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
+  margin-bottom: 22px;
+  align-items: stretch;
 }
 
-.dashboard-mini-box {
-  border: 1px solid #dde3ea;
-  border-radius: 14px;
-  padding: 16px;
-  background: #f8fafc;
+.dashboard-summary-card {
+  height: 100%;
+  min-height: 260px;
 }
 
-.dashboard-mini-box h3 {
-  margin: 0 0 8px;
-  font-size: 17px;
+/* =========================
+   Latest List Cards
+========================= */
+
+.dashboard-list-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  align-items: stretch;
 }
 
-.dashboard-mini-box p {
+.dashboard-list-grid .card {
+  height: 300px;
+  min-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 0;
+}
+
+/* =========================
+   Card Title Row
+========================= */
+
+.dashboard-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dashboard-title-row h2 {
   margin: 0;
-  color: #5f6b7a;
-  line-height: 1.5;
 }
 
-@media (max-width: 1100px) {
+.dashboard-link {
+  color: #1f7a59;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dashboard-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   Summary Rows
+========================= */
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 0;
+  border-top: 1px solid #e1e5ea;
+}
+
+.summary-row:first-of-type {
+  border-top: 0;
+}
+
+.summary-row span {
+  color: #4b5563;
+}
+
+.summary-row b {
+  font-size: 18px;
+}
+
+/* =========================
+   Latest List Rows
+========================= */
+
+.dashboard-list-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  border-top: 1px solid #e1e5ea;
+  padding: 12px 0;
+  min-height: 76px;
+}
+
+.dashboard-list-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.dashboard-list-row b {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.dashboard-list-row p {
+  margin: 0 0 5px;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.35;
+
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboard-list-row small {
+  color: #6b7280;
+}
+
+.dashboard-list-row span {
+  flex-shrink: 0;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1250px) {
   .dashboard-grid,
-  .dashboard-section-grid {
+  .dashboard-section-grid,
+  .dashboard-list-grid {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-summary-card {
+    min-height: auto;
+  }
+
+  .dashboard-list-grid .card {
+    height: auto;
+    min-height: 260px;
+  }
+
+  .dashboard-list-row p {
+    max-width: 650px;
+  }
+}
+
+@media (max-width: 800px) {
+  .dashboard-page .dashboard-header-row {
+    flex-direction: column;
   }
 }
