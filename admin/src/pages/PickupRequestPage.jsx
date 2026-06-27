@@ -116,9 +116,13 @@ function PickupRequestPage() {
     return "status-blue";
   }
 
-  const openRecyclingPoints = recyclingPoints.filter((point) => {
-    return point.status === "Open" || point.isOpen === true;
-  });
+  const openRecyclingPoints = recyclingPoints
+    .filter((point) => {
+      return point.status === "Open" || point.isOpen === true;
+    })
+    .sort((a, b) => {
+      return a.pointCode.localeCompare(b.pointCode);
+    });
 
   const selectedPoint = recyclingPoints.find((point) => {
     return point.id === selectedPointId;
@@ -141,7 +145,7 @@ function PickupRequestPage() {
       <h1>View Request</h1>
 
       <p className="page-subtitle">
-        Manage pickup requests submitted from the Flutter mobile app.
+        Manage pickup requests.
       </p>
 
       {message && <p className="message-box">{message}</p>}

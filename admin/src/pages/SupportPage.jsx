@@ -4,7 +4,6 @@ import {
   listenFeedback,
   listenFaqs,
   updateFeedbackReply,
-  updateFeedbackStatus,
   createFaq,
   updateFaq,
   deleteFaq,
@@ -97,25 +96,26 @@ function SupportPage() {
     setFeedbackStatus(item.status || "Open");
   }
 
-  async function handleSaveReply() {
+  async function handleMarkResolved() {
     if (!selectedFeedback) return;
+
+    if (selectedFeedback.status === "Resolved") {
+      return;
+    }
+
+    if (replyText.trim() === "") {
+      alert("Please write a reply before marking resolved.");
+      return;
+    }
 
     await updateFeedbackReply(
       selectedFeedback.id,
       replyText.trim(),
-      feedbackStatus
+      "Resolved"
     );
 
-    alert("Feedback updated.");
-  }
-
-  async function handleQuickStatus(status) {
-    if (!selectedFeedback) return;
-
-    await updateFeedbackStatus(selectedFeedback.id, status);
-    setFeedbackStatus(status);
-
-    alert("Status updated.");
+    setFeedbackStatus("Resolved");
+    alert("Feedback marked as resolved.");
   }
 
   function startCreateFaq() {
@@ -174,12 +174,15 @@ function SupportPage() {
     startCreateFaq();
   }
 
+  const isFeedbackResolved =
+    selectedFeedback && selectedFeedback.status === "Resolved";
+
   return (
     <div className="support-page">
       <h1>Support</h1>
 
       <p className="page-subtitle">
-        Manage FAQ and Help Centre feedback from the mobile app.
+        Manage Help Centre feedback and FAQ.
       </p>
 
       <div className="support-top-row">
@@ -220,7 +223,6 @@ function SupportPage() {
             >
               <option value="All">Status</option>
               <option value="Open">Open</option>
-              <option value="In Progress">In Progress</option>
               <option value="Resolved">Resolved</option>
             </select>
           )}
@@ -309,15 +311,11 @@ function SupportPage() {
                 </div>
 
                 <label className="form-label">Status</label>
-                <select
+                <input
                   className="support-input"
                   value={feedbackStatus}
-                  onChange={(event) => setFeedbackStatus(event.target.value)}
-                >
-                  <option value="Open">Open</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Resolved">Resolved</option>
-                </select>
+                  disabled
+                />
 
                 <label className="form-label">Admin Reply</label>
                 <textarea
@@ -325,16 +323,14 @@ function SupportPage() {
                   value={replyText}
                   onChange={(event) => setReplyText(event.target.value)}
                   placeholder="Write admin reply..."
+                  disabled={isFeedbackResolved}
                 />
 
                 <div className="button-row">
-                  <button className="primary-btn" onClick={handleSaveReply}>
-                    Save Reply
-                  </button>
-
                   <button
-                    className="normal-btn"
-                    onClick={() => handleQuickStatus("Resolved")}
+                    className="primary-btn"
+                    onClick={handleMarkResolved}
+                    disabled={isFeedbackResolved}
                   >
                     Mark Resolved
                   </button>
@@ -448,14 +444,6 @@ function SupportPage() {
               <div className="button-row">
                 <button className="primary-btn" type="submit">
                   {selectedFaq ? "Update FAQ" : "Create FAQ"}
-                </button>
-
-                <button
-                  className="normal-btn"
-                  type="button"
-                  onClick={startCreateFaq}
-                >
-                  Clear
                 </button>
 
                 {selectedFaq && (

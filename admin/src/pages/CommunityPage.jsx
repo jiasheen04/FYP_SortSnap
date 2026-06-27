@@ -473,7 +473,7 @@ function CommunityPage() {
       <h1>Community</h1>
 
       <p className="page-subtitle">
-        Create and edit quiz, flashcard, and article content for the mobile app.
+        Create and edit quiz, flashcard, and article content.
       </p>
 
       {message !== "" && <div className="message-box">{message}</div>}
