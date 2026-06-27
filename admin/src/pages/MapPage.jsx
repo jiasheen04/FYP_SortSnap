@@ -700,9 +700,6 @@ function MapPage() {
 
           <div className="map-card" style={{ marginTop: "24px" }}>
             <h2>User Location Reports</h2>
-            <p className="page-subtitle">
-              These are comments submitted by users from the Flutter map page.
-            </p>
 
             {reportLoading ? (
               <p>Loading location reports...</p>
