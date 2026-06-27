@@ -21,7 +21,7 @@ export async function getAllRecyclingPoints() {
   });
 
   pointList.sort((a, b) => {
-    return a.name.localeCompare(b.name);
+    return a.pointCode.localeCompare(b.pointCode);
   });
 
   return pointList;
@@ -30,7 +30,7 @@ export async function getAllRecyclingPoints() {
 async function generateNextPointCode() {
   const snapshot = await getDocs(collection(db, recyclingPointCollection));
 
-  let biggestNumber = 0;
+  const usedNumbers = [];
 
   snapshot.docs.forEach((docItem) => {
     const data = docItem.data();
@@ -39,12 +39,17 @@ async function generateNextPointCode() {
     const numberOnly = code.replace("RP", "");
     const number = parseInt(numberOnly);
 
-    if (!isNaN(number) && number > biggestNumber) {
-      biggestNumber = number;
+    if (!isNaN(number)) {
+      usedNumbers.push(number);
     }
   });
 
-  const nextNumber = biggestNumber + 1;
+  let nextNumber = 1;
+
+  while (usedNumbers.includes(nextNumber)) {
+    nextNumber++;
+  }
+
   return "RP" + String(nextNumber).padStart(2, "0");
 }
 

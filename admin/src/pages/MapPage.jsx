@@ -425,15 +425,6 @@ function MapPage() {
           </h2>
 
           <form onSubmit={handleSubmit}>
-            <div className="map-form-group">
-              <label>Point Code</label>
-              <input
-                type="text"
-                name="pointCode"
-                value={selectedPoint ? form.pointCode : getNextPointCodePreview()}
-                disabled
-              />
-            </div>
 
             <div className="map-form-group">
               <label>Name</label>
@@ -623,17 +614,23 @@ function MapPage() {
                     ? "Update Point"
                     : "+ Add Point"}
               </button>
-
-              <button className="map-secondary-btn" type="button" onClick={resetForm}>
-                Clear
-              </button>
             </div>
           </form>
         </div>
 
         <div>
           <div className="map-card">
-            <h2>Recycling Points</h2>
+            <div className="map-list-title-row">
+              <h2>Recycling Points</h2>
+
+              <button
+                className="map-primary-btn"
+                type="button"
+                onClick={resetForm}
+              >
+                Create New Point
+              </button>
+            </div>
 
             {loading ? (
               <p>Loading recycling points...</p>

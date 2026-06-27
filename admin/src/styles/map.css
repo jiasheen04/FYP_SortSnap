@@ -150,12 +150,9 @@
 }
 
 .map-primary-btn {
-  background: #16a34a;
+  background: #4fbd91;
+  border-color: #4fbd91;
   color: white;
-}
-
-.map-primary-btn:hover {
-  background: #15803d;
 }
 
 .map-primary-btn:disabled {
@@ -269,6 +266,19 @@
   background: #fecaca;
 }
 
+.map-list-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.map-list-title-row h2 {
+  margin: 0;
+}
+
+
 @media (max-width: 1100px) {
   .map-report-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -291,12 +301,12 @@
   .map-report-divider {
     display: none;
   }
-}
 
-.map-form-row {
-  grid-template-columns: 1fr;
-}
+  .map-form-row {
+    grid-template-columns: 1fr;
+  }
 
-.map-checkbox-grid {
-  grid-template-columns: 1fr;
+  .map-checkbox-grid {
+    grid-template-columns: 1fr;
+  }
 }
