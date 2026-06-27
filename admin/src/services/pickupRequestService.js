@@ -46,7 +46,6 @@ async function getCurrentAdminInfo() {
 
   return {
     adminId: currentUser.uid,
-    adminEmail: currentUser.email || adminData.email || "",
     adminUsername: adminData.username || "",
     adminUserNo: adminData.userNo || "",
   };
@@ -60,7 +59,6 @@ export async function updatePickupStatus(pickupId, newStatus) {
     status: newStatus,
     updatedAt: serverTimestamp(),
     updatedByAdminId: admin.adminId,
-    updatedByAdminEmail: admin.adminEmail,
     updatedByAdminUsername: admin.adminUsername,
     updatedByAdminUserNo: admin.adminUserNo,
   };
@@ -68,31 +66,31 @@ export async function updatePickupStatus(pickupId, newStatus) {
   if (newStatus === "Completed") {
     updateData.completedAt = serverTimestamp();
     updateData.completedByAdminId = admin.adminId;
-  }
-
-  if (newStatus === "Rejected") {
-    updateData.rejectedAt = serverTimestamp();
-    updateData.rejectedByAdminId = admin.adminId;
+    updateData.completedByAdminUsername = admin.adminUsername;
+    updateData.completedByAdminUserNo = admin.adminUserNo;
   }
 
   await updateDoc(pickupRef, updateData);
 }
 
-export async function forwardPickupRequest(pickupId, recyclingPointId) {
+export async function forwardPickupRequest(
+  pickupId,
+  recyclingPointId,
+  recyclingPointName
+) {
   const admin = await getCurrentAdminInfo();
   const pickupRef = doc(db, pickupCollection, pickupId);
 
   await updateDoc(pickupRef, {
     status: "Forwarded",
     forwardedToPointId: recyclingPointId,
+    forwardedToPointName: recyclingPointName,
     forwardedAt: serverTimestamp(),
     forwardedByAdminId: admin.adminId,
-    forwardedByAdminEmail: admin.adminEmail,
     forwardedByAdminUsername: admin.adminUsername,
     forwardedByAdminUserNo: admin.adminUserNo,
     updatedAt: serverTimestamp(),
     updatedByAdminId: admin.adminId,
-    updatedByAdminEmail: admin.adminEmail,
     updatedByAdminUsername: admin.adminUsername,
     updatedByAdminUserNo: admin.adminUserNo,
   });

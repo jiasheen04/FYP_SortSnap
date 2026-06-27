@@ -95,24 +95,24 @@
 }
 
 /* keep pickup request boxes stable */
-.request-page .two-column > .card {
+.request-page .two-column>.card {
   min-height: 620px;
 }
 
-.request-page .two-column > .card:first-child {
+.request-page .two-column>.card:first-child {
   height: 620px;
   overflow: hidden;
 }
 
-.request-page .two-column > .card:first-child table {
+.request-page .two-column>.card:first-child table {
   display: block;
   max-height: 430px;
   overflow-y: auto;
 }
 
-.request-page .two-column > .card:first-child thead,
-.request-page .two-column > .card:first-child tbody,
-.request-page .two-column > .card:first-child tr {
+.request-page .two-column>.card:first-child thead,
+.request-page .two-column>.card:first-child tbody,
+.request-page .two-column>.card:first-child tr {
   display: table;
   width: 100%;
   table-layout: fixed;
@@ -126,6 +126,32 @@
   width: 360px;
   z-index: 999;
 }
+
+.request-page .status-green {
+  color: #1b8f4d;
+  font-weight: 700;
+}
+
+.request-page .rp-contact-box {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background-color: #f5f7f9;
+  font-size: 14px;
+}
+
+.request-page .rp-contact-box p {
+  margin: 6px 0 0;
+  color: #555;
+  font-size: 13px;
+}
+
+.request-page button:disabled,
+.request-page select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 
 @media (max-width: 1100px) {
   .request-page .two-column {

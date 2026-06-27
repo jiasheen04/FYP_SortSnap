@@ -84,9 +84,9 @@ class _PickupFormPageState extends State<PickupFormPage> {
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to submit request: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to submit request: $e')));
     } finally {
       if (mounted) {
         setState(() {
@@ -137,10 +137,7 @@ class _PickupFormPageState extends State<PickupFormPage> {
           children: [
             const Text(
               'Request Recycling Pickup',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 8),
@@ -156,13 +153,7 @@ class _PickupFormPageState extends State<PickupFormPage> {
 
             const SizedBox(height: 28),
 
-            const Text(
-              'Pickup Address *',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            _buildRequiredLabel('Pickup Address'),
 
             const SizedBox(height: 8),
 
@@ -197,22 +188,13 @@ class _PickupFormPageState extends State<PickupFormPage> {
 
             const SizedBox(height: 24),
 
-            const Text(
-              'Item Types *',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            _buildRequiredLabel('Item Types'),
 
             const SizedBox(height: 4),
 
             const Text(
               'Select items for pickup',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.black54,
-              ),
+              style: TextStyle(fontSize: 13, color: Colors.black54),
             ),
 
             const SizedBox(height: 14),
@@ -245,8 +227,9 @@ class _PickupFormPageState extends State<PickupFormPage> {
                       item,
                       style: TextStyle(
                         color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
                       ),
                     ),
                   ),
@@ -258,10 +241,7 @@ class _PickupFormPageState extends State<PickupFormPage> {
 
             const Text(
               'Remarks',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
 
             const SizedBox(height: 8),
@@ -313,6 +293,31 @@ class _PickupFormPageState extends State<PickupFormPage> {
     );
   }
 
+  Widget _buildRequiredLabel(String label) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: label,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const TextSpan(
+            text: ' *',
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSmallInput({
     required String label,
     required String hint,
@@ -324,10 +329,7 @@ class _PickupFormPageState extends State<PickupFormPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         TextField(
@@ -344,10 +346,7 @@ class _PickupFormPageState extends State<PickupFormPage> {
       hintText: hintText,
       filled: true,
       fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide.none,

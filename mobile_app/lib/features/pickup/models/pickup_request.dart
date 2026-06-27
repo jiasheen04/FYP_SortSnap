@@ -13,6 +13,9 @@ class PickupRequest {
   final List<String> itemTypes;
   final DateTime? createdAt;
 
+  final String? forwardedToPointId;
+  final String? forwardedToPointName;
+
   PickupRequest({
     required this.pickupId,
     required this.userId,
@@ -25,6 +28,8 @@ class PickupRequest {
     required this.status,
     required this.itemTypes,
     this.createdAt,
+    this.forwardedToPointId,
+    this.forwardedToPointName,
   });
 
   factory PickupRequest.fromFirestore(Map<String, dynamic> data, String id) {
@@ -40,6 +45,8 @@ class PickupRequest {
       status: data['status'] ?? 'Pending',
       itemTypes: List<String>.from(data['itemTypes'] ?? []),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      forwardedToPointId: data['forwardedToPointId'],
+      forwardedToPointName: data['forwardedToPointName'],
     );
   }
 }

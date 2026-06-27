@@ -13,9 +13,18 @@ class PickupRequestModel {
     this.itemTypes = data.itemTypes || [];
     this.createdAt = data.createdAt || null;
     this.updatedAt = data.updatedAt || null;
+
     this.forwardedByAdminId = data.forwardedByAdminId || "";
+    this.forwardedByAdminUsername = data.forwardedByAdminUsername || "";
+    this.forwardedByAdminUserNo = data.forwardedByAdminUserNo || "";
     this.forwardedToPointId = data.forwardedToPointId || "";
+    this.forwardedToPointName = data.forwardedToPointName || "";
     this.forwardedAt = data.forwardedAt || null;
+
+    this.completedByAdminId = data.completedByAdminId || "";
+    this.completedByAdminUsername = data.completedByAdminUsername || "";
+    this.completedByAdminUserNo = data.completedByAdminUserNo || "";
+    this.completedAt = data.completedAt || null;
   }
 
   getItemsText() {

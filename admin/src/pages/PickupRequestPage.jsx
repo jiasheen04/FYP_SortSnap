@@ -8,7 +8,7 @@ import {
 
 import { getAllRecyclingPoints } from "../services/recyclingPointService";
 
-function ViewRequestPage() {
+function PickupRequestPage() {
   const [pickupRequests, setPickupRequests] = useState([]);
   const [recyclingPoints, setRecyclingPoints] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -79,8 +79,27 @@ function ViewRequestPage() {
       return;
     }
 
+    const selectedPoint = recyclingPoints.find((point) => {
+      return point.id === selectedPointId;
+    });
+
+    if (!selectedPoint) {
+      setMessage("Selected recycling point not found.");
+      return;
+    }
+
+    if (selectedPoint.status !== "Open" && selectedPoint.isOpen !== true) {
+      setMessage("Please select an open recycling point.");
+      return;
+    }
+
     try {
-      await forwardPickupRequest(selectedRequest.id, selectedPointId);
+      await forwardPickupRequest(
+        selectedRequest.id,
+        selectedPointId,
+        selectedPoint.getDisplayName()
+      );
+
       setMessage("Pickup request forwarded successfully.");
       await loadPageData();
     } catch (error) {
@@ -88,6 +107,34 @@ function ViewRequestPage() {
       setMessage("Failed to forward pickup request.");
     }
   }
+
+  function getStatusClass(status) {
+    if (status === "Completed") {
+      return "status-green";
+    }
+
+    return "status-blue";
+  }
+
+  const openRecyclingPoints = recyclingPoints.filter((point) => {
+    return point.status === "Open" || point.isOpen === true;
+  });
+
+  const selectedPoint = recyclingPoints.find((point) => {
+    return point.id === selectedPointId;
+  });
+
+  let forwardedPointName = "";
+
+  if (selectedPoint) {
+    forwardedPointName = selectedPoint.getDisplayName();
+  } else if (selectedRequest && selectedRequest.forwardedToPointName) {
+    forwardedPointName = selectedRequest.forwardedToPointName;
+  }
+
+  const isPending = selectedRequest && selectedRequest.status === "Pending";
+  const isForwarded = selectedRequest && selectedRequest.status === "Forwarded";
+  const isCompleted = selectedRequest && selectedRequest.status === "Completed";
 
   return (
     <div className="request-page">
@@ -135,7 +182,9 @@ function ViewRequestPage() {
                       <td>{request.pickupId}</td>
                       <td>{request.username}</td>
                       <td>
-                        <span className="status-blue">{request.status}</span>
+                        <span className={getStatusClass(request.status)}>
+                          {request.status}
+                        </span>
                       </td>
                       <td>{request.getCreatedDateText()}</td>
                     </tr>
@@ -203,8 +252,17 @@ function ViewRequestPage() {
 
                 <div className="detail-row">
                   <b>Status</b>
-                  <span className="status-blue">{selectedRequest.status}</span>
+                  <span className={getStatusClass(selectedRequest.status)}>
+                    {selectedRequest.status}
+                  </span>
                 </div>
+
+                {forwardedPointName && selectedRequest.status !== "Pending" && (
+                  <div className="detail-row">
+                    <b>Forwarded To</b>
+                    <span>{forwardedPointName}</span>
+                  </div>
+                )}
 
                 <hr />
 
@@ -213,33 +271,39 @@ function ViewRequestPage() {
                 <select
                   value={selectedPointId}
                   onChange={(e) => setSelectedPointId(e.target.value)}
+                  disabled={!isPending}
                 >
                   <option value="">Select recycling point</option>
 
-                  {recyclingPoints.map((point) => (
+                  {openRecyclingPoints.map((point) => (
                     <option key={point.id} value={point.id}>
                       {point.getDisplayName()}
                     </option>
                   ))}
                 </select>
 
+                {selectedPoint && (
+                  <div className="rp-contact-box">
+                    <b>Recycling Point Contact:</b>{" "}
+                    {selectedPoint.contact || "-"}
+                  </div>
+                )}
+
                 <div className="button-row">
-                  <button className="primary-btn" onClick={handleForwardRequest}>
+                  <button
+                    className="primary-btn"
+                    onClick={handleForwardRequest}
+                    disabled={!isPending}
+                  >
                     Forward Request
                   </button>
 
                   <button
                     className="normal-btn"
                     onClick={() => handleUpdateStatus("Completed")}
+                    disabled={!isForwarded || isCompleted}
                   >
                     Mark Completed
-                  </button>
-
-                  <button
-                    className="normal-btn"
-                    onClick={() => handleUpdateStatus("Rejected")}
-                  >
-                    Reject
                   </button>
                 </div>
               </>
@@ -251,4 +315,4 @@ function ViewRequestPage() {
   );
 }
 
-export default ViewRequestPage; 
+export default PickupRequestPage;

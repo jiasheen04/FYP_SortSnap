@@ -6,6 +6,14 @@ class PickupRequestCard extends StatelessWidget {
 
   const PickupRequestCard({super.key, required this.request});
 
+  bool _hasText(String? value) {
+    return value != null && value.trim().isNotEmpty;
+  }
+
+  bool _isForwarded() {
+    return request.status.toLowerCase() == 'forwarded';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,14 +61,18 @@ class PickupRequestCard extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 6),
+
               Text(
                 request.pickupAddress,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: Colors.black54, fontSize: 12),
               ),
+
               const SizedBox(height: 6),
+
               Text(
                 request.itemTypes.join(', '),
                 style: const TextStyle(
@@ -69,6 +81,18 @@ class PickupRequestCard extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
+
+              if (_isForwarded() && _hasText(request.forwardedToPointName)) ...[
+                const SizedBox(height: 6),
+                Text(
+                  'Recycling Point: ${request.forwardedToPointName}',
+                  style: const TextStyle(
+                    color: Colors.black54,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -100,7 +124,9 @@ class PickupRequestCard extends StatelessWidget {
                   ),
                 ),
               ),
+
               const SizedBox(height: 18),
+
               Text(
                 'Pickup ${request.pickupId.replaceAll('PR', '')} Details',
                 style: const TextStyle(
@@ -108,7 +134,9 @@ class PickupRequestCard extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
               ),
+
               const SizedBox(height: 12),
+
               _buildDetailRow('Status', request.status),
               _buildDetailRow('Address', request.pickupAddress),
 
@@ -122,6 +150,27 @@ class PickupRequestCard extends StatelessWidget {
 
               if (request.remarks != null && request.remarks!.isNotEmpty)
                 _buildDetailRow('Remarks', request.remarks!),
+
+              if (_isForwarded() && _hasText(request.forwardedToPointName)) ...[
+                const SizedBox(height: 6),
+                const Divider(),
+
+                _buildDetailRow(
+                  'Recycling Point',
+                  request.forwardedToPointName!,
+                ),
+
+                const SizedBox(height: 8),
+
+                const Text(
+                  'Note: The recycling point PIC will contact you for pickup arrangement.',
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 13,
+                    height: 1.4,
+                  ),
+                ),
+              ],
 
               const SizedBox(height: 8),
             ],
@@ -138,7 +187,7 @@ class PickupRequestCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 95,
+            width: 115,
             child: Text(
               label,
               style: const TextStyle(
