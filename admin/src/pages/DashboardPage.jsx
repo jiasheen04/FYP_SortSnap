@@ -92,7 +92,7 @@ function DashboardPage() {
         <div>
           <h1>Dashboard</h1>
           <p className="page-subtitle">
-            Simple overview of requests, reports and feedback.
+            Overview of requests, reports and feedback.
           </p>
         </div>
 
@@ -107,19 +107,16 @@ function DashboardPage() {
         <div className="stat-card">
           <h3>Pending Pickup Requests</h3>
           <p>{pendingPickup}</p>
-          <small>{pickupRequests.length} total pickup requests</small>
         </div>
 
         <div className="stat-card">
           <h3>Open Feedback</h3>
           <p>{openFeedback}</p>
-          <small>{feedbackList.length} total feedback</small>
         </div>
 
         <div className="stat-card">
           <h3>Open Location Reports</h3>
           <p>{openReports}</p>
-          <small>{locationReports.length} total reports</small>
         </div>
       </div>
 
@@ -147,9 +144,9 @@ function DashboardPage() {
             <b>{countStatus(pickupRequests, "Completed")}</b>
           </div>
 
-          <div className="summary-row">
-            <span>Rejected</span>
-            <b>{countStatus(pickupRequests, "Rejected")}</b>
+          <div className="summary-row total-summary-row">
+            <span>Total</span>
+            <b>{pickupRequests.length}</b>
           </div>
         </div>
 
@@ -171,7 +168,7 @@ function DashboardPage() {
             <b>{countStatus(feedbackList, "Resolved")}</b>
           </div>
 
-          <div className="summary-row">
+          <div className="summary-row total-summary-row">
             <span>Total</span>
             <b>{feedbackList.length}</b>
           </div>
@@ -195,7 +192,7 @@ function DashboardPage() {
             <b>{countStatus(locationReports, "Resolved")}</b>
           </div>
 
-          <div className="summary-row">
+          <div className="summary-row total-summary-row">
             <span>Total</span>
             <b>{locationReports.length}</b>
           </div>
