@@ -16,9 +16,6 @@
   cursor: pointer;
 }
 
-.community-page .community-tabs button:hover {
-  background: #eef6f2;
-}
 
 .community-page .community-tabs .active-tab {
   background: #4fbd91;
@@ -92,10 +89,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 14px;
-}
-
-.community-page .community-list-item:hover {
-  background: #f8fafc;
 }
 
 .community-page .community-list-item.active {
@@ -231,10 +224,6 @@
   cursor: pointer;
 }
 
-.community-page .item-tab:hover {
-  background: #eef6f2;
-}
-
 .community-page .active-item-tab {
   background: #4fbd91;
   border-color: #4fbd91;
@@ -305,39 +294,27 @@
   cursor: pointer;
 }
 
-.community-page .small-btn:hover {
-  background: #f4f6f8;
-}
-
 .community-page .add-btn {
   background: #e9fff3;
   color: #087a3f;
   border-color: #a8ecc7;
 }
 
-.community-page .add-btn:hover {
-  background: #dffcea;
-}
-
 .community-page .danger-btn {
-  border: 1px solid #ffd0c9;
+  border: 1px solid #ef4444;
   border-radius: 13px;
   padding: 12px 18px;
-  background: #fff7f5;
-  color: #b42318;
   font-weight: bold;
   cursor: pointer;
   font-size: 15px;
+  background: #ef4444;
+  color: white;
 }
 
 .community-page .small-btn.danger-btn {
   border-radius: 10px;
   padding: 8px 12px;
   font-size: 13px;
-}
-
-.community-page .danger-btn:hover {
-  background: #fff0ed;
 }
 
 .community-page button:disabled {

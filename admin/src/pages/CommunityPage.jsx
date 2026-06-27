@@ -755,14 +755,6 @@ function CommunityPage() {
                 {selectedFlashcardSet ? "Update Set" : "Create Set"}
               </button>
 
-              <button
-                className="normal-btn"
-                type="button"
-                onClick={startCreateFlashcard}
-              >
-                Clear
-              </button>
-
               {selectedFlashcardSet && (
                 <button
                   className="danger-btn"
@@ -1115,10 +1107,6 @@ function CommunityPage() {
                 {selectedQuiz ? "Update Quiz" : "Create Quiz"}
               </button>
 
-              <button className="normal-btn" type="button" onClick={startCreateQuiz}>
-                Clear
-              </button>
-
               {selectedQuiz && (
                 <button
                   className="danger-btn"
@@ -1285,11 +1273,6 @@ function CommunityPage() {
               Active
             </label>
 
-            <p className="form-help">
-              Image path must already exist inside Flutter assets. This admin page
-              saves the path only.
-            </p>
-
             <div className="button-row">
               <button
                 className="primary-btn"
@@ -1297,14 +1280,6 @@ function CommunityPage() {
                 disabled={isSaving}
               >
                 {selectedArticle ? "Update Article" : "Create Article"}
-              </button>
-
-              <button
-                className="normal-btn"
-                type="button"
-                onClick={startCreateArticle}
-              >
-                Clear
               </button>
 
               {selectedArticle && (
