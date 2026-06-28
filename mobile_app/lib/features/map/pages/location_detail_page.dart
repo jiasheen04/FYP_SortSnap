@@ -129,7 +129,7 @@ class LocationDetailPage extends StatelessWidget {
                     border: Border.all(color: const Color(0xFFFFB99F)),
                   ),
                   child: const Text(
-                    'This recycling point is not accepting recycling items at the moment. Please call before visiting.',
+                    'This recycling point is not accepting recycling items at the moment. Please call before going.',
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.black87,

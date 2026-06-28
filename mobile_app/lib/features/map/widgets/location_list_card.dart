@@ -120,7 +120,7 @@ class LocationListCard extends StatelessWidget {
                   border: Border.all(color: const Color(0xFFFFB99F)),
                 ),
                 child: const Text(
-                  'This recycling point is currently not accepting items. Please call before going.',
+                  'This recycling point is not accepting recycling items at the moment. Please call before going.',
                   style: TextStyle(
                     fontSize: 11,
                     color: Colors.black87,
