@@ -9,6 +9,7 @@ class RecyclingPointModel {
     this.hours = data.hours || "";
     this.status = data.status || "Unknown";
     this.isOpen = data.is_open === true;
+    this.recyclingStatus = data.recyclingStatus || "Accepting Items";
     this.contact = data.contact || "";
     this.area = data.area || "";
     this.openingHours = data.opening_hours || {};

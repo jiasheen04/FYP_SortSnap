@@ -63,6 +63,7 @@ function cleanPointData(pointData) {
     hours: pointData.hours,
     status: pointData.status,
     is_open: pointData.status === "Open",
+    recyclingStatus: pointData.recyclingStatus || "Accepting Items",
     contact: pointData.contact,
     area: pointData.area,
     opening_hours: pointData.opening_hours,

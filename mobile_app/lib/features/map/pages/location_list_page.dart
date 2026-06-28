@@ -24,22 +24,31 @@ class LocationListPage extends StatefulWidget {
 
 class _LocationListPageState extends State<LocationListPage> {
   final TextEditingController _searchController = TextEditingController();
+  
+  String _searchQuery = "";
 
-  String _searchQuery = '';
   bool _showOpenOnly = false;
+  bool _showAcceptingOnly = true;
   double? _selectedDistanceKm;
 
   List<RecyclingPoint> get _filteredPoints {
     final filtered = widget.points.where((point) {
       final matchesSearch = LocationUtils.matchesSearch(point, _searchQuery);
       final matchesOpen = LocationUtils.matchesOpenFilter(point, _showOpenOnly);
+      final matchesAccepting = LocationUtils.matchesAcceptingFilter(
+        point,
+        _showAcceptingOnly,
+      );
       final matchesDistance = LocationUtils.matchesDistanceFilter(
         point,
         widget.currentPosition,
         _selectedDistanceKm,
       );
 
-      return matchesSearch && matchesOpen && matchesDistance;
+      return matchesSearch &&
+          matchesOpen &&
+          matchesAccepting &&
+          matchesDistance;
     }).toList();
 
     if (widget.currentPosition != null) {
@@ -100,9 +109,13 @@ class _LocationListPageState extends State<LocationListPage> {
       builder: (context) {
         return LocationFilterSheet(
           initialShowOpenOnly: _showOpenOnly,
+          initialShowAcceptingOnly: _showAcceptingOnly,
           initialDistanceKm: _selectedDistanceKm,
           onOpenOnlyChanged: (value) {
             _showOpenOnly = value;
+          },
+          onAcceptingOnlyChanged: (value) {
+            _showAcceptingOnly = value;
           },
           onDistanceChanged: (value) {
             _selectedDistanceKm = value;

@@ -8,9 +8,31 @@ class RecyclingPointService {
   Future<List<RecyclingPoint>> getRecyclingPoints() async {
     final snapshot = await _firestore.collection('recycling_points').get();
 
-    return snapshot.docs.map((doc) {
+    final points = snapshot.docs.map((doc) {
       return RecyclingPoint.fromFirestore(doc.id, doc.data());
     }).toList();
+
+    points.sort((a, b) {
+      return a.pointCode.compareTo(b.pointCode);
+    });
+
+    return points;
+  }
+
+  Stream<List<RecyclingPoint>> getRecyclingPointsStream() {
+    return _firestore.collection('recycling_points').snapshots().map((
+      snapshot,
+    ) {
+      final points = snapshot.docs.map((doc) {
+        return RecyclingPoint.fromFirestore(doc.id, doc.data());
+      }).toList();
+
+      points.sort((a, b) {
+        return a.pointCode.compareTo(b.pointCode);
+      });
+
+      return points;
+    });
   }
 
   Future<void> addRecyclingPoint({
@@ -21,6 +43,7 @@ class RecyclingPointService {
     required String hours,
     required String status,
     required bool isOpen,
+    String recyclingStatus = 'Accepting Items',
     required String contact,
     required String area,
     required Map<String, dynamic> openingHours,
@@ -39,6 +62,7 @@ class RecyclingPointService {
       'hours': hours,
       'status': status,
       'is_open': isOpen,
+      'recyclingStatus': recyclingStatus,
       'contact': contact,
       'area': area,
       'opening_hours': openingHours,

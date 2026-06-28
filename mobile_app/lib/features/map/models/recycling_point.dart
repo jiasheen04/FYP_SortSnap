@@ -8,6 +8,7 @@ class RecyclingPoint {
   final String hours;
   final String status;
   final bool isOpen;
+  final String recyclingStatus;
   final String contact;
   final String area;
   final Map<String, dynamic> openingHours;
@@ -22,6 +23,7 @@ class RecyclingPoint {
     required this.hours,
     required this.status,
     required this.isOpen,
+    required this.recyclingStatus,
     required this.contact,
     required this.area,
     required this.openingHours,
@@ -47,6 +49,7 @@ class RecyclingPoint {
       hours: data['hours'] ?? '',
       status: openNow ? 'Open' : 'Closed',
       isOpen: openNow,
+      recyclingStatus: data['recyclingStatus'] ?? 'Accepting Items',
       contact: data['contact'] ?? '',
       area: data['area'] ?? '',
       openingHours: openingHoursData,

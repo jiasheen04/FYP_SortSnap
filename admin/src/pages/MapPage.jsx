@@ -36,6 +36,7 @@ const emptyForm = {
   contact: "",
   area: "",
   status: "Open",
+  recyclingStatus: "Accepting Items",
   hours: "",
   types: [],
   monday: "",
@@ -197,6 +198,7 @@ function MapPage() {
       contact: point.contact,
       area: point.area,
       status: point.status,
+      recyclingStatus: point.recyclingStatus || "Accepting Items",
       hours: point.hours,
       types: point.types || [],
       monday: point.openingHours.monday || "",
@@ -219,6 +221,7 @@ function MapPage() {
       contact: form.contact.trim(),
       area: form.area.trim(),
       status: form.status,
+      recyclingStatus: form.recyclingStatus,
       hours: form.hours.trim(),
       types: form.types,
       opening_hours: {
@@ -337,6 +340,14 @@ function MapPage() {
     }
 
     return "map-status-unknown";
+  }
+
+  function getRecyclingStatusClass(status) {
+    if (status === "Not Accepting Items") {
+      return "map-status-closed";
+    }
+
+    return "map-status-open";
   }
 
   function getNextPointCodePreview() {
@@ -493,10 +504,14 @@ function MapPage() {
             </div>
 
             <div className="map-form-group">
-              <label>Status</label>
-              <select name="status" value={form.status} onChange={handleChange}>
-                <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
+              <label>Recycling Status</label>
+              <select
+                name="recyclingStatus"
+                value={form.recyclingStatus}
+                onChange={handleChange}
+              >
+                <option value="Accepting Items">Accepting Items</option>
+                <option value="Not Accepting Items">Not Accepting Items</option>
               </select>
             </div>
 
@@ -665,6 +680,13 @@ function MapPage() {
                           <td>
                             <span className={getStatusClass(point.status)}>
                               {point.status}
+                            </span>
+
+                            <br />
+                            <br />
+
+                            <span className={getRecyclingStatusClass(point.recyclingStatus)}>
+                              {point.recyclingStatus || "Accepting Items"}
                             </span>
                           </td>
 

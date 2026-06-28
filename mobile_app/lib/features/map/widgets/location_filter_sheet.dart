@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 
 class LocationFilterSheet extends StatefulWidget {
   final bool initialShowOpenOnly;
+  final bool initialShowAcceptingOnly;
   final double? initialDistanceKm;
   final ValueChanged<bool> onOpenOnlyChanged;
+  final ValueChanged<bool> onAcceptingOnlyChanged;
   final ValueChanged<double?> onDistanceChanged;
   final VoidCallback onApply;
 
   const LocationFilterSheet({
     super.key,
     required this.initialShowOpenOnly,
+    required this.initialShowAcceptingOnly,
     required this.initialDistanceKm,
     required this.onOpenOnlyChanged,
+    required this.onAcceptingOnlyChanged,
     required this.onDistanceChanged,
     required this.onApply,
   });
@@ -22,12 +26,14 @@ class LocationFilterSheet extends StatefulWidget {
 
 class _LocationFilterSheetState extends State<LocationFilterSheet> {
   late bool tempShowOpenOnly;
+  late bool tempShowAcceptingOnly;
   double? tempDistanceKm;
 
   @override
   void initState() {
     super.initState();
     tempShowOpenOnly = widget.initialShowOpenOnly;
+    tempShowAcceptingOnly = widget.initialShowAcceptingOnly;
     tempDistanceKm = widget.initialDistanceKm;
   }
 
@@ -56,6 +62,19 @@ class _LocationFilterSheetState extends State<LocationFilterSheet> {
     );
   }
 
+  Widget _filterCheckRow({
+    required String label,
+    required bool value,
+    required ValueChanged<bool?> onChanged,
+  }) {
+    return Row(
+      children: [
+        Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
+        Checkbox(value: value, onChanged: onChanged),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,30 +88,27 @@ class _LocationFilterSheetState extends State<LocationFilterSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  'Show open locations only',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              Checkbox(
-                value: tempShowOpenOnly,
-                onChanged: (value) {
-                  setState(() {
-                    tempShowOpenOnly = value ?? false;
-                  });
-                },
-              ),
-            ],
+          _filterCheckRow(
+            label: 'Show open locations only',
+            value: tempShowOpenOnly,
+            onChanged: (value) {
+              setState(() {
+                tempShowOpenOnly = value ?? false;
+              });
+            },
+          ),
+          _filterCheckRow(
+            label: 'Show accepting items only',
+            value: tempShowAcceptingOnly,
+            onChanged: (value) {
+              setState(() {
+                tempShowAcceptingOnly = value ?? true;
+              });
+            },
           ),
           const Divider(),
           const SizedBox(height: 8),
-          const Text(
-            'Distance:',
-            style: TextStyle(fontSize: 16),
-          ),
+          const Text('Distance:', style: TextStyle(fontSize: 16)),
           const SizedBox(height: 10),
           Wrap(
             spacing: 12,
@@ -150,6 +166,7 @@ class _LocationFilterSheetState extends State<LocationFilterSheet> {
               ),
               onPressed: () {
                 widget.onOpenOnlyChanged(tempShowOpenOnly);
+                widget.onAcceptingOnlyChanged(tempShowAcceptingOnly);
                 widget.onDistanceChanged(tempDistanceKm);
                 widget.onApply();
               },

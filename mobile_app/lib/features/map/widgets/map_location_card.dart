@@ -19,6 +19,8 @@ class MapLocationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isNotAccepting = point.recyclingStatus == 'Not Accepting Items';
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -39,27 +41,54 @@ class MapLocationCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: point.isOpen
-                        ? const Color(0xFFA7E1C8)
-                        : const Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Status: ${point.status}',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w600,
-                    ),
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 6,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: point.isOpen
+                              ? const Color(0xFFA7E1C8)
+                              : const Color(0xFFD9D9D9),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'Status: ${point.status}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isNotAccepting
+                              ? const Color(0xFFFFD6C9)
+                              : const Color(0xFFA7E1C8),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'Recycling: ${point.recyclingStatus}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.more_horiz, color: Color(0xFF8FD3BB)),
                   onSelected: (value) {
@@ -78,6 +107,28 @@ class MapLocationCard extends StatelessWidget {
               point.name,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
+
+            if (isNotAccepting) ...[
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF0E8),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: const Color(0xFFFFB99F)),
+                ),
+                child: const Text(
+                  'This recycling point is currently not accepting items. Please call before going.',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+
             const SizedBox(height: 10),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,9 +204,16 @@ class MapLocationCard extends StatelessWidget {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.navigation, color: Colors.black87, size: 16),
+                          Icon(
+                            Icons.navigation,
+                            color: Colors.black87,
+                            size: 16,
+                          ),
                           SizedBox(width: 6),
-                          Text('Go Now', style: TextStyle(color: Colors.black87)),
+                          Text(
+                            'Go Now',
+                            style: TextStyle(color: Colors.black87),
+                          ),
                         ],
                       ),
                     ),

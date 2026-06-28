@@ -58,9 +58,28 @@ class LocationDetailPage extends StatelessWidget {
     );
   }
 
+  Widget _buildStatusBadge(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 12,
+          color: Colors.black87,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool openNow = point.isOpen;
+    final bool isNotAccepting = point.recyclingStatus == 'Not Accepting Items';
 
     return Scaffold(
       backgroundColor: const Color(0xFFDDF2EA),
@@ -82,26 +101,44 @@ class LocationDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: openNow
-                      ? const Color(0xFFA7E1C8)
-                      : const Color(0xFFD9D9D9),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'Status: ${point.status}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w600,
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _buildStatusBadge(
+                    'Status: ${point.status}',
+                    openNow ? const Color(0xFFA7E1C8) : const Color(0xFFD9D9D9),
+                  ),
+                  _buildStatusBadge(
+                    'Recycling: ${point.recyclingStatus}',
+                    isNotAccepting
+                        ? const Color(0xFFFFD6C9)
+                        : const Color(0xFFA7E1C8),
+                  ),
+                ],
+              ),
+
+              if (isNotAccepting) ...[
+                const SizedBox(height: 12),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF0E8),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFFFFB99F)),
+                  ),
+                  child: const Text(
+                    'This recycling point is not accepting recycling items at the moment. Please call before visiting.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-              ),
+              ],
+
               const SizedBox(height: 16),
               Text(
                 point.name,
@@ -213,7 +250,6 @@ class LocationDetailPage extends StatelessWidget {
                 ),
               const SizedBox(height: 8),
               Text('Area: ${point.area}', style: const TextStyle(fontSize: 14)),
-
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,

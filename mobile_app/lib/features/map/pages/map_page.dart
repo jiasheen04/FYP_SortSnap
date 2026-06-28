@@ -23,10 +23,6 @@ class _MapPageState extends State<MapPage> {
   final RecyclingPointService _recyclingPointService = RecyclingPointService();
 
   GoogleMapController? mapController;
-  final Set<Marker> _markers = {};
-
-  bool _isLoading = true;
-  List<RecyclingPoint> _points = [];
   RecyclingPoint? _selectedPoint;
   Position? _currentPosition;
 
@@ -38,7 +34,6 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _initializePage() async {
     await _getCurrentLocation();
-    await _loadRecyclingPoints();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -70,38 +65,6 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _loadRecyclingPoints() async {
-    try {
-      final points = await _recyclingPointService.getRecyclingPoints();
-
-      final markers = points.map((point) {
-        return Marker(
-          markerId: MarkerId(point.id),
-          position: LatLng(point.latitude, point.longitude),
-          infoWindow: InfoWindow(title: point.name, snippet: point.address),
-          onTap: () {
-            setState(() {
-              _selectedPoint = point;
-            });
-          },
-        );
-      }).toSet();
-
-      setState(() {
-        _points = points;
-        _markers
-          ..clear()
-          ..addAll(markers);
-        _isLoading = false;
-      });
-    } catch (e) {
-      debugPrint('Error loading recycling points: $e');
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   Future<void> _launchPhoneCall(String contact) async {
     if (contact.isEmpty) return;
 
@@ -122,7 +85,7 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _openMapSearchDialog() async {
+  Future<void> _openMapSearchDialog(List<RecyclingPoint> points) async {
     final TextEditingController controller = TextEditingController();
 
     await showDialog(
@@ -146,7 +109,7 @@ class _MapPageState extends State<MapPage> {
               onPressed: () {
                 final query = controller.text.trim().toLowerCase();
 
-                final results = _points.where((point) {
+                final results = points.where((point) {
                   return point.name.toLowerCase().contains(query) ||
                       point.address.toLowerCase().contains(query) ||
                       point.area.toLowerCase().contains(query);
@@ -175,16 +138,43 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _openListPage() {
+  void _openListPage(List<RecyclingPoint> points) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => LocationListPage(
-          points: _points,
-          currentPosition: _currentPosition,
-        ),
+        builder: (_) =>
+            LocationListPage(points: points, currentPosition: _currentPosition),
       ),
     );
+  }
+
+  Set<Marker> _buildMarkers(List<RecyclingPoint> points) {
+    return points.map((point) {
+      return Marker(
+        markerId: MarkerId(point.id),
+        position: LatLng(point.latitude, point.longitude),
+        infoWindow: InfoWindow(title: point.name, snippet: point.address),
+        onTap: () {
+          setState(() {
+            _selectedPoint = point;
+          });
+        },
+      );
+    }).toSet();
+  }
+
+  RecyclingPoint? _getUpdatedSelectedPoint(List<RecyclingPoint> points) {
+    if (_selectedPoint == null) {
+      return null;
+    }
+
+    for (final point in points) {
+      if (point.id == _selectedPoint!.id) {
+        return point;
+      }
+    }
+
+    return null;
   }
 
   @override
@@ -204,110 +194,131 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Colors.white))
-          : Stack(
-              children: [
-                GoogleMap(
-                  initialCameraPosition: const CameraPosition(
-                    target: defaultCenter,
-                    zoom: 11.8,
-                  ),
-                  onMapCreated: (controller) {
-                    mapController = controller;
-                  },
-                  markers: _markers,
-                  myLocationEnabled: _currentPosition != null,
-                  myLocationButtonEnabled: true,
-                  onTap: (_) {
-                    setState(() {
-                      _selectedPoint = null;
-                    });
-                  },
+      body: StreamBuilder<List<RecyclingPoint>>(
+        stream: _recyclingPointService.getRecyclingPointsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Failed to load recycling points.',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            );
+          }
+
+          final points = snapshot.data!;
+          final markers = _buildMarkers(points);
+          final selectedPoint = _getUpdatedSelectedPoint(points);
+
+          return Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: defaultCenter,
+                  zoom: 11.8,
                 ),
-                Positioned(
-                  top: 14,
-                  left: 16,
-                  child: GestureDetector(
-                    onTap: _openListPage,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF62C49D),
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.format_list_bulleted,
+                onMapCreated: (controller) {
+                  mapController = controller;
+                },
+                markers: markers,
+                myLocationEnabled: _currentPosition != null,
+                myLocationButtonEnabled: true,
+                onTap: (_) {
+                  setState(() {
+                    _selectedPoint = null;
+                  });
+                },
+              ),
+              Positioned(
+                top: 14,
+                left: 16,
+                child: GestureDetector(
+                  onTap: () => _openListPage(points),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF62C49D),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.format_list_bulleted,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          'List View',
+                          style: TextStyle(
                             color: Colors.white,
-                            size: 18,
+                            fontWeight: FontWeight.w600,
                           ),
-                          SizedBox(width: 6),
-                          Text(
-                            'List View',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+              ),
+              Positioned(
+                right: 16,
+                bottom: 120,
+                child: FloatingActionButton(
+                  heroTag: 'map_search_btn',
+                  backgroundColor: const Color(0xFF62C49D),
+                  onPressed: () => _openMapSearchDialog(points),
+                  child: const Icon(Icons.search, color: Colors.white),
+                ),
+              ),
+              if (selectedPoint != null)
                 Positioned(
+                  left: 16,
                   right: 16,
-                  bottom: 120,
-                  child: FloatingActionButton(
-                    heroTag: 'map_search_btn',
-                    backgroundColor: const Color(0xFF62C49D),
-                    onPressed: _openMapSearchDialog,
-                    child: const Icon(Icons.search, color: Colors.white),
+                  bottom: 16,
+                  child: MapLocationCard(
+                    point: selectedPoint,
+                    onReport: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              LocationReportPage(recyclingPoint: selectedPoint),
+                        ),
+                      );
+                    },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              LocationDetailPage(point: selectedPoint),
+                        ),
+                      );
+                    },
+                    onCall: () => _launchPhoneCall(selectedPoint.contact),
+                    onNavigate: () => _launchNavigation(selectedPoint),
                   ),
                 ),
-                if (_selectedPoint != null)
-                  Positioned(
-                    left: 16,
-                    right: 16,
-                    bottom: 16,
-                    child: MapLocationCard(
-                      point: _selectedPoint!,
-                      onReport: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => LocationReportPage(
-                              recyclingPoint: _selectedPoint!,
-                            ),
-                          ),
-                        );
-                      },
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                LocationDetailPage(point: _selectedPoint!),
-                          ),
-                        );
-                      },
-                      onCall: () => _launchPhoneCall(_selectedPoint!.contact),
-                      onNavigate: () => _launchNavigation(_selectedPoint!),
-                    ),
-                  ),
-              ],
-            ),
+            ],
+          );
+        },
+      ),
       bottomNavigationBar: const BottomNav(selectedIndex: 1),
     );
   }

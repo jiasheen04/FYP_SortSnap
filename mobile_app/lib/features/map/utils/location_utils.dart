@@ -40,6 +40,11 @@ class LocationUtils {
     return point.isOpen;
   }
 
+  static bool matchesAcceptingFilter(RecyclingPoint point, bool acceptingOnly) {
+    if (!acceptingOnly) return true;
+    return point.recyclingStatus == 'Accepting Items';
+  }
+
   static bool matchesDistanceFilter(
     RecyclingPoint point,
     Position? currentPosition,
