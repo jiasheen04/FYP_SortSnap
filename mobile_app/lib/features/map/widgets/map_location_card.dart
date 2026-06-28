@@ -52,7 +52,11 @@ class MapLocationCard extends StatelessWidget {
                   ),
                   child: Text(
                     'Status: ${point.status}',
-                    style: const TextStyle(fontSize: 11, color: Colors.white),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -87,7 +91,10 @@ class MapLocationCard extends StatelessWidget {
                     ),
                     child: Text(
                       point.address,
-                      style: const TextStyle(fontSize: 10, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                 ),
@@ -101,7 +108,10 @@ class MapLocationCard extends StatelessWidget {
                     ),
                     child: Text(
                       'Operation hour: ${point.hours}',
-                      style: const TextStyle(fontSize: 10, color: Colors.white),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                 ),
@@ -122,9 +132,9 @@ class MapLocationCard extends StatelessWidget {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.call, color: Colors.white, size: 16),
+                          Icon(Icons.call, color: Colors.black87, size: 16),
                           SizedBox(width: 6),
-                          Text('Call', style: TextStyle(color: Colors.white)),
+                          Text('Call', style: TextStyle(color: Colors.black87)),
                         ],
                       ),
                     ),
@@ -143,9 +153,9 @@ class MapLocationCard extends StatelessWidget {
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.navigation, color: Colors.white, size: 16),
+                          Icon(Icons.navigation, color: Colors.black87, size: 16),
                           SizedBox(width: 6),
-                          Text('Go Now', style: TextStyle(color: Colors.white)),
+                          Text('Go Now', style: TextStyle(color: Colors.black87)),
                         ],
                       ),
                     ),

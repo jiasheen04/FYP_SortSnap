@@ -35,31 +35,17 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> loadUserData() async {
     try {
-      User? currentUser = FirebaseAuth.instance.currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser!;
 
-      if (currentUser != null) {
-        DocumentSnapshot userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.uid)
-            .get();
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
 
-        if (userDoc.exists) {
-          setState(() {
-            userDisplayName = userDoc['firstName'] ?? 'User';
-            isLoading = false;
-          });
-        } else {
-          setState(() {
-            userDisplayName = 'User';
-            isLoading = false;
-          });
-        }
-      } else {
-        setState(() {
-          userDisplayName = 'User';
-          isLoading = false;
-        });
-      }
+      setState(() {
+        userDisplayName = userDoc['firstName'] ?? 'User';
+        isLoading = false;
+      });
     } catch (e) {
       setState(() {
         userDisplayName = 'User';
@@ -101,17 +87,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void showQrDialog() {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    String userId = 'N/A';
-
-    if (currentUser != null) {
-      if (currentUser.uid.length > 8) {
-        userId = '${currentUser.uid.substring(0, 8)}...';
-      } else {
-        userId = currentUser.uid;
-      }
-    }
-
     showDialog(
       context: context,
       builder: (context) {
@@ -125,13 +100,8 @@ class _DashboardPageState extends State<DashboardPage> {
               const Icon(Icons.qr_code_2, size: 120, color: Color(0xFF51BA90)),
               const SizedBox(height: 16),
               const Text(
-                'Your SortSnap QR',
+                'Personal QR Code',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'User ID: $userId',
-                style: const TextStyle(fontSize: 13, color: Colors.black54),
               ),
               const SizedBox(height: 8),
               const Text(

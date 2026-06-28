@@ -203,7 +203,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   _buildMenuItem(
                     icon: Icons.school_outlined,
-                    title: 'Education',
+                    title: 'Quiz Records',
                     onTap: () {
                       Navigator.push(
                         context,

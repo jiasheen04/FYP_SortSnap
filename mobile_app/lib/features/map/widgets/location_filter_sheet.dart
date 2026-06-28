@@ -146,7 +146,7 @@ class _LocationFilterSheetState extends State<LocationFilterSheet> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFA7E1C8),
-                foregroundColor: Colors.white,
+                foregroundColor: Colors.black87,
               ),
               onPressed: () {
                 widget.onOpenOnlyChanged(tempShowOpenOnly);

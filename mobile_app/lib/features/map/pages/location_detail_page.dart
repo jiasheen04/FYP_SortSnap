@@ -41,12 +41,16 @@ class LocationDetailPage extends StatelessWidget {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 11, color: Colors.white),
+              style: const TextStyle(
+                fontSize: 11,
+                color: Colors.black87,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               value,
-              style: const TextStyle(fontSize: 11, color: Colors.white),
+              style: const TextStyle(fontSize: 11, color: Colors.black87),
             ),
           ],
         ),
@@ -93,8 +97,8 @@ class LocationDetailPage extends StatelessWidget {
                   'Status: ${point.status}',
                   style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -131,12 +135,12 @@ class LocationDetailPage extends StatelessWidget {
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.call, color: Colors.white, size: 18),
+                            Icon(Icons.call, color: Colors.black87, size: 18),
                             SizedBox(width: 6),
                             Text(
                               'Call',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -160,14 +164,14 @@ class LocationDetailPage extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.navigation,
-                              color: Colors.white,
+                              color: Colors.black87,
                               size: 18,
                             ),
                             SizedBox(width: 6),
                             Text(
                               'Go Now',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black87,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

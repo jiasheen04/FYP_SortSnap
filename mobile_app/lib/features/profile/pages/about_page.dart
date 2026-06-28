@@ -12,12 +12,20 @@ class AboutPage extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'About SortSnap',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 17),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -26,18 +34,25 @@ class AboutPage extends StatelessWidget {
           children: [
             const SizedBox(height: 20),
             Container(
-              width: 100,
-              height: 100,
+              width: 105,
+              height: 105,
+              padding: const EdgeInsets.all(12),
               decoration: const BoxDecoration(
                 color: Color(0xFFE8F8F0),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.recycling, size: 55, color: Color(0xFF51BA90)),
+              child: ClipOval(
+                child: Image.asset('assets/images/logo.png', fit: BoxFit.cover),
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
               'SortSnap',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Color(0xFF51BA90)),
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF51BA90),
+              ),
             ),
             const SizedBox(height: 6),
             const Text(
@@ -69,7 +84,11 @@ class AboutPage extends StatelessWidget {
                 'It helps you identify whether an item is recyclable, find nearby recycling points, '
                 'learn through quizzes and flashcards, and request pickup services for your recyclables.\n\n'
                 'Our mission is to make recycling easier, clearer, and more accessible for everyone.',
-                style: TextStyle(fontSize: 15, height: 1.6, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 15,
+                  height: 1.6,
+                  color: Colors.black87,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
