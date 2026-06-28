@@ -27,6 +27,107 @@ const acceptedTypeOptions = [
   "Textile",
 ];
 
+const dayKeys = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];
+
+function getTodayKey(now) {
+  return dayKeys[now.getDay()];
+}
+
+function convertToTodayTime(timeText, now) {
+  const match = timeText.trim().match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/i);
+
+  if (!match) {
+    return null;
+  }
+
+  let hour = Number(match[1]);
+  const minute = Number(match[2] || "0");
+  const period = match[3].toUpperCase();
+
+  if (period === "PM" && hour !== 12) {
+    hour += 12;
+  }
+
+  if (period === "AM" && hour === 12) {
+    hour = 0;
+  }
+
+  const date = new Date(now);
+  date.setHours(hour, minute, 0, 0);
+
+  return date;
+}
+
+function isCurrentTimeInside(hoursText, now) {
+  const timeRanges = hoursText.split(",");
+
+  for (const range of timeRanges) {
+    const times = range.split("-");
+
+    if (times.length !== 2) {
+      continue;
+    }
+
+    const startTime = convertToTodayTime(times[0].trim(), now);
+    let endTime = convertToTodayTime(times[1].trim(), now);
+
+    if (!startTime || !endTime) {
+      continue;
+    }
+
+    if (endTime < startTime) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+
+    if (now >= startTime && now <= endTime) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function getTodayHours(point, now) {
+  const openingHours = point.openingHours || {};
+  const todayKey = getTodayKey(now);
+
+  return (openingHours[todayKey] || "").toString();
+}
+
+function getCurrentPointStatus(point, now) {
+  const firebaseStatus = point.status || "Unknown";
+  const firebaseIsOpen = point.isOpen === true;
+  const openingHours = point.openingHours || {};
+
+  if (firebaseStatus === "Closed") {
+    return "Closed";
+  }
+
+  if (Object.keys(openingHours).length === 0) {
+    return firebaseIsOpen ? "Open" : "Closed";
+  }
+
+  const todayHours = getTodayHours(point, now);
+
+  if (todayHours.trim() === "") {
+    return firebaseIsOpen ? "Open" : "Closed";
+  }
+
+  if (todayHours.toLowerCase().includes("closed")) {
+    return "Closed";
+  }
+
+  return isCurrentTimeInside(todayHours, now) ? "Open" : "Closed";
+}
+
 const emptyForm = {
   pointCode: "",
   name: "",
@@ -58,10 +159,19 @@ function MapPage() {
   const [loading, setLoading] = useState(true);
   const [reportLoading, setReportLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [now, setNow] = useState(new Date());
 
   useEffect(() => {
     loadPoints();
     loadLocationReports();
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 60000);
+
+    return () => clearInterval(timer);
   }, []);
 
   async function loadPoints() {
@@ -377,8 +487,8 @@ function MapPage() {
   }
 
   const totalPoints = points.length;
-  const openPoints = points.filter((point) => point.status === "Open").length;
-  const closedPoints = points.filter((point) => point.status === "Closed").length;
+  const openPoints = points.filter((point) => getCurrentPointStatus(point, now) === "Open").length;
+  const closedPoints = points.filter((point) => getCurrentPointStatus(point, now) === "Closed").length;
   const cyberjayaPoints = points.filter(
     (point) => point.area.toLowerCase() === "cyberjaya"
   ).length;
@@ -667,52 +777,56 @@ function MapPage() {
                         <td colSpan="4">No recycling point found.</td>
                       </tr>
                     ) : (
-                      points.map((point) => (
-                        <tr key={point.id}>
-                          <td>
-                            <strong>{point.getDisplayName()}</strong>
-                            <br />
-                            <small>{point.address}</small>
-                            <br />
-                            <small>Types: {point.getTypeText()}</small>
-                          </td>
+                      points.map((point) => {
+                        const currentStatus = getCurrentPointStatus(point, now);
 
-                          <td>
-                            <span className={getStatusClass(point.status)}>
-                              {point.status}
-                            </span>
+                        return (
+                          <tr key={point.id}>
+                            <td>
+                              <strong>{point.getDisplayName()}</strong>
+                              <br />
+                              <small>{point.address}</small>
+                              <br />
+                              <small>Types: {point.getTypeText()}</small>
+                            </td>
 
-                            <br />
-                            <br />
+                            <td>
+                              <span className={getStatusClass(currentStatus)}>
+                                {currentStatus}
+                              </span>
 
-                            <span className={getRecyclingStatusClass(point.recyclingStatus)}>
-                              {point.recyclingStatus || "Accepting Items"}
-                            </span>
-                          </td>
+                              <br />
+                              <br />
 
-                          <td>{point.area}</td>
+                              <span className={getRecyclingStatusClass(point.recyclingStatus)}>
+                                {point.recyclingStatus || "Accepting Items"}
+                              </span>
+                            </td>
 
-                          <td>
-                            <div className="map-action-buttons">
-                              <button
-                                className="map-edit-btn"
-                                type="button"
-                                onClick={() => handleEdit(point)}
-                              >
-                                Edit
-                              </button>
+                            <td>{point.area}</td>
 
-                              <button
-                                className="map-delete-btn"
-                                type="button"
-                                onClick={() => handleDelete(point)}
-                              >
-                                Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
+                            <td>
+                              <div className="map-action-buttons">
+                                <button
+                                  className="map-edit-btn"
+                                  type="button"
+                                  onClick={() => handleEdit(point)}
+                                >
+                                  Edit
+                                </button>
+
+                                <button
+                                  className="map-delete-btn"
+                                  type="button"
+                                  onClick={() => handleDelete(point)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
                     )}
                   </tbody>
                 </table>
