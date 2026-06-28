@@ -139,71 +139,60 @@ class _RecycleCategoriesPageState extends State<RecycleCategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFD5EDE4),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 14, 18, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black87,
-                      size: 29,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Text(
-                    'Recycle Categories',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(221, 254, 254, 254),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 22),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: buildTabButton(title: 'Recyclable', index: 0),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: buildTabButton(title: 'Special Handling', index: 1),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
-                itemCount: currentCategories.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 26,
-                  crossAxisSpacing: 18,
-                  childAspectRatio: 0.78,
-                ),
-                itemBuilder: (context, index) {
-                  return buildCategoryCard(currentCategories[index]);
-                },
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF51BA90),
+        elevation: 0,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 29),
         ),
+        title: const Text(
+          'Recycle Categories',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          const SizedBox(height: 32),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22),
+            child: Row(
+              children: [
+                Expanded(child: buildTabButton(title: 'Recyclable', index: 0)),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: buildTabButton(title: 'Non-Recyclable', index: 1),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+              itemCount: currentCategories.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 26,
+                crossAxisSpacing: 18,
+                childAspectRatio: 0.78,
+              ),
+              itemBuilder: (context, index) {
+                return buildCategoryCard(currentCategories[index]);
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

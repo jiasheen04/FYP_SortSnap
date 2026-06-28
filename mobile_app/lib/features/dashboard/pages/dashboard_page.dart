@@ -139,7 +139,7 @@ class _DashboardPageState extends State<DashboardPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DashboardSectionTitle(
-          title: 'Category',
+          title: 'Recycle Categories',
           showSeeAll: true,
           onSeeAll: openCategoryPage,
         ),

@@ -24,9 +24,9 @@ class RecycleCategory {
 
 class RecycleCategoryData {
   static const String recyclablePath = 'assets/images/categories/recyclable';
-  static const String specialPath = 'assets/images/categories/specialhandling';
+  static const String nonRecyclablePath =
+      'assets/images/categories/specialhandling';
 
-  // Trashpedia - Zero Waste Malaysia 101 Trash.
   static const List<RecycleCategory> recyclableCategories = [
     RecycleCategory(
       name: 'Plastic',
@@ -39,7 +39,6 @@ class RecycleCategoryData {
         'Plastic bottled water',
         'Shampoo/ Soap Bottle',
         'Mouthwash bottle',
-        'Clear Clamshell Food Container',
       ],
       itemImages: {
         'Plastic bag': '$recyclablePath/plasticbag.png',
@@ -47,7 +46,6 @@ class RecycleCategoryData {
         'Plastic bottled water': '$recyclablePath/plasticbottle.png',
         'Shampoo/ Soap Bottle': '$recyclablePath/shampoobottle.png',
         'Mouthwash bottle': '$recyclablePath/detergentbottle.png',
-        'Clear Clamshell Food Container': '$recyclablePath/foodcontainer.png',
       },
     ),
     RecycleCategory(
@@ -55,21 +53,11 @@ class RecycleCategoryData {
       icon: Icons.description_outlined,
       isRecyclable: true,
       imagePath: '$recyclablePath/newspaper.png',
-      items: [
-        'Newspaper',
-        'Magazine',
-        'Advertisement flyers',
-        'Envelope with window',
-        'Receipt',
-        'Shredded paper',
-      ],
+      items: ['Newspaper', 'Magazine', 'Used Beverage Carton'],
       itemImages: {
         'Newspaper': '$recyclablePath/newspaper.png',
         'Magazine': '$recyclablePath/magazine.png',
-        'Advertisement flyers': '$recyclablePath/officepaper.png',
-        'Envelope with window': '$recyclablePath/envelope.png',
-        'Receipt': '$recyclablePath/receipt.png',
-        'Shredded paper': '$recyclablePath/shreddedpaper.png',
+        'Used Beverage Carton': '$nonRecyclablePath/beveragecarton.png',
       },
     ),
     RecycleCategory(
@@ -78,61 +66,33 @@ class RecycleCategoryData {
       isRecyclable: true,
       imagePath: '$recyclablePath/cartonbox.png',
       items: [
-        'Cardboard boxes',
         'Pizza box',
-        'Mooncake boxes',
-        'Product packaging box',
         'Cylinder tube packaging',
-        'Delivery parcel packaging',
+        'Cardboard boxes',
+        'Mooncake boxes',
       ],
       itemImages: {
-        'Cardboard boxes': '$recyclablePath/cartonbox.png',
         'Pizza box': '$recyclablePath/pizzabox.png',
-        'Mooncake boxes': '$recyclablePath/mooncakebox.png',
-        'Product packaging box': '$recyclablePath/cerealbox.png',
         'Cylinder tube packaging': '$recyclablePath/cylindertubepackaging.png',
-        'Delivery parcel packaging': '$recyclablePath/deliverybox.png',
-      },
-    ),
-    RecycleCategory(
-      name: 'Metal',
-      icon: Icons.settings_outlined,
-      isRecyclable: true,
-      imagePath: '$recyclablePath/aluminiumcan.png',
-      items: [
-        'Aluminium Can',
-        'Tin Can',
-        'Aluminium foil',
-        'Aluminium cream tube',
-        'Medals',
-        'Staples',
-      ],
-      itemImages: {
-        'Aluminium Can': '$recyclablePath/aluminiumcan.png',
-        'Tin Can': '$recyclablePath/tincan.png',
-        'Aluminium foil': '$recyclablePath/cleanfoil.png',
-        'Aluminium cream tube': '$recyclablePath/aluminiumcreamtube.png',
-        'Medals': '$recyclablePath/medal.png',
-        'Staples': '$recyclablePath/staples.png',
+        'Cardboard boxes': '$recyclablePath/cartonbox.png',
+        'Mooncake boxes': '$recyclablePath/mooncakebox.png',
       },
     ),
     RecycleCategory(
       name: 'Glass',
       icon: Icons.wine_bar_outlined,
       isRecyclable: true,
-      imagePath: '$recyclablePath/glassbottle.png',
-      items: [
-        'Glass container',
-        'Broken Glass (Household Jar)',
-        'Mirror',
-        'Juice bottle',
-      ],
-      itemImages: {
-        'Glass container': '$recyclablePath/glassjar.png',
-        'Broken Glass (Household Jar)': '$recyclablePath/brokenglass.png',
-        'Mirror': '$recyclablePath/mirror.png',
-        'Juice bottle': '$recyclablePath/glassbottle.png',
-      },
+      imagePath: '$recyclablePath/glassjar.png',
+      items: ['Glass container'],
+      itemImages: {'Glass container': '$recyclablePath/glassjar.png'},
+    ),
+    RecycleCategory(
+      name: 'Metal',
+      icon: Icons.settings_outlined,
+      isRecyclable: true,
+      imagePath: '$recyclablePath/aluminiumcan.png',
+      items: ['Aluminium Can'],
+      itemImages: {'Aluminium Can': '$recyclablePath/aluminiumcan.png'},
     ),
     RecycleCategory(
       name: 'Battery',
@@ -149,91 +109,74 @@ class RecycleCategoryData {
       name: 'E-Waste',
       icon: Icons.devices_outlined,
       isRecyclable: true,
-      imagePath: '$recyclablePath/mobilephone.png',
-      items: [
-        'Computer/ Laptop',
-        'Charging Cable',
-        'Earphones',
-        'Printer ink cartridge',
-        'Fridge',
-      ],
+      imagePath: '$recyclablePath/laptop.png',
+      items: ['Computer/ Laptop', 'Printer ink cartridge', 'Earphones', 'CD'],
       itemImages: {
         'Computer/ Laptop': '$recyclablePath/laptop.png',
-        'Charging Cable': '$recyclablePath/charger.png',
-        'Earphones': '$recyclablePath/earphones.png',
         'Printer ink cartridge': '$recyclablePath/inkcatridge.png',
-        'Fridge': '$recyclablePath/fridge.png',
+        'Earphones': '$recyclablePath/earphones.png',
+        'CD': '$nonRecyclablePath/cd.png',
       },
     ),
   ];
 
-  // These items need special disposal guidance or are not suitable for normal recycling bins.
   static const List<RecycleCategory> nonRecyclableCategories = [
     RecycleCategory(
-      name: 'Personal Waste',
+      name: 'General Waste',
       icon: Icons.delete_outline,
       isRecyclable: false,
-      imagePath: '$specialPath/diapers.png',
+      imagePath: '$nonRecyclablePath/coffeecup.png',
       items: [
-        'Diapers',
-        'Face Mask',
-        'Cotton bud',
-        'Contact Lens',
-        'Floss pick',
-        'Disposable razor',
+        'Coffee paper cup',
+        'Plastic straw',
+        'Plush toy',
+        'Snack packaging',
+        'Receipt',
+        'Polystyrene Box',
       ],
       itemImages: {
-        'Diapers': '$specialPath/diapers.png',
-        'Face Mask': '$specialPath/facemask.png',
-        'Cotton bud': '$specialPath/cottonbud.png',
-        'Contact Lens': '$specialPath/contactlens.png',
-        'Floss pick': '$specialPath/flosspick.png',
-        'Disposable razor': '$specialPath/disposablerazor.png',
+        'Coffee paper cup': '$nonRecyclablePath/coffeecup.png',
+        'Plastic straw': '$nonRecyclablePath/straw.png',
+        'Plush toy': '$nonRecyclablePath/plushtoy.png',
+        'Snack packaging': '$nonRecyclablePath/snackpacket.png',
+        'Receipt': '$recyclablePath/receipt.png',
+        'Polystyrene Box': '$nonRecyclablePath/polysterene.png',
       },
+    ),
+    RecycleCategory(
+      name: 'Personal Waste',
+      icon: Icons.baby_changing_station_outlined,
+      isRecyclable: false,
+      imagePath: '$nonRecyclablePath/diapers.png',
+      items: ['Diapers'],
+      itemImages: {'Diapers': '$nonRecyclablePath/diapers.png'},
+    ),
+    RecycleCategory(
+      name: 'Fragile Waste',
+      icon: Icons.broken_image_outlined,
+      isRecyclable: false,
+      imagePath: '$nonRecyclablePath/brokenglass.png',
+      items: ['Mirror', 'Broken Glass (Household Jar)'],
+      itemImages: {
+        'Mirror': '$nonRecyclablePath/mirror.png',
+        'Broken Glass (Household Jar)': '$nonRecyclablePath/brokenglass.png',
+      },
+    ),
+    RecycleCategory(
+      name: 'Hazardous Waste',
+      icon: Icons.warning_amber_outlined,
+      isRecyclable: false,
+      imagePath: '$nonRecyclablePath/lightbulb.png',
+      items: ['Light bulb'],
+      itemImages: {'Light bulb': '$nonRecyclablePath/lightbulb.png'},
     ),
     RecycleCategory(
       name: 'Food Waste',
       icon: Icons.restaurant_outlined,
       isRecyclable: false,
-      imagePath: '$specialPath/foodwaste.png',
+      imagePath: '$nonRecyclablePath/foodwaste.png',
       items: ['Food Waste'],
-      itemImages: {'Food Waste': '$specialPath/foodwaste.png'},
-    ),
-    RecycleCategory(
-      name: 'Medical Waste',
-      icon: Icons.medical_services_outlined,
-      isRecyclable: false,
-      imagePath: '$specialPath/expiredmedicine.png',
-      items: ['Medical strips', 'Expired medicine', 'Home test kits'],
-      itemImages: {
-        'Medical strips': '$specialPath/medicalstrips.png',
-        'Expired medicine': '$specialPath/expiredmedicine.png',
-        'Home test kits': '$specialPath/testkits.png',
-      },
-    ),
-    RecycleCategory(
-      name: 'Ceramic / Glass',
-      icon: Icons.local_cafe_outlined,
-      isRecyclable: false,
-      imagePath: '$specialPath/brokebowl.png',
-      items: ['Broken ceramic bowl', 'Broken Glass (Household Jar)', 'Mirror'],
-      itemImages: {
-        'Broken ceramic bowl': '$specialPath/brokebowl.png',
-        'Broken Glass (Household Jar)': '$specialPath/brokenglass.png',
-        'Mirror': '$specialPath/mirror.png',
-      },
-    ),
-    RecycleCategory(
-      name: 'Hazardous Items',
-      icon: Icons.warning_amber_outlined,
-      isRecyclable: false,
-      imagePath: '$specialPath/lightbulb.png',
-      items: ['Light bulb', 'Disposable Gas Lighter', 'Cigarettes and box'],
-      itemImages: {
-        'Light bulb': '$specialPath/lightbulb.png',
-        'Disposable Gas Lighter': '$specialPath/lighter.png',
-        'Cigarettes and box': '$specialPath/cigaretts.png',
-      },
+      itemImages: {'Food Waste': '$nonRecyclablePath/foodwaste.png'},
     ),
   ];
 
