@@ -128,6 +128,127 @@ function getCurrentPointStatus(point, now) {
   return isCurrentTimeInside(todayHours, now) ? "Open" : "Closed";
 }
 
+const dayLabels = {
+  monday: "Mon",
+  tuesday: "Tue",
+  wednesday: "Wed",
+  thursday: "Thu",
+  friday: "Fri",
+  saturday: "Sat",
+  sunday: "Sun",
+};
+
+const formDayKeys = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+];
+
+function formatSingleTime(timeText) {
+  const cleanText = timeText.trim().toUpperCase().replace(/\s+/g, " ");
+
+  const match = cleanText.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)$/);
+
+  if (!match) {
+    return timeText.trim();
+  }
+
+  let hour = Number(match[1]);
+  const minute = match[2] || "00";
+  const period = match[3];
+
+  return hour + ":" + minute + " " + period;
+}
+
+function formatHourRange(rangeText) {
+  const cleanText = rangeText
+    .replace(/–/g, "-")
+    .replace(/—/g, "-")
+    .trim();
+
+  const parts = cleanText.split("-");
+
+  if (parts.length !== 2) {
+    return cleanText;
+  }
+
+  const startTime = formatSingleTime(parts[0]);
+  const endTime = formatSingleTime(parts[1]);
+
+  return startTime + "-" + endTime;
+}
+
+function formatDayHours(hoursText) {
+  const cleanText = (hoursText || "").trim();
+
+  if (cleanText === "") {
+    return "";
+  }
+
+  if (cleanText.toLowerCase() === "closed") {
+    return "Closed";
+  }
+
+  return cleanText
+    .split(",")
+    .map((range) => formatHourRange(range))
+    .join(", ");
+}
+
+function buildDisplayHours(openingHours) {
+  const groups = [];
+  let startDay = null;
+  let endDay = null;
+  let currentHours = null;
+
+  formDayKeys.forEach((day) => {
+    const dayHours = openingHours[day] || "";
+
+    if (currentHours === null) {
+      startDay = day;
+      endDay = day;
+      currentHours = dayHours;
+      return;
+    }
+
+    if (dayHours === currentHours) {
+      endDay = day;
+    } else {
+      groups.push({
+        startDay: startDay,
+        endDay: endDay,
+        hours: currentHours,
+      });
+
+      startDay = day;
+      endDay = day;
+      currentHours = dayHours;
+    }
+  });
+
+  groups.push({
+    startDay: startDay,
+    endDay: endDay,
+    hours: currentHours,
+  });
+
+  return groups
+    .filter((group) => group.hours.trim() !== "")
+    .map((group) => {
+      const dayText =
+        group.startDay === group.endDay
+          ? dayLabels[group.startDay]
+          : dayLabels[group.startDay] + "-" + dayLabels[group.endDay];
+
+      return dayText + ": " + group.hours;
+    })
+    .join("; ");
+}
+
 const emptyForm = {
   pointCode: "",
   name: "",
@@ -299,6 +420,16 @@ function MapPage() {
   function handleEdit(point) {
     setSelectedPoint(point);
 
+    const openingHours = {
+      monday: formatDayHours(point.openingHours.monday || ""),
+      tuesday: formatDayHours(point.openingHours.tuesday || ""),
+      wednesday: formatDayHours(point.openingHours.wednesday || ""),
+      thursday: formatDayHours(point.openingHours.thursday || ""),
+      friday: formatDayHours(point.openingHours.friday || ""),
+      saturday: formatDayHours(point.openingHours.saturday || ""),
+      sunday: formatDayHours(point.openingHours.sunday || ""),
+    };
+
     setForm({
       pointCode: point.pointCode,
       name: point.name,
@@ -309,19 +440,31 @@ function MapPage() {
       area: point.area,
       status: point.status,
       recyclingStatus: point.recyclingStatus || "Accepting Items",
-      hours: point.hours,
+      hours: buildDisplayHours(openingHours),
       types: point.types || [],
-      monday: point.openingHours.monday || "",
-      tuesday: point.openingHours.tuesday || "",
-      wednesday: point.openingHours.wednesday || "",
-      thursday: point.openingHours.thursday || "",
-      friday: point.openingHours.friday || "",
-      saturday: point.openingHours.saturday || "",
-      sunday: point.openingHours.sunday || "",
+      monday: openingHours.monday,
+      tuesday: openingHours.tuesday,
+      wednesday: openingHours.wednesday,
+      thursday: openingHours.thursday,
+      friday: openingHours.friday,
+      saturday: openingHours.saturday,
+      sunday: openingHours.sunday,
     });
   }
 
   function buildPointData() {
+    const openingHours = {
+      monday: formatDayHours(form.monday),
+      tuesday: formatDayHours(form.tuesday),
+      wednesday: formatDayHours(form.wednesday),
+      thursday: formatDayHours(form.thursday),
+      friday: formatDayHours(form.friday),
+      saturday: formatDayHours(form.saturday),
+      sunday: formatDayHours(form.sunday),
+    };
+
+    const displayHours = buildDisplayHours(openingHours);
+
     return {
       pointCode: selectedPoint ? form.pointCode : getNextPointCodePreview(),
       name: form.name.trim(),
@@ -332,17 +475,9 @@ function MapPage() {
       area: form.area.trim(),
       status: form.status,
       recyclingStatus: form.recyclingStatus,
-      hours: form.hours.trim(),
+      hours: displayHours,
       types: form.types,
-      opening_hours: {
-        monday: form.monday.trim(),
-        tuesday: form.tuesday.trim(),
-        wednesday: form.wednesday.trim(),
-        thursday: form.thursday.trim(),
-        friday: form.friday.trim(),
-        saturday: form.saturday.trim(),
-        sunday: form.sunday.trim(),
-      },
+      opening_hours: openingHours,
     };
   }
 

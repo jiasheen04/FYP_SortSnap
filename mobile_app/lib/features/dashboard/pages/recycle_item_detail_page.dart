@@ -46,29 +46,224 @@ class RecycleItemDetailPage extends StatelessWidget {
   }
 
   static const Map<String, TrashItemDetail> itemDetails = {
+    'Plastic bag': TrashItemDetail(
+      number: '001',
+      description:
+          'Plastic bags are commonly used to carry or pack items. They are lightweight but can stay in the environment for a very long time if not disposed properly.',
+      components: [
+        'Normal plastic bag: Body - 4 LDPE',
+        'Biodegradable bag: Body - 7 PLA',
+      ],
+      whatToDo: [
+        '4 LDPE plastic bag: Plastic bin',
+        '7 PLA biodegradable bag: General bin',
+      ],
+      steps: ['Clean and dry.', 'Place into respective bins.'],
+    ),
+
+    'Plastic takeaway container': TrashItemDetail(
+      number: '002',
+      description:
+          'Plastic takeaway containers are commonly used for food delivery and takeaway meals. They should only be recycled when they are clean.',
+      components: [
+        'Clear takeaway container: Body - 5 PP',
+        'Foam takeaway container: Body - 6 PS',
+        'Black base container: Body - 5 PP',
+        'Brown container: Body - 7 Other',
+      ],
+      whatToDo: [
+        '5 PP container: Plastic bin',
+        '6 PS container: General bin',
+        '5 PP black base container: Plastic bin',
+        '7 Other container: General bin',
+      ],
+      steps: [
+        'Remove the label.',
+        'Clean and dry.',
+        'Place into respective bins.',
+      ],
+    ),
+
+    'Plastic bottled water': TrashItemDetail(
+      number: '003',
+      description:
+          'Plastic bottles are usually used to store drinking water or other liquids.',
+      components: ['Cap: 5 PP', 'Body: 1 PET', 'Label: 3 PVC / 1 PET'],
+      whatToDo: [
+        'Cap: Plastic bin',
+        'Bottle body: Plastic bin',
+        'Label: General bin',
+      ],
+      steps: [
+        'Remove the label.',
+        'Clean and dry.',
+        'Place into respective bins with caps on.',
+      ],
+    ),
+
+    'Coffee paper cup': TrashItemDetail(
+      number: '004',
+      description:
+          'Coffee paper cups are usually made from mixed materials. Because of the inner lining and drink residue, they are not suitable for normal paper recycling.',
+      components: ['Cap: 5 PP', 'Cup: Mixed material', 'Sleeve: Paper'],
+      whatToDo: [
+        'Cap: General bin',
+        'Cup: General bin',
+        'Paper sleeve: Paper bin',
+      ],
+      steps: ['Separate the components.', 'Place into respective bins.'],
+    ),
+
+    'Used Beverage Carton': TrashItemDetail(
+      number: '005',
+      description:
+          'Used beverage cartons are normally made from layers of paperboard, plastic, and aluminium.',
+      components: [
+        'Cap: 5 PP',
+        'Lining: Plastic PE and aluminium',
+        'Shell: Paperboard',
+      ],
+      whatToDo: ['Send to recycling points that accept used beverage cartons.'],
+      steps: [
+        'Clean and dry.',
+        'Compress the carton.',
+        'Place into respective bins with caps on.',
+      ],
+    ),
+
+    'Plastic straw': TrashItemDetail(
+      number: '006',
+      description:
+          'Plastic straws are small and lightweight, so they are usually not accepted for normal recycling.',
+      components: ['Body: 5 PP'],
+      whatToDo: ['Plastic straw: General bin'],
+      steps: ['Place into the respective bin.'],
+    ),
+
+    'CD': TrashItemDetail(
+      number: '007',
+      description:
+          'CDs are made from mixed materials and can take a long time to break down. They should not be burnt because harmful chemicals may be released.',
+      components: [
+        'CD: 7 PC and metal',
+        'Paper label: Paper',
+        'Casing: 5 PP soft / 6 PS hard',
+      ],
+      whatToDo: [
+        'CD: Special collection point if available',
+        'Paper label: Paper bin',
+        'Casing: Plastic bin',
+      ],
+      steps: ['Separate the components.', 'Place into respective bins.'],
+    ),
+
+    'Plush toy': TrashItemDetail(
+      number: '008',
+      description:
+          'Plush toys are usually made from mixed fabric and filling materials. They are not suitable for normal recycling.',
+      components: ['Body: Mixed material'],
+      whatToDo: [
+        'Plush toy: Cloth collection bin or general bin if not accepted',
+      ],
+      steps: ['Place into the respective bin.'],
+    ),
+
+    'Diapers': TrashItemDetail(
+      number: '009',
+      description:
+          'Disposable diapers are not suitable for recycling because they are contaminated after use and take a long time to decompose.',
+      components: [
+        'Inner layer: 5 PP and cotton',
+        'Absorbent core: Plastic',
+        'Outer layer: Plastic',
+      ],
+      whatToDo: ['Diapers: General bin'],
+      steps: ['Place into the respective bin.'],
+    ),
+
+    'Snack packaging': TrashItemDetail(
+      number: '010',
+      description:
+          'Snack packaging is usually made from mixed layers of plastic and aluminium coating. It is commonly used once and thrown away.',
+      components: ['Packet film: PET and aluminium coating'],
+      whatToDo: ['Snack packaging: General bin'],
+      steps: ['Place into the respective bin.'],
+    ),
+
+    'Receipt': TrashItemDetail(
+      number: '011',
+      description:
+          'Receipts can be made from pure paper or thermal paper. Thermal paper is not suitable for normal paper recycling.',
+      components: ['Receipt 1: Pure paper', 'Receipt 2: Thermal paper'],
+      whatToDo: [
+        'Pure paper receipt: Paper bin',
+        'Thermal paper receipt: General bin',
+      ],
+      steps: ['Identify the type of receipt.', 'Place into respective bins.'],
+    ),
+
+    'Newspaper': TrashItemDetail(
+      number: '012',
+      description:
+          'Newspapers are printed papers that are usually used for a short time before being thrown away.',
+      components: ['Body: Paper'],
+      whatToDo: ['Newspaper: Paper bin'],
+      steps: ['Place into the respective bin.'],
+    ),
+
+    'Magazine': TrashItemDetail(
+      number: '013',
+      description:
+          'Magazines are printed materials that usually use higher grade paper and glossy pages.',
+      components: ['Cover and inner pages: Virgin fibre'],
+      whatToDo: ['Magazine: Paper bin'],
+      steps: [
+        'Place into the respective bin.',
+        'Tie them up first if there are many magazines.',
+      ],
+    ),
+
+    'Shampoo/ Soap Bottle': TrashItemDetail(
+      number: '014',
+      description:
+          'Shampoo and soap bottles are usually plastic bottles used for personal care products.',
+      components: [
+        'Cap: 5 PP and string',
+        'Body: 2 HDPE / 1 PET',
+        'Label: 3 PVC / 1 PET',
+      ],
+      whatToDo: [
+        'Cap: Plastic bin',
+        'Bottle body: Plastic bin',
+        'Label: General bin',
+      ],
+      steps: [
+        'Remove the label.',
+        'Clean and dry.',
+        'Place into respective bins with caps on.',
+      ],
+    ),
+
     'Glass container': TrashItemDetail(
       number: '016',
       description:
-          'Glass containers are commonly used for storing food condiments, liquids, pickles and other items. Glass can take a very long time to decompose in the environment.',
+          'Glass containers are commonly used for storing food condiments, liquids, pickles and other items.',
       components: ['Body: Glass', 'Label: Paper or plastic label'],
-      whatToDo: [
-        'Glass body: Recycle if clean and accepted',
-        'Label: Remove before recycling if possible',
-      ],
+      whatToDo: ['Glass body: Glass bin', 'Label: General bin'],
       steps: ['Remove label.', 'Clean and dry.', 'Place into respective bins.'],
     ),
 
     'Pizza box': TrashItemDetail(
       number: '018',
       description:
-          'Most pizza boxes are made of cardboard. They can be recycled if the box is not smeared with grease or food stain.',
+          'Pizza boxes are usually made from cardboard. They can be recycled if the box is not badly stained with grease or food.',
       components: [
         'Body: Cardboard',
         'Contaminated part: Grease or food-stained cardboard',
       ],
       whatToDo: [
         'Clean cardboard part: Paper or cardboard bin',
-        'Greasy part: Compost bin if available, otherwise general waste',
+        'Greasy part: Compost bin if available, otherwise general bin',
       ],
       steps: [
         'Tear off the contaminated parts.',
@@ -80,18 +275,15 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Light bulb': TrashItemDetail(
       number: '021',
       description:
-          'Light bulbs may contain small amounts of mercury, which can be harmful if not disposed properly.',
-      components: [
-        'Body: Glass and metal parts',
-        'Inside: Electrical and lighting material',
-      ],
+          'Light bulbs may contain small amounts of mercury, so they should be handled carefully before disposal.',
+      components: ['Body: Glass and metal parts', 'Inside: Lighting material'],
       whatToDo: [
+        'Wrap and label before disposal.',
         'Do not throw loosely into the bin.',
-        'Wrap and label it before disposal.',
       ],
       steps: [
         'Wrap and tie them in a newspaper.',
-        'Label “light bulb”.',
+        'Label "light bulb".',
         'Place into the respective bin.',
       ],
     ),
@@ -99,16 +291,19 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Mirror': TrashItemDetail(
       number: '023',
       description:
-          'Mirrors are made with reflective coating. Because of this coating, they are not recyclable like normal glass bottles or jars.',
+          'Mirrors are made with reflective coating. Because of this coating, they are not recycled like normal glass bottles or jars.',
       components: ['Body: Glass with reflective coating'],
-      whatToDo: ['Mirror: General waste'],
-      steps: ['Place into the respective bin.'],
+      whatToDo: ['Mirror: General bin'],
+      steps: [
+        'Wrap it properly if broken or sharp.',
+        'Place into the respective bin.',
+      ],
     ),
 
     'Dry Cell Battery': TrashItemDetail(
       number: '024',
       description:
-          'Dry cell batteries are used in many household electronics. They contain metal and chemicals, so they should be disposed responsibly.',
+          'Dry cell batteries are used in many household electronics. They contain chemicals and should be disposed responsibly.',
       components: [
         'Body: Metal exterior',
         'Inside: Battery chemicals and heavy metals',
@@ -123,7 +318,7 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Mouthwash bottle': TrashItemDetail(
       number: '026',
       description:
-          'Mouthwash bottles are usually plastic bottles. A 1-PET bottle can take up to 450 years to decompose.',
+          'Mouthwash bottles are usually plastic bottles used for personal care products.',
       components: [
         'Cap: Plastic',
         'Body: Plastic bottle',
@@ -146,7 +341,7 @@ class RecycleItemDetailPage extends StatelessWidget {
       description:
           'Broken glass can hurt cleaners and waste collectors if it is thrown away without protection.',
       components: ['Body: Broken glass pieces'],
-      whatToDo: ['Broken glass: Place safely into the respective bin'],
+      whatToDo: ['Broken glass: Wrap or place safely before disposal'],
       steps: [
         'Place all the broken glass in a transparent container.',
         'Label as broken glass.',
@@ -166,14 +361,14 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Polystyrene Box': TrashItemDetail(
       number: '030',
       description:
-          'Polystyrene is commonly used as packaging material because it can absorb shock. However, it can take around 500 years to decompose.',
+          'Polystyrene is commonly used as food or packaging material. It is difficult to recycle and can take a very long time to decompose.',
       components: [
         'Body: Polystyrene / styrofoam',
         'Label: Sticker or paper label',
       ],
       whatToDo: [
         'Clean polystyrene: Recycle only if accepted',
-        'Dirty polystyrene: General waste',
+        'Dirty polystyrene: General bin',
       ],
       steps: [
         'Remove any label on the styrofoam.',
@@ -185,7 +380,7 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Computer/ Laptop': TrashItemDetail(
       number: '036',
       description:
-          'Computers and laptops contain valuable metals that can be reused through recycling. They should not be thrown away as normal waste.',
+          'Computers and laptops contain electronic parts and valuable materials. They should not be thrown away as normal waste.',
       components: [
         'Body: Plastic and metal casing',
         'Inside: Circuit board and electronic components',
@@ -201,7 +396,7 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Old car battery': TrashItemDetail(
       number: '039',
       description:
-          'Old car batteries contain toxic lead and sulfuric acid. These materials should be kept out of the environment.',
+          'Old car batteries contain toxic lead and sulfuric acid. They should be handled carefully and sent to proper collection points.',
       components: [
         'Body: Plastic battery casing',
         'Inside: Lead and sulfuric acid',
@@ -215,21 +410,19 @@ class RecycleItemDetailPage extends StatelessWidget {
     'Printer ink cartridge': TrashItemDetail(
       number: '040',
       description:
-          'Printer ink cartridges are part of e-waste. They can be kept out of landfills by using proper take-back or recycling services.',
+          'Printer ink cartridges are part of e-waste. They should be returned through proper take-back or recycling services.',
       components: [
         'Body: Plastic cartridge',
         'Inside: Ink residue and cartridge parts',
       ],
-      whatToDo: ['Authentic cartridge: Brand take-back or drop-off point'],
-      steps: [
-        'For authentic cartridges, check for drop-off location or arrange a pickup service.',
-      ],
+      whatToDo: ['Printer ink cartridge: Brand take-back or drop-off point'],
+      steps: ['Check for drop-off location or arrange a pickup service.'],
     ),
 
     'Aluminium Can': TrashItemDetail(
       number: '041',
       description:
-          'Aluminium cans are commonly used for drinks and food products. Aluminium is one of the materials that is commonly recycled.',
+          'Aluminium cans are commonly used for drinks and food products. Aluminium is a commonly recycled material.',
       components: ['Body: Aluminium'],
       whatToDo: ['Aluminium can: Metal bin'],
       steps: ['Clean and dry.', 'Compress.', 'Place into the respective bin.'],
@@ -296,7 +489,6 @@ class RecycleItemDetailPage extends StatelessWidget {
       steps: ['Separate the component.', 'Place into respective bins.'],
     ),
   };
-
   Widget buildItemImage() {
     return Container(
       width: 130,
@@ -340,11 +532,11 @@ class RecycleItemDetailPage extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withValues(alpha: 0.95),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
