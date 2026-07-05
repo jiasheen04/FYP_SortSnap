@@ -119,8 +119,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
     try {
       await _imageScanService.warmUpImageScanner();
-    } catch (e) {
-      debugPrint('Silent CNN warm up failed: $e');
+    } catch (_) {
     } finally {
       _isWarmingImageScanner = false;
     }
@@ -193,9 +192,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       });
 
       _scrollToBottom();
-    } catch (e) {
-      debugPrint('Failed to load chat messages: $e');
-
+    } catch (_) {
       if (!mounted) return;
 
       setState(() {
@@ -286,7 +283,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final requestGranted = await Gal.requestAccess(toAlbum: true);
 
         if (!requestGranted) {
-          debugPrint('Gallery permission denied.');
           return;
         }
       }
@@ -298,9 +294,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Photo saved to gallery.')));
-    } catch (e) {
-      debugPrint('Failed to save image to gallery: $e');
-    }
+    } catch (_) {}
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -341,12 +335,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
       try {
         await _imageScanService.warmUpImageScanner();
-        
+
         final result = await _imageScanService.classifyImage(
           imageFile: imageFile,
         );
-
-        debugPrint('FLUTTER IMAGE RESULT: $result');
 
         if (!mounted) return;
 

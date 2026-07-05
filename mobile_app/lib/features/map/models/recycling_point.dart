@@ -12,6 +12,7 @@ class RecyclingPoint {
   final String contact;
   final String area;
   final Map<String, dynamic> openingHours;
+  final List<String> types;
 
   RecyclingPoint({
     required this.id,
@@ -27,17 +28,25 @@ class RecyclingPoint {
     required this.contact,
     required this.area,
     required this.openingHours,
+    required this.types,
   });
 
   factory RecyclingPoint.fromFirestore(String id, Map<String, dynamic> data) {
-    final Map<String, dynamic> openingHoursData =
-        Map<String, dynamic>.from(data['opening_hours'] ?? {});
+    final Map<String, dynamic> openingHoursData = Map<String, dynamic>.from(
+      data['opening_hours'] ?? {},
+    );
 
     final bool openNow = _checkOpenNow(
       data['status'] ?? 'Unknown',
       data['is_open'] ?? false,
       openingHoursData,
     );
+
+    final rawTypes = data['types'];
+
+    final List<String> typesData = rawTypes is List
+        ? rawTypes.map((item) => item.toString()).toList()
+        : <String>[];
 
     return RecyclingPoint(
       id: id,
@@ -53,6 +62,7 @@ class RecyclingPoint {
       contact: data['contact'] ?? '',
       area: data['area'] ?? '',
       openingHours: openingHoursData,
+      types: typesData,
     );
   }
 
@@ -157,12 +167,6 @@ class RecyclingPoint {
 
     final DateTime now = DateTime.now();
 
-    return DateTime(
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
+    return DateTime(now.year, now.month, now.day, hour, minute);
   }
 }

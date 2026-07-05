@@ -2,7 +2,6 @@ const ILMU_API_KEY = process.env.ILMU_API_KEY;
 const ILMU_BASE_URL = process.env.ILMU_BASE_URL || "https://api.ilmu.ai/v1";
 const ILMU_MODEL = process.env.ILMU_MODEL || "ilmu-nemo-nano";
 
-// Local CNN API first. On Render, set CNN_API_URL to: https://sortsnap-cnn.onrender.com
 const CNN_API_URL = process.env.CNN_API_URL || "http://127.0.0.1:8000";
 
 async function callIlmu(messages, maxTokens = 500) {
@@ -23,7 +22,6 @@ async function callIlmu(messages, maxTokens = 500) {
   const data = await response.json();
 
   if (!response.ok) {
-    console.error("ILMU API Error:", data);
     throw new Error(data.error?.message || "ILMU API request failed");
   }
 
@@ -64,9 +62,6 @@ async function callCnnApi(file) {
       try {
         data = JSON.parse(rawText);
       } catch (jsonError) {
-        console.error(`CNN returned non-JSON on attempt ${attempt}`);
-        console.error("CNN status:", response.status);
-        console.error("CNN response preview:", rawText.slice(0, 200));
 
         if (attempt < maxAttempts) {
           await sleep(30000);
@@ -79,7 +74,6 @@ async function callCnnApi(file) {
       }
 
       if (!response.ok || !data.success) {
-        console.error(`CNN API Error on attempt ${attempt}:`, data);
 
         if (attempt < maxAttempts) {
           await sleep(30000);
@@ -91,7 +85,6 @@ async function callCnnApi(file) {
 
       return data;
     } catch (error) {
-      console.error(`CNN call failed on attempt ${attempt}:`, error.message);
 
       if (attempt < maxAttempts) {
         await sleep(30000);
@@ -148,8 +141,8 @@ Say what the image mainly looks like and mention possible mixed materials.
 Mention any warning or exception.
 
 Rules:
-- Mention only this detected item.
-- Do not mention possible mixed materials.
+- If more than one possible material is listed, say the image might be mixed waste.
+- Mention the possible materials shown above, but use uncertain wording like "might", "may", or "looks like".
 - Keep it beginner-friendly.
 - Keep it around 70 to 120 words.
 - Do not mention CNN, model, API, backend, or confidence score.
@@ -307,7 +300,6 @@ Rules:
       source: "ilmu",
     });
   } catch (error) {
-    console.error("Text Chatbot Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -367,7 +359,6 @@ async function classifyImage(req, res) {
       source: "cnn + ilmu",
     });
   } catch (error) {
-    console.error("Image Classification Error:", error);
 
     return res.status(500).json({
       success: false,
@@ -383,7 +374,6 @@ async function classifyImage(req, res) {
       answer:
         "Sorry, I could not classify the image right now. Please type the item name in the chatbot, for example plastic bottle, cardboard box, or battery.",
       source: "cnn + ilmu",
-      error: error.message,
     });
   }
 }

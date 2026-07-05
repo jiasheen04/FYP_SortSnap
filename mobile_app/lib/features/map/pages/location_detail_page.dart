@@ -80,6 +80,9 @@ class LocationDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool openNow = point.isOpen;
     final bool isNotAccepting = point.recyclingStatus == 'Not Accepting Items';
+    final List<String> acceptedTypes = point.types.isEmpty
+        ? ['No item type listed']
+        : point.types;
 
     return Scaffold(
       backgroundColor: const Color(0xFFDDF2EA),
@@ -158,6 +161,38 @@ class LocationDetailPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
+
+              const Text(
+                'Accepted Item Types',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: acceptedTypes.map((type) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA7E1C8),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      type,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+
               Row(
                 children: [
                   Expanded(

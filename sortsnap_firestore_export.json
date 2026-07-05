@@ -1,0 +1,2492 @@
+{
+  "users": [
+    {
+      "id": "2vuSWVTqc3P2Iq1wEFM1TzSD9xD2",
+      "data": {
+        "userNo": "U002",
+        "username": "itest",
+        "firstName": "star",
+        "lastName": "fish",
+        "contactNo": "0126666666",
+        "email": "itest@sortsnap.com",
+        "role": "user",
+        "createdAt": {
+          "_seconds": 1778061372,
+          "_nanoseconds": 516000000
+        }
+      }
+    },
+    {
+      "id": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+      "data": {
+        "email": "admin@sortsnap.com",
+        "role": "admin",
+        "status": "active",
+        "userNo": "A001",
+        "username": "Admin",
+        "createdAt": {
+          "_seconds": 1782045816,
+          "_nanoseconds": 0
+        }
+      }
+    },
+    {
+      "id": "rEYL06epgfRN6qmcUph7ApuUANs2",
+      "data": {
+        "username": "jayven04",
+        "firstName": "Jia Sheen",
+        "lastName": "Wee",
+        "contactNo": "016-6978602",
+        "email": "jayven04@sortsnap.com",
+        "createdAt": {
+          "_seconds": 1776695261,
+          "_nanoseconds": 830000000
+        },
+        "userNo": "U001",
+        "role": "user"
+      }
+    }
+  ],
+  "admins": [],
+  "recycling_points": [
+    {
+      "id": "7YtpwZfnGJsKVT4NhDkX",
+      "data": {
+        "name": "Pusat Kitar Semula Komuniti Presint 9",
+        "address": "Jalan P9b, Presint 9, 62000 Putrajaya, Wilayah Persekutuan Putrajaya",
+        "latitude": 2.939805070345957,
+        "longitude": 101.67192188831629,
+        "hours": "Mon-Thu: 8:30 AM-1:00 PM, 2:00 PM-4:30 PM; Fri: 8:30 AM-12:30 PM, 2:30 PM-4:30 PM; Sat-Sun: 8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+        "status": "Open",
+        "is_open": true,
+        "contact": "1-800-88-3437",
+        "area": "Putrajaya",
+        "opening_hours": {
+          "monday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+          "tuesday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+          "wednesday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+          "thursday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+          "friday": "8:30 AM-12:30 PM, 2:30 PM-4:30 PM",
+          "saturday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM",
+          "sunday": "8:30 AM-1:00 PM, 2:00 PM-4:30 PM"
+        },
+        "pointCode": "RP02",
+        "recyclingStatus": "Accepting Items",
+        "types": [
+          "Plastic",
+          "Metal",
+          "Paper",
+          "Cardboard",
+          "Glass",
+          "Battery",
+          "E-waste",
+          "Textile"
+        ],
+        "updatedAt": {
+          "_seconds": 1782906171,
+          "_nanoseconds": 449000000
+        }
+      }
+    },
+    {
+      "id": "HS3rjKP2JPn9WMnTDzui",
+      "data": {
+        "pointCode": "RP05",
+        "name": "TechWaste Recycling Malaysia",
+        "address": "G-G, 17, Jalan PP 28, Taman Pinggiran Putra, 43300 Seri Kembangan, Selangor",
+        "latitude": 2.990317810414212,
+        "longitude": 100.674778966188,
+        "hours": "Mon-Fri: 10:00 AM-6:00 PM; Sat: 10:00 AM-3:00 PM; Sun: Closed",
+        "status": "Open",
+        "is_open": true,
+        "recyclingStatus": "Accepting Items",
+        "contact": "017-4400204",
+        "area": "Seri Kembangan",
+        "opening_hours": {
+          "monday": "10:00 AM-6:00 PM",
+          "tuesday": "10:00 AM-6:00 PM",
+          "wednesday": "10:00 AM-6:00 PM",
+          "thursday": "10:00 AM-6:00 PM",
+          "friday": "10:00 AM-6:00 PM",
+          "saturday": "10:00 AM-3:00 PM",
+          "sunday": "Closed"
+        },
+        "types": [
+          "Battery",
+          "E-waste"
+        ],
+        "createdAt": {
+          "_seconds": 1782906341,
+          "_nanoseconds": 302000000
+        },
+        "updatedAt": {
+          "_seconds": 1782906363,
+          "_nanoseconds": 516000000
+        }
+      }
+    },
+    {
+      "id": "Vvsv19VIGVHxtMC5R6Lu",
+      "data": {
+        "name": "Cyberjaya Recycling Centre KDEBWM",
+        "address": "Persiaran Rimba Permai, Cyberjaya, 63000 Cyberjaya, Selangor",
+        "latitude": 2.9122525072244243,
+        "longitude": 101.65541918617258,
+        "contact": "011-28574640",
+        "area": "Cyberjaya",
+        "opening_hours": {
+          "monday": "9:00 AM-1:00 PM, 2:00 PM-4:00 PM",
+          "tuesday": "9:00 AM-1:00 PM, 2:00 PM-4:00 PM",
+          "wednesday": "9:00 AM-1:00 PM, 2:00 PM-4:00 PM",
+          "thursday": "9:00 AM-1:00 PM, 2:00 PM-4:00 PM",
+          "friday": "9:00 AM-12:30 PM, 2:30 PM-4:00 PM",
+          "saturday": "9:00 AM-1:00 PM",
+          "sunday": "Closed"
+        },
+        "hours": "Mon-Thu: 9:00 AM-1:00 PM, 2:00 PM-4:00 PM; Fri: 9:00 AM-12:30 PM, 2:30 PM-4:00 PM; Sat: 9:00 AM-1:00 PM; Sun: Closed",
+        "pointCode": "RP01",
+        "is_open": true,
+        "status": "Open",
+        "recyclingStatus": "Not Accepting Items",
+        "types": [
+          "Glass",
+          "Paper",
+          "Plastic",
+          "Metal",
+          "Cardboard",
+          "E-waste",
+          "Battery",
+          "Textile"
+        ],
+        "updatedAt": {
+          "_seconds": 1782906355,
+          "_nanoseconds": 465000000
+        }
+      }
+    },
+    {
+      "id": "XJpFApbShL5AcMRRQiTe",
+      "data": {
+        "pointCode": "RP04",
+        "name": "Puchong Recycling Center",
+        "address": "6, Jln BP 4/1, Bandar Bukit Puchong, 47100 Puchong, Selangor",
+        "latitude": 2.980909533874372,
+        "longitude": 101.6316483674988,
+        "status": "Open",
+        "is_open": true,
+        "recyclingStatus": "Accepting Items",
+        "contact": "019-8887858",
+        "area": "Puchong",
+        "createdAt": {
+          "_seconds": 1782905673,
+          "_nanoseconds": 551000000
+        },
+        "types": [
+          "Battery",
+          "E-waste",
+          "Metal",
+          "Plastic",
+          "Textile",
+          "Paper",
+          "Cardboard"
+        ],
+        "hours": "Mon-Sat: 8:00 AM-7:00 PM; Sun: Closed",
+        "opening_hours": {
+          "monday": "8:00 AM-7:00 PM",
+          "tuesday": "8:00 AM-7:00 PM",
+          "wednesday": "8:00 AM-7:00 PM",
+          "thursday": "8:00 AM-7:00 PM",
+          "friday": "8:00 AM-7:00 PM",
+          "saturday": "8:00 AM-7:00 PM",
+          "sunday": "Closed"
+        },
+        "updatedAt": {
+          "_seconds": 1782906166,
+          "_nanoseconds": 511000000
+        }
+      }
+    },
+    {
+      "id": "a5ynCU7YzJdfZKL57oGi",
+      "data": {
+        "pointCode": "RP03",
+        "name": "ERTH: Electronic Recycling Through Heroes (E-waste)",
+        "address": "Ground Floor, G-3A, Kanvas Retail @ Prima 15, Jalan Teknokrat 6, Cyberjaya, 63000 Cyberjaya, Selangor",
+        "latitude": 2.913383230027233,
+        "longitude": 101.6552305268008,
+        "status": "Open",
+        "is_open": true,
+        "contact": "014-221446",
+        "area": "Cyberjaya",
+        "types": [
+          "E-waste"
+        ],
+        "createdAt": {
+          "_seconds": 1782063497,
+          "_nanoseconds": 281000000
+        },
+        "hours": "Mon-Sun: 10:00 AM-10:00 PM",
+        "opening_hours": {
+          "monday": "10:00 AM-10:00 PM",
+          "tuesday": "10:00 AM-10:00 PM",
+          "wednesday": "10:00 AM-10:00 PM",
+          "thursday": "10:00 AM-10:00 PM",
+          "friday": "10:00 AM-10:00 PM",
+          "saturday": "10:00 AM-10:00 PM",
+          "sunday": "10:00 AM-10:00 PM"
+        },
+        "recyclingStatus": "Accepting Items",
+        "updatedAt": {
+          "_seconds": 1782906351,
+          "_nanoseconds": 211000000
+        }
+      }
+    },
+    {
+      "id": "ciAFrBSpePLbtrcldcWY",
+      "data": {
+        "pointCode": "RP06",
+        "name": "Pusat Kitar Semula Komuniti Presint 18, Putrajaya",
+        "address": "Jalan P18 F, Presint 18, 62150 Putrajaya, Wilayah Persekutuan Putrajaya",
+        "latitude": 2.918584646267384,
+        "longitude": 101.69887083735249,
+        "status": "Open",
+        "is_open": true,
+        "recyclingStatus": "Accepting Items",
+        "contact": "03-78030518",
+        "area": "Putrajaya",
+        "types": [
+          "Plastic",
+          "Paper"
+        ],
+        "createdAt": {
+          "_seconds": 1782906532,
+          "_nanoseconds": 247000000
+        },
+        "hours": "Mon-Fri: Closed; Sat-Sun: 8:30 AM-4:30 PM",
+        "opening_hours": {
+          "monday": "Closed",
+          "tuesday": "Closed",
+          "wednesday": "Closed",
+          "thursday": "Closed",
+          "friday": "Closed",
+          "saturday": "8:30 AM-4:30 PM",
+          "sunday": "8:30 AM-4:30 PM"
+        },
+        "updatedAt": {
+          "_seconds": 1782906544,
+          "_nanoseconds": 58000000
+        }
+      }
+    },
+    {
+      "id": "yz3YF6IJKhgyOujlx2YP",
+      "data": {
+        "pointCode": "RP07",
+        "name": "Vairam Recycle Trading",
+        "address": "Lot 11, Jalan 6/7, Kawasan Perindustrian Seri Kembangan, 43300 Seri Kembangan, Selangor",
+        "latitude": 3.0173837784773205,
+        "longitude": 101.71176399502372,
+        "hours": "Mon-Sat: 8:00 AM-7:00 PM; Sun: 8:00 AM-6:00 PM",
+        "status": "Open",
+        "is_open": true,
+        "recyclingStatus": "Accepting Items",
+        "contact": "011-23553955",
+        "area": "Seri Kembangan",
+        "opening_hours": {
+          "monday": "8:00 AM-7:00 PM",
+          "tuesday": "8:00 AM-7:00 PM",
+          "wednesday": "8:00 AM-7:00 PM",
+          "thursday": "8:00 AM-7:00 PM",
+          "friday": "8:00 AM-7:00 PM",
+          "saturday": "8:00 AM-7:00 PM",
+          "sunday": "8:00 AM-6:00 PM"
+        },
+        "types": [
+          "Battery",
+          "Paper",
+          "Plastic",
+          "Metal",
+          "E-waste"
+        ],
+        "createdAt": {
+          "_seconds": 1782906836,
+          "_nanoseconds": 424000000
+        },
+        "updatedAt": {
+          "_seconds": 1782906836,
+          "_nanoseconds": 424000000
+        }
+      }
+    }
+  ],
+  "location_reports": [
+    {
+      "id": "P1jcGQLpmS8n0Nlx64VR",
+      "data": {
+        "resolvedAt": null,
+        "recyclingPointId": "7YtpwZfnGJsKVT4NhDkX",
+        "resolvedByAdminId": null,
+        "userNo": "U001",
+        "recyclingPointName": "Pusat Kitar Semula Komuniti Presint 9",
+        "description": "The estimated distance is wrong",
+        "userName": "Jia Sheen Wee",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "issueType": "Other",
+        "recyclingPointCode": "RP02",
+        "reportCode": "LR001",
+        "username": "jayven04",
+        "status": "Open",
+        "createdAt": {
+          "_seconds": 1777434595,
+          "_nanoseconds": 229000000
+        }
+      }
+    }
+  ],
+  "pickup_requests": [
+    {
+      "id": "PR001",
+      "data": {
+        "itemTypes": [
+          "Plastic",
+          "Metal",
+          "Paper"
+        ],
+        "unitNo": "A-10-1",
+        "forwardedByAdminId": null,
+        "userNo": "U001",
+        "postalCode": "63100",
+        "pickupId": "PR001",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "pickupAddress": "Multimedia University - MMU Cyberjaya, Persiaran Multimedia, 63100 Cyberjaya, Selangor",
+        "remarks": "many items",
+        "username": "jayven04",
+        "createdAt": {
+          "_seconds": 1780294083,
+          "_nanoseconds": 163000000
+        },
+        "forwardedAt": {
+          "_seconds": 1782054141,
+          "_nanoseconds": 981000000
+        },
+        "forwardedToPointId": "Vvsv19VIGVHxtMC5R6Lu",
+        "updatedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "completedAt": {
+          "_seconds": 1782198281,
+          "_nanoseconds": 343000000
+        },
+        "updatedByAdminUsername": "Admin",
+        "completedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "updatedByAdminUserNo": "A001",
+        "status": "Completed",
+        "updatedAt": {
+          "_seconds": 1782198281,
+          "_nanoseconds": 343000000
+        }
+      }
+    },
+    {
+      "id": "PR002",
+      "data": {
+        "itemTypes": [
+          "Plastic",
+          "Others",
+          "Cardboard"
+        ],
+        "unitNo": "T1-11-2",
+        "userNo": "U001",
+        "postalCode": "63000",
+        "pickupId": "PR002",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "pickupAddress": "Cyber 4, 63000 Cyberjaya, Selangor",
+        "remarks": "tyre",
+        "username": "jayven04",
+        "createdAt": {
+          "_seconds": 1780294191,
+          "_nanoseconds": 236000000
+        },
+        "forwardedToPointId": "Vvsv19VIGVHxtMC5R6Lu",
+        "updatedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "forwardedByAdminEmail": "admin@sortsnap.com",
+        "forwardedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "forwardedByAdminUsername": "Admin",
+        "forwardedByAdminUserNo": "A001",
+        "updatedByAdminUsername": "Admin",
+        "updatedByAdminUserNo": "A001",
+        "forwardedToPointName": "RP01 - Cyberjaya Recycling Centre KDEBWM",
+        "forwardedAt": {
+          "_seconds": 1782545269,
+          "_nanoseconds": 88000000
+        },
+        "completedAt": {
+          "_seconds": 1782548642,
+          "_nanoseconds": 580000000
+        },
+        "completedByAdminUsername": "Admin",
+        "completedByAdminUserNo": "A001",
+        "completedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "status": "Completed",
+        "updatedAt": {
+          "_seconds": 1782548642,
+          "_nanoseconds": 580000000
+        }
+      }
+    },
+    {
+      "id": "PR003",
+      "data": {
+        "itemTypes": [
+          "Plastic",
+          "Metal",
+          "Paper",
+          "Cardboard"
+        ],
+        "unitNo": "T1-23-04",
+        "userNo": "U001",
+        "postalCode": "63000",
+        "pickupId": "PR003",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "pickupAddress": "T1-23-04, Lakefront Residence Cyberjaya, 63000 Cyberjaya, Selangor",
+        "remarks": "pickup during weekend",
+        "username": "jayven04",
+        "createdAt": {
+          "_seconds": 1782543985,
+          "_nanoseconds": 148000000
+        },
+        "updatedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "forwardedByAdminEmail": "admin@sortsnap.com",
+        "forwardedByAdminId": "b6JqvgGG22WW6evvJrXP3YrzObq1",
+        "forwardedByAdminUsername": "Admin",
+        "updatedByAdminUserNo": "A001",
+        "forwardedByAdminUserNo": "A001",
+        "updatedByAdminUsername": "Admin",
+        "status": "Forwarded",
+        "forwardedToPointName": "RP02 - Pusat Kitar Semula Komuniti Presint 9",
+        "forwardedAt": {
+          "_seconds": 1782546390,
+          "_nanoseconds": 484000000
+        },
+        "forwardedToPointId": "7YtpwZfnGJsKVT4NhDkX",
+        "updatedAt": {
+          "_seconds": 1782546390,
+          "_nanoseconds": 484000000
+        }
+      }
+    },
+    {
+      "id": "PR004",
+      "data": {
+        "itemTypes": [
+          "E-waste"
+        ],
+        "unitNo": "B-12-01",
+        "forwardedByAdminId": null,
+        "forwardedAt": null,
+        "userNo": "U001",
+        "postalCode": "63000",
+        "pickupId": "PR004",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "pickupAddress": "Jalan Teknokrat 1, Cyber 3, 63000 Cyberjaya, Selangor",
+        "forwardedToPointId": null,
+        "remarks": "fridge",
+        "username": "jayven04",
+        "status": "Pending",
+        "updatedAt": null,
+        "createdAt": {
+          "_seconds": 1782548834,
+          "_nanoseconds": 353000000
+        }
+      }
+    }
+  ],
+  "chatbot_records": [
+    {
+      "id": "rEYL06epgfRN6qmcUph7ApuUANs2",
+      "data": {
+        "userNo": "U001",
+        "userName": "Jia Sheen Wee",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "isRecyclingRelated": true,
+        "username": "jayven04",
+        "latestQuestion": "Image scan",
+        "messageCount": 6,
+        "source": "cnn + ilmu",
+        "latestAnswer": "Item: cardboard\nCategory: cardboard\nRecyclable: Yes\n\n✅ Main result\nThis is cardboard.\n\n♻️ What to do\n• Flatten the cardboard to make it easier to handle.\n• Remove any food residue, liquids, or liquids-soaked parts.\n• If it is dirty or greasy, discard that part — only clean cardboard can be recycled.\n• Flatten and place it in the recycling bin or take it to a recycling drop‑off point.\n\n⚠️ Important note\nDo not recycle cardboard that is wet, soiled, or contaminated with food or oil.",
+        "imageScanCount": 2,
+        "updatedAt": {
+          "_seconds": 1782011605,
+          "_nanoseconds": 789000000
+        }
+      }
+    }
+  ],
+  "image_scan_records": [
+    {
+      "id": "U001_scan_000001",
+      "data": {
+        "scanNo": 1,
+        "detectionMode": "possible_mixed",
+        "isRecyclable": true,
+        "scanId": "U001_scan_000001",
+        "userNo": "U001",
+        "confidence": 0.5691,
+        "chatDisplayText": "Possible mixed materials:\n\n1. paper\nRecyclable: Yes\n\n2. plastic\nRecyclable: Yes\n\n✅ Main result  \nThis image mainly looks like paper and plastic items. There may also be other materials mixed in.\n\n♻️ What to do  \n• Separate paper and plastic from each other.  \n• For paper: keep it clean and dry; flatten it before disposal.  \n• For plastic: rinse containers to remove food residue; do not include plastic bags.  \n• Place each material in the correct recycling bin according to local guidelines.\n\n⚠️ Important note  \nIf you are unsure about an item, dispose of it in general waste to avoid contaminating recyclables.",
+        "displayOrder": 1,
+        "source": "cnn + ilmu",
+        "userName": "Jia Sheen Wee",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "classifications": [
+          {
+            "isRecyclable": true,
+            "itemName": "paper",
+            "confidence": 0.5691,
+            "category": "paper",
+            "confidencePercentage": 56.91,
+            "class": "paper"
+          },
+          {
+            "isRecyclable": true,
+            "itemName": "plastic",
+            "confidence": 0.2623,
+            "category": "plastic",
+            "confidencePercentage": 26.23,
+            "class": "plastic"
+          }
+        ],
+        "itemName": "paper",
+        "guidance": "✅ Main result  \nThis image mainly looks like paper and plastic items. There may also be other materials mixed in.\n\n♻️ What to do  \n• Separate paper and plastic from each other.  \n• For paper: keep it clean and dry; flatten it before disposal.  \n• For plastic: rinse containers to remove food residue; do not include plastic bags.  \n• Place each material in the correct recycling bin according to local guidelines.\n\n⚠️ Important note  \nIf you are unsure about an item, dispose of it in general waste to avoid contaminating recyclables.",
+        "possibleCategories": [
+          {
+            "itemName": "paper",
+            "isRecyclable": true,
+            "confidence": 0.5691,
+            "category": "paper",
+            "confidencePercentage": 56.91
+          },
+          {
+            "itemName": "plastic",
+            "isRecyclable": true,
+            "confidence": 0.2623,
+            "category": "plastic",
+            "confidencePercentage": 26.23
+          }
+        ],
+        "category": "paper",
+        "confidencePercentage": 56.91,
+        "imageLocalPath": "/data/user/0/com.sortsnap.mobile_app/cache/scaled_1000323949.jpg",
+        "username": "jayven04",
+        "createdAt": {
+          "_seconds": 1781974304,
+          "_nanoseconds": 409000000
+        }
+      }
+    },
+    {
+      "id": "U001_scan_000002",
+      "data": {
+        "scanNo": 2,
+        "detectionMode": "single",
+        "isRecyclable": true,
+        "scanId": "U001_scan_000002",
+        "userNo": "U001",
+        "confidence": 0.9814,
+        "chatDisplayText": "Item: cardboard\nCategory: cardboard\nRecyclable: Yes\n\n✅ Main result\nThis is cardboard.\n\n♻️ What to do\n• Flatten the cardboard to make it easier to handle.\n• Remove any food residue, liquids, or liquids-soaked parts.\n• If it is dirty or greasy, discard that part — only clean cardboard can be recycled.\n• Flatten and place it in the recycling bin or take it to a recycling drop‑off point.\n\n⚠️ Important note\nDo not recycle cardboard that is wet, soiled, or contaminated with food or oil.",
+        "displayOrder": 2,
+        "source": "cnn + ilmu",
+        "userName": "Jia Sheen Wee",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "classifications": [
+          {
+            "isRecyclable": true,
+            "itemName": "cardboard",
+            "confidence": 0.9814,
+            "category": "cardboard",
+            "confidencePercentage": 98.14,
+            "class": "cardboard"
+          }
+        ],
+        "itemName": "cardboard",
+        "guidance": "✅ Main result\nThis is cardboard.\n\n♻️ What to do\n• Flatten the cardboard to make it easier to handle.\n• Remove any food residue, liquids, or liquids-soaked parts.\n• If it is dirty or greasy, discard that part — only clean cardboard can be recycled.\n• Flatten and place it in the recycling bin or take it to a recycling drop‑off point.\n\n⚠️ Important note\nDo not recycle cardboard that is wet, soiled, or contaminated with food or oil.",
+        "possibleCategories": [
+          {
+            "itemName": "cardboard",
+            "isRecyclable": true,
+            "confidence": 0.9814,
+            "category": "cardboard",
+            "confidencePercentage": 98.14
+          }
+        ],
+        "category": "cardboard",
+        "confidencePercentage": 98.14,
+        "imageLocalPath": "/data/user/0/com.sortsnap.mobile_app/cache/scaled_1000323648.jpg",
+        "username": "jayven04",
+        "createdAt": {
+          "_seconds": 1782011605,
+          "_nanoseconds": 789000000
+        }
+      }
+    },
+    {
+      "id": "rEYL06epgfRN6qmcUph7ApuUANs2",
+      "data": {
+        "userNo": "U001",
+        "latestImageSource": "camera",
+        "userName": "Jia Sheen Wee",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "username": "jayven04",
+        "isRecyclable": true,
+        "source": "cnn + ilmu",
+        "detectionMode": "possible_mixed",
+        "classifications": [
+          {
+            "isRecyclable": true,
+            "itemName": "paper",
+            "confidence": 0.6135,
+            "category": "paper",
+            "confidencePercentage": 61.35,
+            "class": "paper"
+          },
+          {
+            "isRecyclable": true,
+            "itemName": "plastic",
+            "confidence": 0.3104,
+            "category": "plastic",
+            "confidencePercentage": 31.04,
+            "class": "plastic"
+          }
+        ],
+        "latestItemName": "paper",
+        "latestGuidance": "✅ Main result  \nThis image mainly looks like paper and plastic items. There may also be other mixed materials.\n\n♻️ What to do  \n• Separate paper and plastic from each other.  \n• For paper: keep it clean and dry; flatten boxes if possible.  \n• For plastic: rinse containers to remove food residue; remove caps if they are different plastic types.  \n• Place each material in the correct recycling bin provided in Cyberjaya.\n\n⚠️ Important note  \nIf any item is contaminated (e.g., food-soiled), dispose of it as general waste to avoid contaminating the recycling stream.",
+        "latestCategory": "paper",
+        "latestImageLocalPath": "/data/user/0/com.sortsnap.mobile_app/cache/scaled_79b1819a-6893-4f6d-bf39-271672c757038434175478126812542.jpg",
+        "latestConfidencePercentage": 61.35,
+        "latestConfidence": 0.6135,
+        "updatedAt": {
+          "_seconds": 1781863025,
+          "_nanoseconds": 327000000
+        }
+      }
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "recycling_basics_quiz",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "totalQuestions": 5,
+        "quizOrder": 1,
+        "description": "Learn how to identify common recyclable items.",
+        "title": "Recycling Basics Quiz",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "waste_handling_quiz",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "totalQuestions": 5,
+        "quizOrder": 2,
+        "description": "Learn the correct way to prepare waste before recycling.",
+        "title": "Waste Handling Quiz",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    }
+  ],
+  "quiz_questions": [
+    {
+      "id": "Q001",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/plastic-bottled-water/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "recycling_basics_quiz",
+        "questionOrder": 1,
+        "explanation": "This is a plastic bottled water container. Plastic bottles should be prepared properly before recycling.",
+        "isActive": true,
+        "questionType": "image",
+        "questionText": "What item is shown in the picture?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        },
+        "imagePath": "assets/images/quiz/plastic_bottle.png"
+      }
+    },
+    {
+      "id": "Q002",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/plastic-bag/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "recycling_basics_quiz",
+        "questionOrder": 2,
+        "explanation": "This is a plastic bag. Reusable bags are a better alternative to single-use plastic bags.",
+        "isActive": true,
+        "questionType": "image",
+        "questionText": "What item is shown in the picture?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        },
+        "imagePath": "assets/images/quiz/plastic_bag.png"
+      }
+    },
+    {
+      "id": "Q003",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/newspaper/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "recycling_basics_quiz",
+        "questionOrder": 3,
+        "explanation": "Newspaper is a paper-based item and can be recycled if it is clean and dry.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "Which of these is a paper-based recyclable item?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        },
+        "imagePath": "assets/images/quiz/newspaper.png"
+      }
+    },
+    {
+      "id": "Q004",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/dry-cell-battery/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "recycling_basics_quiz",
+        "questionOrder": 4,
+        "explanation": "Dry cell batteries should be handled carefully and disposed of through the correct collection method.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "Which item should be handled carefully because it contains chemicals?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        },
+        "imagePath": "assets/images/quiz/mix_items.png"
+      }
+    },
+    {
+      "id": "Q005",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/cardboard-boxes/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "recycling_basics_quiz",
+        "questionOrder": 5,
+        "explanation": "Cardboard boxes are commonly used for packaging, moving, storage, and transporting goods.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "Which item is commonly used for packaging, moving, and storage?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        },
+        "imagePath": "assets/images/quiz/cardboard.png"
+      }
+    },
+    {
+      "id": "Q006",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/plastic-bottled-water/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "waste_handling_quiz",
+        "imagePath": "",
+        "questionOrder": 1,
+        "explanation": "Remove the label, clean and dry the bottle, then place it into the respective bin with the cap on.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "What should you do before recycling a plastic bottled water container?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q007",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/plastic-bag/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "waste_handling_quiz",
+        "imagePath": "",
+        "questionOrder": 2,
+        "explanation": "Plastic bags should be clean and dry before placing them into the respective bin.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "What should you do before recycling a plastic bag?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q008",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/cardboard-boxes/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "waste_handling_quiz",
+        "imagePath": "",
+        "questionOrder": 3,
+        "explanation": "Remove adhesive tape, dismantle the box, then place it into the respective bin.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "What should you do with cardboard boxes before recycling?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q009",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/dry-cell-battery/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "waste_handling_quiz",
+        "imagePath": "",
+        "questionOrder": 4,
+        "explanation": "Used dry cell batteries should be tied together or placed in a box before being placed into the respective bin.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "What is the better way to dispose of used dry cell batteries?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q010",
+      "data": {
+        "sourceUrl": "https://trashpedia.zerowastemalaysia.org/en/plastic-bag/",
+        "createdByAdminId": "seed_admin",
+        "quizId": "waste_handling_quiz",
+        "imagePath": "",
+        "questionOrder": 5,
+        "explanation": "A better alternative is to bring reusable bags such as tote bags or backpacks.",
+        "isActive": true,
+        "questionType": "text",
+        "questionText": "What is a better alternative to using single-use plastic bags?",
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    }
+  ],
+  "quiz_options": [
+    {
+      "id": "Q001_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q001",
+        "optionOrder": 1,
+        "optionText": "Glass container",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q001_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q001",
+        "optionOrder": 2,
+        "optionText": "Plastic bottled water",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q001_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q001",
+        "optionOrder": 3,
+        "optionText": "Cardboard box",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q001_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q001",
+        "optionOrder": 4,
+        "optionText": "Dry cell battery",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q002_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q002",
+        "optionOrder": 1,
+        "optionText": "Newspaper",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q002_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q002",
+        "optionOrder": 2,
+        "optionText": "Aluminium can",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q002_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q002",
+        "optionOrder": 3,
+        "optionText": "Cardboard box",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q002_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q002",
+        "optionOrder": 4,
+        "optionText": "Plastic bag",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q003_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q003",
+        "optionOrder": 1,
+        "optionText": "Newspaper",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q003_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q003",
+        "optionOrder": 2,
+        "optionText": "Food waste",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q003_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q003",
+        "optionOrder": 3,
+        "optionText": "Used battery",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q003_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q003",
+        "optionOrder": 4,
+        "optionText": "Broken ceramic bowl",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q004_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q004",
+        "optionOrder": 1,
+        "optionText": "Plastic bag",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q004_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q004",
+        "optionOrder": 2,
+        "optionText": "Newspaper",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q004_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q004",
+        "optionOrder": 3,
+        "optionText": "Dry cell battery",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q004_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q004",
+        "optionOrder": 4,
+        "optionText": "Cardboard box",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q005_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q005",
+        "optionOrder": 1,
+        "optionText": "Plastic straw",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q005_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q005",
+        "optionOrder": 2,
+        "optionText": "Cardboard box",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q005_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q005",
+        "optionOrder": 3,
+        "optionText": "Dry cell battery",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q005_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q005",
+        "optionOrder": 4,
+        "optionText": "Plastic bag",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q006_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q006",
+        "optionOrder": 1,
+        "optionText": "Leave liquid inside the bottle",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q006_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q006",
+        "optionOrder": 2,
+        "optionText": "Mix it with food waste",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q006_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q006",
+        "optionOrder": 3,
+        "optionText": "Throw it anywhere",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q006_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q006",
+        "optionOrder": 4,
+        "optionText": "Remove the label, clean and dry it, then place it into the respective bin with the cap on",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q007_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q007",
+        "optionOrder": 1,
+        "optionText": "Clean and dry it before placing it into the respective bin",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q007_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q007",
+        "optionOrder": 2,
+        "optionText": "Fill it with leftover drink",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q007_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q007",
+        "optionOrder": 3,
+        "optionText": "Mix it with food waste",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q007_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q007",
+        "optionOrder": 4,
+        "optionText": "Burn it at home",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q008_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q008",
+        "optionOrder": 1,
+        "optionText": "Make the cardboard wet first",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q008_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q008",
+        "optionOrder": 2,
+        "optionText": "Fill the box with food waste",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q008_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q008",
+        "optionOrder": 3,
+        "optionText": "Remove adhesive tape, dismantle the box, then place it into the respective bin",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q008_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q008",
+        "optionOrder": 4,
+        "optionText": "Throw it anywhere after use",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q009_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q009",
+        "optionOrder": 1,
+        "optionText": "Mix them with normal food waste",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q009_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q009",
+        "optionOrder": 2,
+        "optionText": "Tie them together or put them in a box, then place into the respective bin",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q009_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q009",
+        "optionOrder": 3,
+        "optionText": "Put them into water",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q009_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q009",
+        "optionOrder": 4,
+        "optionText": "Throw them anywhere",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q010_1",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q010",
+        "optionOrder": 1,
+        "optionText": "Use more single-use plastic bags",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q010_2",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q010",
+        "optionOrder": 2,
+        "optionText": "Use plastic bags once and throw them away",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q010_3",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q010",
+        "optionOrder": 3,
+        "optionText": "Bring reusable bags such as tote bags or backpacks",
+        "isCorrect": true,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    },
+    {
+      "id": "Q010_4",
+      "data": {
+        "createdByAdminId": "seed_admin",
+        "questionId": "Q010",
+        "optionOrder": 4,
+        "optionText": "Use a new plastic bag for every small item",
+        "isCorrect": false,
+        "createdAt": {
+          "_seconds": 1780850625,
+          "_nanoseconds": 20000000
+        }
+      }
+    }
+  ],
+  "quiz_attempts": [
+    {
+      "id": "DSWaf6Px35KJk62ikTWm",
+      "data": {
+        "score": 4,
+        "totalQuestions": 5,
+        "quizId": "recycling_basics_quiz",
+        "userNo": "U001",
+        "answers": [
+          {
+            "questionId": "Q001",
+            "selectedOptionId": "Q001_2",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q002",
+            "selectedOptionId": "Q002_4",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q003",
+            "selectedOptionId": "Q003_1",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q004",
+            "selectedOptionId": "Q004_3",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q005",
+            "selectedOptionId": "Q005_3",
+            "isCorrect": false
+          }
+        ],
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "quizTitle": "Recycling Basics Quiz",
+        "username": "jayven04",
+        "completedAt": {
+          "_seconds": 1782927001,
+          "_nanoseconds": 985000000
+        },
+        "startedAt": {
+          "_seconds": 1782927001,
+          "_nanoseconds": 985000000
+        }
+      }
+    },
+    {
+      "id": "g2DyeHbnN9r5izA8toXG",
+      "data": {
+        "score": 3,
+        "totalQuestions": 5,
+        "quizId": "recycling_basics_quiz",
+        "userNo": "U001",
+        "answers": [
+          {
+            "questionId": "Q001",
+            "selectedOptionId": "Q001_1",
+            "isCorrect": false
+          },
+          {
+            "questionId": "Q002",
+            "selectedOptionId": "Q002_4",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q003",
+            "selectedOptionId": "Q003_1",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q004",
+            "selectedOptionId": "Q004_4",
+            "isCorrect": false
+          },
+          {
+            "questionId": "Q005",
+            "selectedOptionId": "Q005_2",
+            "isCorrect": true
+          }
+        ],
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "quizTitle": "Recycling Basics Quiz",
+        "username": "jayven04",
+        "completedAt": {
+          "_seconds": 1781800393,
+          "_nanoseconds": 740000000
+        },
+        "startedAt": {
+          "_seconds": 1781800393,
+          "_nanoseconds": 740000000
+        }
+      }
+    },
+    {
+      "id": "r14Jzc1xDPgXKGAQyYbY",
+      "data": {
+        "score": 5,
+        "totalQuestions": 5,
+        "quizId": "recycling_basics_quiz",
+        "userNo": "U001",
+        "answers": [
+          {
+            "questionId": "Q001",
+            "selectedOptionId": "Q001_2",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q002",
+            "selectedOptionId": "Q002_4",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q003",
+            "selectedOptionId": "Q003_1",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q004",
+            "selectedOptionId": "Q004_3",
+            "isCorrect": true
+          },
+          {
+            "questionId": "Q005",
+            "selectedOptionId": "Q005_2",
+            "isCorrect": true
+          }
+        ],
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "quizTitle": "Recycling Basics Quiz",
+        "username": "jayven04",
+        "completedAt": {
+          "_seconds": 1780932583,
+          "_nanoseconds": 570000000
+        },
+        "startedAt": {
+          "_seconds": 1780932583,
+          "_nanoseconds": 570000000
+        }
+      }
+    }
+  ],
+  "flashcard_sets": [
+    {
+      "id": "advanced_rules_set_1",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "advanced",
+        "description": "Understand how recycling affects the environment.",
+        "title": "Environmental Impact",
+        "difficultyOrder": 5,
+        "isActive": true,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "advanced_rules_set_2",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "advanced",
+        "description": "Learn how to decide the correct recycling action.",
+        "title": "Recycling Rules & Decisions",
+        "difficultyOrder": 6,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "isActive": true,
+        "updatedAt": {
+          "_seconds": 1782144114,
+          "_nanoseconds": 24000000
+        }
+      }
+    },
+    {
+      "id": "beginner_items_set_1",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "beginner",
+        "description": "Recognise items that can usually be recycled.",
+        "title": "Common Recyclable Items",
+        "difficultyOrder": 1,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "isActive": true,
+        "updatedAt": {
+          "_seconds": 1782198603,
+          "_nanoseconds": 970000000
+        }
+      }
+    },
+    {
+      "id": "beginner_items_set_2",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "beginner",
+        "description": "Recognise waste that needs different handling.",
+        "title": "Common Non-Recyclable Items",
+        "difficultyOrder": 2,
+        "isActive": true,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "intermediate_sorting_set_1",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "intermediate",
+        "description": "Learn what to do before placing items into recycling.",
+        "title": "Preparation Before Recycling",
+        "difficultyOrder": 3,
+        "isActive": true,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "intermediate_sorting_set_2",
+      "data": {
+        "createdByAdminId": "seed_data",
+        "level": "intermediate",
+        "description": "Learn how to handle food waste, e-waste, and general waste.",
+        "title": "Special Waste Handling",
+        "difficultyOrder": 4,
+        "isActive": true,
+        "totalCards": 5,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "AF101",
+      "data": {
+        "backExplanation": "Contamination happens when dirty, wet, or wrong items are mixed with recyclables. It can make good recyclable items harder to process.",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste.png",
+        "setId": "advanced_rules_set_1",
+        "frontText": "What is contamination in recycling?",
+        "cardOrder": 1,
+        "category": "Recycling Quality",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF102",
+      "data": {
+        "backExplanation": "Sorting waste at home helps recyclable, food waste, general waste, and e-waste go to the correct handling process.",
+        "sourceNote": "Based on waste separation and 3R guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste2.png",
+        "setId": "advanced_rules_set_1",
+        "frontText": "Why is separating waste at home useful?",
+        "cardOrder": 2,
+        "category": "Waste Separation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF103",
+      "data": {
+        "backExplanation": "3R means Reduce, Reuse, and Recycle. Reducing and reusing come before recycling because they help prevent waste earlier.",
+        "sourceNote": "Based on SWCorp 3R guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/plastic_bag.png",
+        "setId": "advanced_rules_set_1",
+        "frontText": "Why is recycling only one part of 3R?",
+        "cardOrder": 3,
+        "category": "3R Concept",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF104",
+      "data": {
+        "backExplanation": "E-waste may contain batteries, metals, and electronic parts that need special handling instead of normal disposal.",
+        "sourceNote": "Based on e-waste sorting guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste4.png",
+        "setId": "advanced_rules_set_1",
+        "frontText": "Why should e-waste not be mixed with household waste?",
+        "cardOrder": 4,
+        "category": "E-waste Rule",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF105",
+      "data": {
+        "backExplanation": "Recycling helps reduce the amount of waste sent for disposal and supports the reuse of materials instead of always using new resources.",
+        "sourceNote": "Based on 3R and environmental guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste.png",
+        "setId": "advanced_rules_set_1",
+        "frontText": "How does recycling help reduce environmental impact?",
+        "cardOrder": 5,
+        "category": "Environmental Impact",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF201",
+      "data": {
+        "backExplanation": "Check the item material, whether it is clean, and whether your local recycling system accepts it.",
+        "sourceNote": "Based on recycling sorting guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/glass_bottle.png",
+        "setId": "advanced_rules_set_2",
+        "frontText": "What should you check before recycling an item?",
+        "cardOrder": 1,
+        "category": "Recycling Decision",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF202",
+      "data": {
+        "backExplanation": "Leftover food or liquid can cause smell and make recyclable materials dirty, so containers should be emptied before recycling.",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/milk_box.png",
+        "setId": "advanced_rules_set_2",
+        "frontText": "Why should food containers be emptied first?",
+        "cardOrder": 2,
+        "category": "Recycling Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF203",
+      "data": {
+        "backExplanation": "Paper and cardboard can become weak or dirty when wet, so keeping them dry helps maintain their recycling quality.",
+        "sourceNote": "Based on paper recycling guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/newspaper.png",
+        "setId": "advanced_rules_set_2",
+        "frontText": "Why are paper items sensitive to water?",
+        "cardOrder": 3,
+        "category": "Paper Recycling",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF204",
+      "data": {
+        "backExplanation": "Mixed waste makes sorting harder because recyclable, organic, general, and e-waste items need different handling methods.",
+        "sourceNote": "Based on waste sorting guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste3.png",
+        "setId": "advanced_rules_set_2",
+        "frontText": "What is the problem with mixed waste?",
+        "cardOrder": 4,
+        "category": "Sorting Rule",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "AF205",
+      "data": {
+        "backExplanation": "Different places may accept different materials. Following local rules helps prevent wrong items from entering the recycling stream.",
+        "sourceNote": "Based on local recycling guidance.",
+        "level": "advanced",
+        "imagePath": "assets/images/flashcards/waste.png",
+        "setId": "advanced_rules_set_2",
+        "frontText": "Why should users follow local recycling rules?",
+        "cardOrder": 5,
+        "category": "Local Recycling Rule",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "BF101",
+      "data": {
+        "setId": "beginner_items_set_1",
+        "level": "beginner",
+        "cardOrder": 1,
+        "frontText": "Plastic Bottle",
+        "backExplanation": "Plastic bottles are recyclable. Empty, rinse, and dry them before recycling.",
+        "imagePath": "assets/images/flashcards/plastic_bottle.png",
+        "category": "Recyclable",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 369000000
+        },
+        "updatedAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 369000000
+        }
+      }
+    },
+    {
+      "id": "BF102",
+      "data": {
+        "setId": "beginner_items_set_1",
+        "level": "beginner",
+        "cardOrder": 2,
+        "frontText": "Aluminium Can",
+        "backExplanation": "Aluminium cans are recyclable. Make sure the can is empty before recycling.",
+        "imagePath": "assets/images/flashcards/aluminium_can.png",
+        "category": "Recyclable",
+        "sourceNote": "Based on 3R recycling guidance.",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 426000000
+        },
+        "updatedAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 426000000
+        }
+      }
+    },
+    {
+      "id": "BF103",
+      "data": {
+        "setId": "beginner_items_set_1",
+        "level": "beginner",
+        "cardOrder": 3,
+        "frontText": "Newspaper",
+        "backExplanation": "Newspaper is recyclable. Keep it clean and dry before recycling.",
+        "imagePath": "assets/images/flashcards/newspaper.png",
+        "category": "Recyclable",
+        "sourceNote": "Based on 3R recycling guidance.",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 460000000
+        },
+        "updatedAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 460000000
+        }
+      }
+    },
+    {
+      "id": "BF104",
+      "data": {
+        "setId": "beginner_items_set_1",
+        "level": "beginner",
+        "cardOrder": 4,
+        "frontText": "Cardboard Box",
+        "backExplanation": "Cardboard is recyclable. Flatten it if possible and keep it dry.",
+        "imagePath": "assets/images/flashcards/cardboard.png",
+        "category": "Recyclable",
+        "sourceNote": "Based on 3R recycling guidance.",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 500000000
+        },
+        "updatedAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 500000000
+        }
+      }
+    },
+    {
+      "id": "BF105",
+      "data": {
+        "setId": "beginner_items_set_1",
+        "level": "beginner",
+        "cardOrder": 5,
+        "frontText": "Glass Bottle",
+        "backExplanation": "Glass bottles are recyclable. Empty and rinse them before recycling.",
+        "imagePath": "assets/images/flashcards/glass_bottle.png",
+        "category": "Recyclable",
+        "sourceNote": "Based on 3R recycling guidance.",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 542000000
+        },
+        "updatedAt": {
+          "_seconds": 1782198604,
+          "_nanoseconds": 542000000
+        }
+      }
+    },
+    {
+      "id": "BF201",
+      "data": {
+        "backExplanation": "Drink cartons can be recycled in suitable recycling systems. Empty and rinse them first.",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "level": "beginner",
+        "imagePath": "assets/images/flashcards/milk_box.png",
+        "setId": "beginner_items_set_2",
+        "frontText": "Drink Carton",
+        "cardOrder": 1,
+        "category": "Recyclable",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "BF202",
+      "data": {
+        "backExplanation": "Banana peel is organic waste. Put it into a compost or food-waste bin if available.",
+        "sourceNote": "Based on food waste sorting guidance.",
+        "level": "beginner",
+        "imagePath": "assets/images/flashcards/banana_skin.png",
+        "setId": "beginner_items_set_2",
+        "frontText": "Banana Peel",
+        "cardOrder": 2,
+        "category": "Organic Waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "BF203",
+      "data": {
+        "backExplanation": "Batteries are e-waste or hazardous waste. Do not throw them into the normal rubbish bin.",
+        "sourceNote": "Based on e-waste sorting guidance.",
+        "level": "beginner",
+        "imagePath": "assets/images/flashcards/battery.png",
+        "setId": "beginner_items_set_2",
+        "frontText": "Battery",
+        "cardOrder": 3,
+        "category": "E-waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "BF204",
+      "data": {
+        "backExplanation": "Plastic bags usually need special handling. Do not mix them blindly with clean recyclables.",
+        "sourceNote": "Based on plastic waste sorting guidance.",
+        "level": "beginner",
+        "imagePath": "assets/images/flashcards/plastic_bag.png",
+        "setId": "beginner_items_set_2",
+        "frontText": "Plastic Bag",
+        "cardOrder": 4,
+        "category": "Special Handling",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "BF205",
+      "data": {
+        "backExplanation": "A rubbish bag is general waste. Put it into the general waste bin.",
+        "sourceNote": "Based on waste sorting guidance.",
+        "level": "beginner",
+        "imagePath": "assets/images/flashcards/trash.png",
+        "setId": "beginner_items_set_2",
+        "frontText": "Rubbish Bag",
+        "cardOrder": 5,
+        "category": "General Waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF101",
+      "data": {
+        "backExplanation": "Empty the bottle, rinse it if dirty, and let it dry before placing it into the recycling bin.",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/plastic_bottle.png",
+        "setId": "intermediate_sorting_set_1",
+        "frontText": "What should you do before recycling a plastic bottle?",
+        "cardOrder": 1,
+        "category": "Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF102",
+      "data": {
+        "backExplanation": "Make sure the can is empty. Rinse it if there is leftover drink or food residue.",
+        "sourceNote": "Based on 3R recycling guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/aluminium_can.png",
+        "setId": "intermediate_sorting_set_1",
+        "frontText": "What should you do before recycling an aluminium can?",
+        "cardOrder": 2,
+        "category": "Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF103",
+      "data": {
+        "backExplanation": "Keep newspaper clean and dry. Do not mix it with wet or oily waste.",
+        "sourceNote": "Based on paper recycling guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/newspaper.png",
+        "setId": "intermediate_sorting_set_1",
+        "frontText": "How should newspaper be prepared for recycling?",
+        "cardOrder": 3,
+        "category": "Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF104",
+      "data": {
+        "backExplanation": "Flatten the cardboard if possible and keep it dry before recycling.",
+        "sourceNote": "Based on paper recycling guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/cardboard.png",
+        "setId": "intermediate_sorting_set_1",
+        "frontText": "How should cardboard be prepared before recycling?",
+        "cardOrder": 4,
+        "category": "Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF105",
+      "data": {
+        "backExplanation": "Empty the carton and rinse it if needed. This helps reduce smell and contamination.",
+        "sourceNote": "Based on recycling preparation guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/milk_box.png",
+        "setId": "intermediate_sorting_set_1",
+        "frontText": "What should you do before recycling a drink carton?",
+        "cardOrder": 5,
+        "category": "Preparation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF201",
+      "data": {
+        "backExplanation": "Batteries should be sent to e-waste or hazardous waste collection points. Do not throw them into normal rubbish bins.",
+        "sourceNote": "Based on e-waste sorting guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/battery.png",
+        "setId": "intermediate_sorting_set_2",
+        "frontText": "How should batteries be handled?",
+        "cardOrder": 1,
+        "category": "E-waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF202",
+      "data": {
+        "backExplanation": "Banana peels are organic waste. Put them into food waste or compost bins if available.",
+        "sourceNote": "Based on food waste sorting guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/banana_skin.png",
+        "setId": "intermediate_sorting_set_2",
+        "frontText": "How should banana peels be handled?",
+        "cardOrder": 2,
+        "category": "Organic Waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF203",
+      "data": {
+        "backExplanation": "Plastic bags may need special collection. Do not mix them blindly with clean recyclable items.",
+        "sourceNote": "Based on plastic waste sorting guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/plastic_bag.png",
+        "setId": "intermediate_sorting_set_2",
+        "frontText": "How should plastic bags be handled?",
+        "cardOrder": 3,
+        "category": "Special Handling",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF204",
+      "data": {
+        "backExplanation": "A rubbish bag usually belongs in general waste unless it contains separated recyclable materials.",
+        "sourceNote": "Based on general waste sorting guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/trash.png",
+        "setId": "intermediate_sorting_set_2",
+        "frontText": "How should a rubbish bag be handled?",
+        "cardOrder": 4,
+        "category": "General Waste",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    },
+    {
+      "id": "IF205",
+      "data": {
+        "backExplanation": "Separate recyclable, food, general, and e-waste items before disposal. Different waste types need different handling.",
+        "sourceNote": "Based on waste sorting guidance.",
+        "level": "intermediate",
+        "imagePath": "assets/images/flashcards/waste3.png",
+        "setId": "intermediate_sorting_set_2",
+        "frontText": "How should mixed waste be handled?",
+        "cardOrder": 5,
+        "category": "Waste Separation",
+        "isActive": true,
+        "createdAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        },
+        "updatedAt": {
+          "_seconds": 1780846742,
+          "_nanoseconds": 386000000
+        }
+      }
+    }
+  ],
+  "articles": [
+    {
+      "id": "article001",
+      "data": {
+        "summary": "Learn why separating recyclable waste from general waste is important in Malaysia.",
+        "sourceUrl": "https://www.nst.com.my/news/nation/2023/03/888284/separating-waste-source-boost-recycling-rate",
+        "articleOrder": 1,
+        "articleId": "article001",
+        "sourceName": "New Straits Times: Separating waste at source to boost recycling rate",
+        "title": "Waste Separation at Source in Malaysia",
+        "category": "Recycling Guide",
+        "isActive": true,
+        "content": "Waste separation at source means separating recyclable waste before it is thrown away with general rubbish. In Malaysia, this practice helps reduce the amount of waste sent to landfills and supports better recycling habits among the community.\n\nRecyclable items such as paper, cardboard, plastic bottles, metal cans, and glass should be separated from food waste and other dirty waste. When recyclable items are clean and dry, they are easier to collect, sort, and process.\n\nThis practice is important because landfill space is limited. If more recyclable materials are separated properly, less useful waste will be disposed of together with general waste.\n\nUsers can start by preparing a separate bag or container at home for recyclable items. Before sending them to a recycling bin or recycling centre, make sure the items are empty, clean, and dry.\n",
+        "createdAt": {
+          "_seconds": 1781005088,
+          "_nanoseconds": 193000000
+        },
+        "createdByAdminId": "seed_admin",
+        "imagePath": "assets/images/articles/article1.png"
+      }
+    },
+    {
+      "id": "article002",
+      "data": {
+        "summary": "Understand how recycling centres support collection, sorting, and community recycling.",
+        "sourceUrl": "https://www.planningmalaysia.org/index.php/pmj/article/view/1656",
+        "articleOrder": 2,
+        "articleId": "article002",
+        "sourceName": "Planning Malaysia Journal: Examining Recyclable Items Collection",
+        "title": "How Recycling Centres Help Communities",
+        "category": "Community Recycling",
+        "isActive": true,
+        "content": "Recycling centres help the community manage recyclable items in a more organised way. They provide a proper place for people to send items that should not be thrown together with general waste.\n\nIn Malaysia, recycling facilities such as Material Recovery Collection Facilities and Community Recycling Centres can support the collection of recyclable items. These facilities help collect and sort materials so that recyclable waste can be managed more effectively.\n\nCommon recyclable items include paper, cardboard, plastics, metals, and glass. Some centres may also accept special items depending on their programme, so users should check the accepted item list before visiting.\n\nRecycling centres are useful because they make recycling easier for the public. They also help reduce the amount of recyclable items that end up in landfills.\n",
+        "createdAt": {
+          "_seconds": 1781005088,
+          "_nanoseconds": 307000000
+        },
+        "createdByAdminId": "seed_admin",
+        "imagePath": "assets/images/articles/article2.png"
+      }
+    }
+  ],
+  "faq": [],
+  "feedback": [
+    {
+      "id": "TSqsG1QGaxsXQk2NZbyG",
+      "data": {
+        "subject": "Add button",
+        "category": "Feature Request",
+        "message": "Your button too small",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "createdAt": {
+          "_seconds": 1782067669,
+          "_nanoseconds": 966000000
+        },
+        "userNo": "U001",
+        "status": "Resolved",
+        "adminReply": "tq for ur report",
+        "updatedAt": {
+          "_seconds": 1782115195,
+          "_nanoseconds": 803000000
+        },
+        "username": "jayven04"
+      }
+    },
+    {
+      "id": "ap1DJmouFIFh20irU6qm",
+      "data": {
+        "subject": "button got bug",
+        "userNo": "U001",
+        "category": "Bug Report",
+        "message": "when i press pickup button they blink",
+        "userId": "rEYL06epgfRN6qmcUph7ApuUANs2",
+        "adminReply": "",
+        "username": "jayven04",
+        "status": "Open",
+        "createdAt": {
+          "_seconds": 1782117511,
+          "_nanoseconds": 854000000
+        },
+        "updatedAt": {
+          "_seconds": 1782117511,
+          "_nanoseconds": 854000000
+        }
+      }
+    }
+  ],
+  "counters": [
+    {
+      "id": "location_reports",
+      "data": {
+        "nextNumber": 2
+      }
+    },
+    {
+      "id": "pickup_requests",
+      "data": {
+        "lastNumber": 4,
+        "updatedAt": {
+          "_seconds": 1782548834,
+          "_nanoseconds": 89000000
+        }
+      }
+    },
+    {
+      "id": "recycling_points",
+      "data": {
+        "nextNumber": 3
+      }
+    },
+    {
+      "id": "users",
+      "data": {
+        "nextNumber": 3
+      }
+    }
+  ]
+}
