@@ -187,6 +187,18 @@ Rules:
 `;
 }
 
+function cleanTextAnswer(answer) {
+  if (!answer) return "";
+
+  return answer
+    .replace(
+      /^\s*✅\s*(Quick answer|Jawapan ringkas|简短回答)\s*\n\s*♻️\s*(What to do|Apa perlu dibuat|应该怎么做)\s*\n\s*⚠️\s*(Important note|Nota penting|重要提醒)\s*\n+/i,
+      ""
+    )
+    .trim();
+}
+
+
 // POST /api/chatbot/text
 async function sendTextMessage(req, res) {
   try {
@@ -313,10 +325,11 @@ Rules:
     ];
 
     const answer = await callIlmu(messages, 700);
+    const cleanAnswer = cleanTextAnswer(answer);
 
     return res.json({
       success: true,
-      answer: answer,
+      answer: cleanAnswer,
       source: "ilmu",
     });
   } catch (error) {
