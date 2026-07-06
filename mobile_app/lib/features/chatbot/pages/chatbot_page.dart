@@ -10,10 +10,16 @@ import 'package:mobile_app/features/chatbot/services/image_scan_service.dart';
 
 class ChatMessage {
   final String text;
+  final String memoryText;
   final bool isUser;
   final File? image;
 
-  ChatMessage({required this.text, required this.isUser, this.image});
+  ChatMessage({
+    required this.text,
+    required this.isUser,
+    this.image,
+    String? memoryText,
+  }) : memoryText = memoryText ?? text;
 }
 
 class QuickQuestion {
@@ -162,6 +168,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final messageType = (data['messageType'] ?? '').toString();
 
         String text = (data['text'] ?? '').toString();
+        String memoryText =
+            (data['imageContextText'] ?? data['text'] ?? '').toString();
 
         File? imageFile;
         final imageLocalPath = (data['imageLocalPath'] ?? '').toString();
@@ -176,12 +184,14 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         if (messageType == 'image_scan') {
           text = 'Scanning image...';
+          memoryText = '';
         }
 
         return ChatMessage(
           text: text,
           isUser: role == 'user',
           image: imageFile,
+          memoryText: memoryText,
         );
       }).toList();
 
@@ -221,9 +231,22 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
   Future<void> _sendQuestionText(String question) async {
     final chatHistory = _messages
-        .where((msg) => msg.text.trim().isNotEmpty)
-        .where((msg) => !msg.text.toLowerCase().contains('scanning image'))
-        .map((msg) => {'text': msg.text, 'isUser': msg.isUser})
+        .map((msg) {
+          final textForAi = msg.memoryText.trim().isNotEmpty
+              ? msg.memoryText
+              : msg.text;
+
+          return {
+            'text': textForAi,
+            'isUser': msg.isUser,
+          };
+        })
+        .where((msg) {
+          final text = (msg['text'] ?? '').toString().trim();
+
+          return text.isNotEmpty &&
+              !text.toLowerCase().contains('scanning image');
+        })
         .toList();
 
     if (_shouldWarmImageScanner(question)) {
@@ -348,8 +371,17 @@ class _ChatbotPageState extends State<ChatbotPage> {
                     'No guidance returned.')
                 .toString();
 
+        final imageContextText =
+            (result['imageContextText'] ?? resultMessage).toString();
+
         setState(() {
-          _messages.add(ChatMessage(text: resultMessage, isUser: false));
+          _messages.add(
+            ChatMessage(
+              text: resultMessage,
+              isUser: false,
+              memoryText: imageContextText,
+            ),
+          );
           _isLoading = false;
         });
 

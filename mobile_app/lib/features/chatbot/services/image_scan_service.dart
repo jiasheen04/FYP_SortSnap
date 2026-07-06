@@ -77,6 +77,32 @@ class ImageScanService {
         '$answer';
   }
 
+  String _buildImageContextText(Map<String, dynamic> data) {
+    final detectionMode = (data['detectionMode'] ?? 'single').toString();
+    final classification =
+        data['classification'] as Map<String, dynamic>? ?? {};
+    final classificationsRaw = data['classifications'] as List? ?? [];
+
+    if (detectionMode == 'possible_mixed' && classificationsRaw.length > 1) {
+      final possibleItems = classificationsRaw.map((rawItem) {
+        final item = Map<String, dynamic>.from(rawItem as Map);
+        final category = (item['category'] ?? 'Unknown').toString();
+        final itemName = (item['itemName'] ?? category).toString();
+        final isRecyclable = item['isRecyclable'] == true;
+
+        return '$itemName ($category, recyclable: ${isRecyclable ? "Yes" : "No"})';
+      }).join(', ');
+
+      return 'Previous image scan result: The uploaded image might contain mixed waste materials: $possibleItems. Use this as the item context when the user asks about "it", "this item", "that item", "the image", or asks for more details. If the user corrects the item, trust the user correction.';
+    }
+
+    final category = (classification['category'] ?? 'Unknown').toString();
+    final itemName = (classification['itemName'] ?? category).toString();
+    final isRecyclable = classification['isRecyclable'] == true;
+
+    return 'Previous image scan result: The uploaded image was classified as $itemName. Category: $category. Recyclable: ${isRecyclable ? "Yes" : "No"}. Use this as the item context when the user asks about "it", "this item", "that item", "the image", or asks for more details. If the user corrects the item, trust the user correction.';
+  }
+
   Future<Map<String, dynamic>> classifyImage({required File imageFile}) async {
     final currentUser = _auth.currentUser;
 
@@ -139,7 +165,10 @@ class ImageScanService {
     }).toList();
 
     final chatDisplayText = _buildImageScanDisplayText(data);
+    final imageContextText = _buildImageContextText(data);
+
     data['chatDisplayText'] = chatDisplayText;
+    data['imageContextText'] = imageContextText;
 
     final chatbotDoc = _firestore.collection('chatbot_records').doc(userId);
     final messagesCollection = chatbotDoc.collection('messages');
@@ -192,6 +221,7 @@ class ImageScanService {
         'possibleCategories': possibleCategories,
         'guidance': answer,
         'chatDisplayText': chatDisplayText,
+        'imageContextText': imageContextText,
         'source': source,
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -203,6 +233,7 @@ class ImageScanService {
         'userName': userName,
         'latestQuestion': 'Image scan',
         'latestAnswer': chatDisplayText,
+        'latestImageContextText': imageContextText,
         'isRecyclingRelated': true,
         'source': source,
         'messageCount': botMessageNo,
@@ -235,6 +266,7 @@ class ImageScanService {
         'role': 'bot',
         'messageType': 'image_scan_result',
         'text': chatDisplayText,
+        'imageContextText': imageContextText,
         'imageLocalPath': imageFile.path,
         'detectionMode': detectionMode,
         'mainCategory': mainCategory,

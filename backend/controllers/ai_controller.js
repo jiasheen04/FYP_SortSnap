@@ -366,13 +366,54 @@ async function classifyImage(req, res) {
       ? cnnResult.classifications
       : [mainClassification];
 
-    const prompt = buildSmartRecyclingPrompt(cnnResult);
+    const rawChatHistory = req.body.chatHistory;
+
+    let chatHistory = [];
+
+    if (rawChatHistory) {
+      try {
+        chatHistory = JSON.parse(rawChatHistory);
+      } catch (error) {
+        chatHistory = [];
+      }
+    }
+
+    const recentHistory = Array.isArray(chatHistory)
+      ? chatHistory.slice(-6)
+      : [];
+
+    const historyText = recentHistory
+      .filter((msg) => msg.text && msg.text.trim() !== "")
+      .map((msg) => {
+        return `${msg.isUser ? "User" : "Assistant"}: ${msg.text}`;
+      })
+      .join("\n");
+
+    const prompt = `
+    Previous chat history:
+    ${historyText || "No previous chat history."}
+
+    ${buildSmartRecyclingPrompt(cnnResult)}
+
+    Use the previous chat history only if it helps understand the user's language or correction.
+    `;
 
     const messages = [
       {
         role: "system",
-        content:
-          "You are SortSnap, a recycling assistant for Cyberjaya users. Use the image classification result to give short and practical recycling guidance. Do not mention technical backend details to the user.",
+        content: `
+        You are SortSnap, a recycling assistant for Cyberjaya users.
+
+        Use the image classification result to give short and practical recycling guidance.
+
+        If previous chat history exists, use it to understand:
+        - the user's language
+        - previous correction
+        - what item the user was discussing
+
+        Do not mention technical backend details to the user.
+        Do not mention CNN, model, API, backend, or confidence score.
+        `,
       },
       {
         role: "user",
