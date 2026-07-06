@@ -70,41 +70,51 @@ class ImageScanService {
   }
 
   String _buildImageScanDisplayText(Map<String, dynamic> data) {
-    final detectionMode = (data['detectionMode'] ?? 'single').toString();
-    final classification =
-        data['classification'] as Map<String, dynamic>? ?? {};
-    final classificationsRaw = data['classifications'] as List? ?? [];
-    final answer = (data['answer'] ?? 'No guidance returned.').toString();
+  final detectionMode = (data['detectionMode'] ?? 'single').toString();
+  final classification =
+      data['classification'] as Map<String, dynamic>? ?? {};
+  final classificationsRaw = data['classifications'] as List? ?? [];
+  final answer = (data['answer'] ?? 'No guidance returned.').toString();
 
-    if (detectionMode == 'possible_mixed' && classificationsRaw.length > 1) {
-      String itemListText = '';
+  final savedCorrection = (data['savedCorrection'] ?? '').toString();
+  final savedCorrectionUsed = data['savedCorrectionUsed'] == true ||
+      savedCorrection.trim().isNotEmpty;
 
-      for (int i = 0; i < classificationsRaw.length; i++) {
-        final item = Map<String, dynamic>.from(classificationsRaw[i] as Map);
+  // If this same image already has saved correction/history, do not show CNN mixed category list again.
+  if (savedCorrectionUsed) {
+    return answer;
+  }
 
-        final category = (item['category'] ?? 'Unknown').toString();
-        final isRecyclable = item['isRecyclable'] == true;
+  // New image/ no saved correction yet: show possible mixed materials if CNN thinks it is mixed.
+  if (detectionMode == 'possible_mixed' && classificationsRaw.length > 1) {
+    String itemListText = '';
 
-        itemListText +=
-            '${i + 1}. $category\n'
-            'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
-      }
+    for (int i = 0; i < classificationsRaw.length; i++) {
+      final item = Map<String, dynamic>.from(classificationsRaw[i] as Map);
 
-      return 'Possible mixed materials:\n\n'
-          '$itemListText'
-          '$answer';
+      final category = (item['category'] ?? 'Unknown').toString();
+      final isRecyclable = item['isRecyclable'] == true;
+
+      itemListText +=
+          '${i + 1}. $category\n'
+          'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n';
     }
 
-    final category = (classification['category'] ?? 'Unknown').toString();
-    final itemName = (classification['itemName'] ?? category).toString();
-    final isRecyclable = classification['isRecyclable'] == true;
-
-    return 'Item: $itemName\n'
-        'Category: $category\n'
-        'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n'
+    return 'Possible mixed materials:\n\n'
+        '$itemListText'
         '$answer';
   }
 
+  // New image/ single item result: show normal CNN item information.
+  final category = (classification['category'] ?? 'Unknown').toString();
+  final itemName = (classification['itemName'] ?? category).toString();
+  final isRecyclable = classification['isRecyclable'] == true;
+
+  return 'Item: $itemName\n'
+      'Category: $category\n'
+      'Recyclable: ${isRecyclable ? "Yes" : "No"}\n\n'
+      '$answer';
+}
   String _buildImageContextText(Map<String, dynamic> data) {
     final savedCorrection = (data['savedCorrection'] ?? '').toString();
 
