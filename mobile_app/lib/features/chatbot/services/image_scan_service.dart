@@ -84,14 +84,16 @@ class ImageScanService {
     final classificationsRaw = data['classifications'] as List? ?? [];
 
     if (detectionMode == 'possible_mixed' && classificationsRaw.length > 1) {
-      final possibleItems = classificationsRaw.map((rawItem) {
-        final item = Map<String, dynamic>.from(rawItem as Map);
-        final category = (item['category'] ?? 'Unknown').toString();
-        final itemName = (item['itemName'] ?? category).toString();
-        final isRecyclable = item['isRecyclable'] == true;
+      final possibleItems = classificationsRaw
+          .map((rawItem) {
+            final item = Map<String, dynamic>.from(rawItem as Map);
+            final category = (item['category'] ?? 'Unknown').toString();
+            final itemName = (item['itemName'] ?? category).toString();
+            final isRecyclable = item['isRecyclable'] == true;
 
-        return '$itemName ($category, recyclable: ${isRecyclable ? "Yes" : "No"})';
-      }).join(', ');
+            return '$itemName ($category, recyclable: ${isRecyclable ? "Yes" : "No"})';
+          })
+          .join(', ');
 
       return 'Previous image scan result: The uploaded image might contain mixed waste materials: $possibleItems. Use this as the item context when the user asks about "it", "this item", "that item", "the image", or asks for more details. If the user corrects the item, trust the user correction.';
     }
@@ -103,7 +105,10 @@ class ImageScanService {
     return 'Previous image scan result: The uploaded image was classified as $itemName. Category: $category. Recyclable: ${isRecyclable ? "Yes" : "No"}. Use this as the item context when the user asks about "it", "this item", "that item", "the image", or asks for more details. If the user corrects the item, trust the user correction.';
   }
 
-  Future<Map<String, dynamic>> classifyImage({required File imageFile}) async {
+  Future<Map<String, dynamic>> classifyImage({
+    required File imageFile,
+    List<Map<String, dynamic>> chatHistory = const [],
+  }) async {
     final currentUser = _auth.currentUser;
 
     if (currentUser == null) {
@@ -117,6 +122,8 @@ class ImageScanService {
     request.files.add(
       await http.MultipartFile.fromPath('image', imageFile.path),
     );
+
+    request.fields['chatHistory'] = jsonEncode(chatHistory);
 
     final streamedResponse = await request.send().timeout(
       const Duration(seconds: 240),
@@ -284,34 +291,34 @@ class ImageScanService {
   }
 
   Future<bool> warmUpImageScanner() async {
-  final url = Uri.parse('https://sortsnap-cnn.onrender.com/health');
+    final url = Uri.parse('https://sortsnap-cnn.onrender.com/health');
 
-  for (int attempt = 1; attempt <= 6; attempt++) {
-    try {
-      final response = await http.get(url).timeout(
-            const Duration(seconds: 20),
-          );
+    for (int attempt = 1; attempt <= 6; attempt++) {
+      try {
+        final response = await http
+            .get(url)
+            .timeout(const Duration(seconds: 20));
 
-      if (response.statusCode == 200) {
-        final body = response.body.trim();
+        if (response.statusCode == 200) {
+          final body = response.body.trim();
 
-        if (body.startsWith('{')) {
-          final data = jsonDecode(body) as Map<String, dynamic>;
+          if (body.startsWith('{')) {
+            final data = jsonDecode(body) as Map<String, dynamic>;
 
-          if (data['success'] == true) {
-            return true;
+            if (data['success'] == true) {
+              return true;
+            }
           }
         }
+      } catch (e) {
+        print('CNN warm up attempt $attempt failed: $e');
       }
-    } catch (e) {
-      print('CNN warm up attempt $attempt failed: $e');
+
+      await Future.delayed(const Duration(seconds: 10));
     }
 
-    await Future.delayed(const Duration(seconds: 10));
+    return false;
   }
-
-  return false;
-}
 
   Future<void> saveLatestImageScanLocal({
     required File imageFile,

@@ -168,8 +168,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final messageType = (data['messageType'] ?? '').toString();
 
         String text = (data['text'] ?? '').toString();
-        String memoryText =
-            (data['imageContextText'] ?? data['text'] ?? '').toString();
+        String memoryText = (data['imageContextText'] ?? data['text'] ?? '')
+            .toString();
 
         File? imageFile;
         final imageLocalPath = (data['imageLocalPath'] ?? '').toString();
@@ -236,10 +236,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ? msg.memoryText
               : msg.text;
 
-          return {
-            'text': textForAi,
-            'isUser': msg.isUser,
-          };
+          return {'text': textForAi, 'isUser': msg.isUser};
         })
         .where((msg) {
           final text = (msg['text'] ?? '').toString().trim();
@@ -359,8 +356,25 @@ class _ChatbotPageState extends State<ChatbotPage> {
       try {
         await _imageScanService.warmUpImageScanner();
 
+        final chatHistory = _messages
+            .map((msg) {
+              final textForAi = msg.memoryText.trim().isNotEmpty
+                  ? msg.memoryText
+                  : msg.text;
+
+              return {'text': textForAi, 'isUser': msg.isUser};
+            })
+            .where((msg) {
+              final text = (msg['text'] ?? '').toString().trim();
+
+              return text.isNotEmpty &&
+                  !text.toLowerCase().contains('scanning image');
+            })
+            .toList();
+
         final result = await _imageScanService.classifyImage(
           imageFile: imageFile,
+          chatHistory: chatHistory,
         );
 
         if (!mounted) return;
@@ -371,8 +385,8 @@ class _ChatbotPageState extends State<ChatbotPage> {
                     'No guidance returned.')
                 .toString();
 
-        final imageContextText =
-            (result['imageContextText'] ?? resultMessage).toString();
+        final imageContextText = (result['imageContextText'] ?? resultMessage)
+            .toString();
 
         setState(() {
           _messages.add(

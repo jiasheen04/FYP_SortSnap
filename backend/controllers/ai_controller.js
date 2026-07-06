@@ -395,7 +395,15 @@ async function classifyImage(req, res) {
 
     ${buildSmartRecyclingPrompt(cnnResult)}
 
-    Use the previous chat history only if it helps understand the user's language or correction.
+    Use the previous chat history to check whether the user corrected a previous image result.
+
+    If the latest user correction conflicts with the image classification result, trust the user's correction more than the image classification.
+
+    For example:
+    - If the image classification says paper and plastic, but the user said "it is plastic only", answer only about plastic.
+    - If the user says "u wrong", "not paper", "this is bottle", or similar correction, follow the corrected item.
+
+    Do not repeat the wrong classification after the user corrected it.
     `;
 
     const messages = [
@@ -410,6 +418,8 @@ async function classifyImage(req, res) {
         - the user's language
         - previous correction
         - what item the user was discussing
+
+        If the user corrected a previous image scan, trust the user's correction more than the image classification result.
 
         Do not mention technical backend details to the user.
         Do not mention CNN, model, API, backend, or confidence score.
