@@ -10,6 +10,63 @@ class ChatbotService {
 
   static const String _baseUrl = 'https://sortsnap-ilmu.onrender.com';
 
+  bool _isPossibleImageCorrection(String text) {
+    final lowerText = text.toLowerCase();
+
+    final correctionWords = [
+      'wrong',
+      'not',
+      'no,',
+      'actually',
+      'this is',
+      'it is',
+      'only',
+      'u wrong',
+      'you wrong',
+      '不是',
+      '错',
+      '其实',
+      '是',
+      'bukan',
+      'sebenarnya',
+      'ini',
+    ];
+
+    return correctionWords.any((word) => lowerText.contains(word));
+  }
+
+  String _findLatestImageHash(List<Map<String, dynamic>> chatHistory) {
+    for (final msg in chatHistory.reversed) {
+      final imageHash = (msg['imageHash'] ?? '').toString();
+
+      if (imageHash.trim().isNotEmpty) {
+        return imageHash;
+      }
+    }
+
+    return '';
+  }
+
+  Future<void> _saveImageCorrection({
+    required String imageHash,
+    required String correctionText,
+    required String userId,
+    required String userNo,
+    required String username,
+    required String userName,
+  }) async {
+    await _firestore.collection('image_corrections').doc(imageHash).set({
+      'imageHash': imageHash,
+      'correctItem': correctionText,
+      'correctedBy': userId,
+      'userId': userId,
+      'userNo': userNo,
+      'username': username,
+      'userName': userName,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
 
   Future<List<Map<String, dynamic>>> getChatMessages() async {
     final currentUser = _auth.currentUser;
@@ -59,6 +116,21 @@ class ChatbotService {
 
     final fullName = '$firstName $lastName'.trim();
     final userName = fullName.isEmpty ? username : fullName;
+
+    final latestImageHash = _findLatestImageHash(chatHistory);
+    final isImageCorrection =
+        latestImageHash.isNotEmpty && _isPossibleImageCorrection(question);
+
+    if (isImageCorrection) {
+      await _saveImageCorrection(
+        imageHash: latestImageHash,
+        correctionText: question,
+        userId: userId,
+        userNo: userNo,
+        username: username,
+        userName: userName,
+      );
+    }
 
     final aiResult = await _askIlmuBackend(
       question: question,

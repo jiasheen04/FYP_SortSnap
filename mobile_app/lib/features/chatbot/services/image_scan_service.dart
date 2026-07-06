@@ -41,6 +41,34 @@ class ImageScanService {
     return cleaned.replaceAll(RegExp(r'[^A-Za-z0-9_-]'), '_');
   }
 
+  Future<String> _createImageHash(File imageFile) async {
+    final bytes = await imageFile.readAsBytes();
+
+    int hash = 2166136261;
+
+    for (final byte in bytes) {
+      hash = hash ^ byte;
+      hash = (hash * 16777619) & 0xffffffff;
+    }
+
+    return hash.toRadixString(16).padLeft(8, '0');
+  }
+
+  Future<String> _getSavedCorrection(String imageHash) async {
+    final doc = await _firestore
+        .collection('image_corrections')
+        .doc(imageHash)
+        .get();
+
+    if (!doc.exists || doc.data() == null) {
+      return '';
+    }
+
+    final data = doc.data()!;
+
+    return (data['correctItem'] ?? '').toString();
+  }
+
   String _buildImageScanDisplayText(Map<String, dynamic> data) {
     final detectionMode = (data['detectionMode'] ?? 'single').toString();
     final classification =
@@ -78,6 +106,12 @@ class ImageScanService {
   }
 
   String _buildImageContextText(Map<String, dynamic> data) {
+    final savedCorrection = (data['savedCorrection'] ?? '').toString();
+
+    if (savedCorrection.trim().isNotEmpty) {
+      return 'Saved correction for this exact image: The user corrected this image as "$savedCorrection". Use this corrected item as the image context. Do not use the old image classification if it conflicts with this correction.';
+    }
+
     final detectionMode = (data['detectionMode'] ?? 'single').toString();
     final classification =
         data['classification'] as Map<String, dynamic>? ?? {};
@@ -115,6 +149,10 @@ class ImageScanService {
       throw Exception('User is not logged in.');
     }
 
+    final imageHash = await _createImageHash(imageFile);
+
+    final savedCorrection = await _getSavedCorrection(imageHash);
+
     final url = Uri.parse('$_baseUrl/api/chatbot/classify-image');
 
     final request = http.MultipartRequest('POST', url);
@@ -125,12 +163,21 @@ class ImageScanService {
 
     request.fields['chatHistory'] = jsonEncode(chatHistory);
 
+    request.fields['imageHash'] = imageHash;
+
+    if (savedCorrection.trim().isNotEmpty) {
+      request.fields['savedCorrection'] = savedCorrection;
+    }
+
     final streamedResponse = await request.send().timeout(
       const Duration(seconds: 240),
     );
 
     final response = await http.Response.fromStream(streamedResponse);
     final data = jsonDecode(response.body) as Map<String, dynamic>;
+
+    data['imageHash'] = imageHash;
+    data['savedCorrection'] = savedCorrection;
 
     if (response.statusCode != 200 || data['success'] != true) {
       throw Exception(data['message'] ?? 'Failed to classify image.');
@@ -218,6 +265,8 @@ class ImageScanService {
         'username': username,
         'userName': userName,
         'imageLocalPath': imageFile.path,
+        'imageHash': imageHash,
+        'savedCorrection': savedCorrection,
         'category': mainCategory,
         'itemName': mainItemName,
         'isRecyclable': isRecyclable,
@@ -259,6 +308,7 @@ class ImageScanService {
         'messageType': 'image_scan',
         'text': 'Image uploaded for scanning.',
         'imageLocalPath': imageFile.path,
+        'imageHash': imageHash,
         'source': 'user',
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -275,6 +325,8 @@ class ImageScanService {
         'text': chatDisplayText,
         'imageContextText': imageContextText,
         'imageLocalPath': imageFile.path,
+        'imageHash': imageHash,
+        'savedCorrection': savedCorrection,
         'detectionMode': detectionMode,
         'mainCategory': mainCategory,
         'mainItemName': mainItemName,

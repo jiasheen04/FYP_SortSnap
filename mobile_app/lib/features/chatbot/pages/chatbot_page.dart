@@ -13,11 +13,13 @@ class ChatMessage {
   final String memoryText;
   final bool isUser;
   final File? image;
+  final String imageHash;
 
   ChatMessage({
     required this.text,
     required this.isUser,
     this.image,
+    this.imageHash = '',
     String? memoryText,
   }) : memoryText = memoryText ?? text;
 }
@@ -173,6 +175,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
 
         File? imageFile;
         final imageLocalPath = (data['imageLocalPath'] ?? '').toString();
+        final imageHash = (data['imageHash'] ?? '').toString();
 
         if (imageLocalPath.isNotEmpty) {
           final file = File(imageLocalPath);
@@ -192,6 +195,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
           isUser: role == 'user',
           image: imageFile,
           memoryText: memoryText,
+          imageHash: imageHash,
         );
       }).toList();
 
@@ -236,7 +240,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ? msg.memoryText
               : msg.text;
 
-          return {'text': textForAi, 'isUser': msg.isUser};
+          return {
+            'text': textForAi,
+            'isUser': msg.isUser,
+            'imageHash': msg.imageHash,
+          };
         })
         .where((msg) {
           final text = (msg['text'] ?? '').toString().trim();
@@ -362,7 +370,11 @@ class _ChatbotPageState extends State<ChatbotPage> {
                   ? msg.memoryText
                   : msg.text;
 
-              return {'text': textForAi, 'isUser': msg.isUser};
+              return {
+                'text': textForAi,
+                'isUser': msg.isUser,
+                'imageHash': msg.imageHash,
+              };
             })
             .where((msg) {
               final text = (msg['text'] ?? '').toString().trim();
@@ -388,12 +400,15 @@ class _ChatbotPageState extends State<ChatbotPage> {
         final imageContextText = (result['imageContextText'] ?? resultMessage)
             .toString();
 
+        final imageHash = (result['imageHash'] ?? '').toString();
+
         setState(() {
           _messages.add(
             ChatMessage(
               text: resultMessage,
               isUser: false,
               memoryText: imageContextText,
+              imageHash: imageHash,
             ),
           );
           _isLoading = false;

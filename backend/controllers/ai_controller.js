@@ -382,6 +382,7 @@ async function classifyImage(req, res) {
       : [mainClassification];
 
     const rawChatHistory = req.body.chatHistory;
+    const savedCorrection = (req.body.savedCorrection || "").toString().trim();
 
     let chatHistory = [];
 
@@ -404,11 +405,43 @@ async function classifyImage(req, res) {
       })
       .join("\n");
 
+    const correctionPrompt = savedCorrection
+      ? `
+    The user uploaded an image that has a saved correction in the database.
+
+    Saved corrected item:
+    ${savedCorrection}
+
+    Use this saved correction as the correct item for this image.
+    Ignore the image classification result if it conflicts with this correction.
+
+    Give recycling guidance for a Cyberjaya user in Malaysia.
+
+    Use this format:
+
+    ✅ Main result
+    Say what the corrected item is.
+
+    ♻️ What to do
+    Give practical recycling or disposal steps.
+
+    ⚠️ Important note
+    Mention any warning or exception.
+
+    Rules:
+    - Follow the saved correction.
+    - Do not mention the wrong image classification.
+    - Do not mention CNN, model, API, backend, database, or confidence score.
+    - Keep it beginner-friendly.
+    - Keep it around 70 to 120 words.
+    `
+      : buildSmartRecyclingPrompt(cnnResult);
+
     const prompt = `
     Previous chat history:
     ${historyText || "No previous chat history."}
 
-    ${buildSmartRecyclingPrompt(cnnResult)}
+    ${correctionPrompt}
 
     Use the previous chat history to check whether the user corrected a previous image result.
 
@@ -459,6 +492,8 @@ async function classifyImage(req, res) {
       classification: mainClassification,
       classifications: classifications,
       top_predictions: cnnResult.top_predictions || classifications,
+      savedCorrectionUsed: savedCorrection !== "",
+      savedCorrection: savedCorrection,
       answer: answer,
       source: "cnn + ilmu",
     });
