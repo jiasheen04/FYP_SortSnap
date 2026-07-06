@@ -1,6 +1,6 @@
 const ILMU_API_KEY = process.env.ILMU_API_KEY;
 const ILMU_BASE_URL = process.env.ILMU_BASE_URL || "https://api.ilmu.ai/v1";
-const ILMU_MODEL = process.env.ILMU_MODEL || "ilmu-nemo-nano";
+const ILMU_MODEL = process.env.ILMU_MODEL || "nemo-super";
 
 const CNN_API_URL = process.env.CNN_API_URL || "http://127.0.0.1:8000";
 
