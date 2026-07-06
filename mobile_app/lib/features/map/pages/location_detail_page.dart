@@ -162,37 +162,6 @@ class LocationDetailPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              const Text(
-                'Accepted Item Types',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: acceptedTypes.map((type) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFA7E1C8),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      type,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 16),
-
               Row(
                 children: [
                   Expanded(
@@ -254,6 +223,7 @@ class LocationDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 24),
               const Text(
                 'Weekly Opening Hours',
@@ -285,6 +255,39 @@ class LocationDetailPage extends StatelessWidget {
                 ),
               const SizedBox(height: 8),
               Text('Area: ${point.area}', style: const TextStyle(fontSize: 14)),
+
+              const SizedBox(height: 24),
+              const Text(
+                'Accepted Item Types',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: acceptedTypes.map((type) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA7E1C8),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      type,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 16),
+              
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
