@@ -394,7 +394,7 @@ async function classifyImage(req, res) {
     }
 
     const recentHistory = Array.isArray(chatHistory)
-      ? chatHistory.slice(-6)
+      ? chatHistory.slice(-10)
       : [];
 
     const historyText = recentHistory
@@ -412,9 +412,14 @@ async function classifyImage(req, res) {
 
     Use the previous chat history to check whether the user corrected a previous image result.
 
-    If the latest user correction conflicts with the image classification result, trust the user's correction more than the image classification.
+    Very important correction rule:
+    - If any recent user message says the image result is wrong, trust the user's correction.
+    - If the user says "this is ...", "it is ...", "actually ...", "not ...", "wrong", or "only ...", treat it as a possible correction.
+    - If the correction conflicts with the image classification result, ignore the image classification result.
+    - Answer based on the corrected item from the user.
+    - Do not repeat the wrong classification after the user corrected it.
 
-    For example:
+    Example:
     - If the image classification says paper and plastic, but the user said "it is plastic only", answer only about plastic.
     - If the user says "u wrong", "not paper", "this is bottle", or similar correction, follow the corrected item.
 
